@@ -1,6 +1,27 @@
 <template>
-  <div>
-    life
+  <div class="life">
+    <v-timeline :dense="$vuetify.breakpoint.smAndDown">
+      <v-timeline-item v-for="n in 4" :key="n">
+        <span slot="opposite">Tus eu perfecto</span>
+        <v-card class="elevation-2">
+          <v-img
+            src="https://cdn.vuetifyjs.com/images/cards/house.jpg"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+            height="200px"
+          >
+            <v-card-title>123</v-card-title>
+          </v-img>
+          <v-card-subtitle class="pb-0">2020-3-17</v-card-subtitle>
+          <v-card-text>
+            Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola
+            imperdiet nec ut, sed euismod convenire principes at. Est et nobis
+            iisque percipit, an vim zril disputando voluptatibus, vix an
+            salutandi sententiae.
+          </v-card-text>
+        </v-card>
+      </v-timeline-item>
+    </v-timeline>
   </div>
 </template>
 
@@ -12,4 +33,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.life {
+  height: 100%;
+  background: url("/life.jpg");
+  background-size: cover;
+}
+</style>

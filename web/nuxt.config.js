@@ -65,6 +65,7 @@ module.exports = {
     // '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    // '@nuxtjs/style-resources',
   ],
   /*
    ** Axios module configuration
@@ -81,13 +82,17 @@ module.exports = {
       light: true,
       themes: {
         light: {
-          primary: '#3f51b5',
-          secondary: '#b0bec5',
+          primary: '#B388FF',
+          secondary: '#7C4DFF',
           accent: '#8c9eff',
           error: '#b71c1c',
         },
       }
     },
+  },
+  styleResources: {
+    less: './assets/**/*.less',
+    // sass: ...
   },
   /*
    ** Build configuration

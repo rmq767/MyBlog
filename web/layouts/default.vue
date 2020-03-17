@@ -5,11 +5,11 @@
       bottom
       disable-route-watcher
       app
-      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+      color="deep-purple accent-1"
     >
       <v-img
         :aspect-ratio="16 / 9"
-        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+        src="https://picsum.photos/1920/1080?random"
       >
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
@@ -78,7 +78,7 @@
       shift
       height="3rem"
     >
-      <v-btn append link to="/blog">
+      <v-btn append link to="/">
         <span>我的文章</span>
         <v-icon>mdi-book</v-icon>
       </v-btn>
@@ -124,3 +124,10 @@ export default {
   })
 };
 </script>
+
+<style>
+#inspire {
+  background-color: #fafafa;
+  margin-bottom: 3rem;
+}
+</style>

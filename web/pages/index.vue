@@ -19,21 +19,34 @@
         <!-- 正文 -->
         <v-col class="col-xs-12 col-md-6 offset-md-1">
           <v-row dense>
-            <v-col v-for="(item, i) in items" :key="i" cols="12">
-              <v-card :color="item.color" dark>
-                <div class="d-flex flex-no-wrap justify-space-between">
-                  <div>
-                    <v-card-title
-                      class="headline"
-                      v-text="item.title"
-                    ></v-card-title>
-
-                    <v-card-subtitle v-text="item.artist"></v-card-subtitle>
-                  </div>
-
-                  <v-avatar class="ma-3" size="125" tile>
-                    <v-img :src="item.src"></v-img>
-                  </v-avatar>
+            <v-col v-for="(item, i) in articles" :key="i" cols="12">
+              <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6">
+                <div class="subtitle-2 text-center">
+                  <v-icon class="mb-5 mx-4 quote "
+                    >mdi-format-quote-open</v-icon
+                  >
+                  <span class="headline">{{ item.title }}</span>
+                  <v-icon class="mb-5 mx-4 quote"
+                    >mdi-format-quote-close</v-icon
+                  >
+                </div>
+                <v-card-text class="text--primary">
+                  <p class="subtitle font-weight-light">
+                    {{ item.content }}
+                  </p>
+                </v-card-text>
+                <div class="d-flex justify-space-around overline">
+                  <span
+                    ><v-icon class="mr-2">mdi-comment</v-icon>{{ 123 }}</span
+                  >
+                  <span
+                    ><v-icon class="mr-2">mdi-eye</v-icon
+                    >{{ item.clicks }}</span
+                  >
+                  <span
+                    ><v-icon class="mr-2">mdi-clock</v-icon
+                    >{{ item.date.split("T")[0] }}</span
+                  >
                 </div>
               </v-card>
             </v-col>
@@ -59,38 +72,82 @@
           </div>
         </v-col>
       </v-row>
+      <pagination type="articles" @getPagination="getPagination"></pagination>
     </v-container>
   </div>
 </template>
 
 <script>
+import Pagination from "../components/Pagination.vue";
 export default {
   data() {
     return {
-      items: [
-        {
-          color: "#1F7087",
-          src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          title: "Supermodel",
-          artist: "Foster the People"
-        },
-        {
-          color: "#952175",
-          src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
-          title: "Halcyon Days",
-          artist: "Ellie Goulding"
-        }
-      ]
+      articles: []
     };
   },
-  methods: {}
+  methods: {
+    getPagination(val) {
+      this.articles = val;
+    }
+  },
+  components: {
+    Pagination
+  }
 };
 </script>
 
-<style>
+<style scoped>
 .home {
+  position: relative;
   height: 100%;
   background: url("/pen.jpg");
   background-size: cover;
+  background-attachment: fixed;
+}
+.subtitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.quote {
+  animation: shake 3s ease infinite;
+}
+@keyframes shake {
+  0%,
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+  }
+  5% {
+    -webkit-transform: rotate(2deg);
+    transform: rotate(2deg);
+  }
+  10%,
+  20%,
+  30% {
+    -webkit-transform: rotate(-8deg);
+    transform: rotate(-8deg);
+  }
+  15%,
+  25%,
+  35% {
+    -webkit-transform: rotate(12deg);
+    transform: rotate(12deg);
+  }
+  40% {
+    -webkit-transform: rotate(-2deg);
+    transform: rotate(-2deg);
+  }
+  45% {
+    -webkit-transform: rotate(2deg);
+    transform: rotate(2deg);
+  }
+  50% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
 }
 </style>

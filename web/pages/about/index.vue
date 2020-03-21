@@ -16,10 +16,4 @@ export default {
 };
 </script>
 
-<style>
-.about {
-  /* height: 100%;
-  background: url("/myinfo.jpg");
-  background-size: cover; */
-}
-</style>
+<style></style>

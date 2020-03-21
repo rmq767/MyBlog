@@ -6,18 +6,6 @@
       @submit.native.prevent="save"
       style="width:45rem;"
     >
-      <el-form-item label="头像">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="showAvatar"
-          :headers="mixGetAuthHeaders()"
-        >
-          <img v-if="message.avatar" :src="message.avatar" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-form-item>
       <el-form-item label="昵称">
         <el-input v-model="message.name"></el-input>
       </el-form-item>
@@ -42,9 +30,7 @@ export default {
   },
   data() {
     return {
-      message: {
-        avatar: ""
-      }
+      message: {}
     };
   },
   methods: {
@@ -59,9 +45,6 @@ export default {
         type: "success",
         message: "保存成功"
       });
-    },
-    showAvatar(val) {
-      this.message.avatar = val.url;
     },
     async fetch() {
       const res = await this.$http.get(`/messages/${this.id}`);

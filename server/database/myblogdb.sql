@@ -1,1 +1,1 @@
-`admins`
+SELECT * FROM comments WHERE is_delete = 0 AND article_id = 19 ORDER BY id LIMIT 10,10

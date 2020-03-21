@@ -7,7 +7,7 @@ module.exports = app => {
   const validateLife = require('../../plugins/life')
 
   router.get("/", async (req, res) => {
-    const sql = `select * from life where is_delete = 0`;
+    const sql = `select * from life where is_delete = 0 ORDER BY id desc`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
@@ -118,7 +118,7 @@ module.exports = app => {
 
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from life limit ${start},${end}`;
+    const sql = `select * from life WHERE is_delete = 0 limit ${start},${end}`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

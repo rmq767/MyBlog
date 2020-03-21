@@ -1,23 +1,29 @@
 <template>
   <div class="link">
     <v-container>
-      <v-row dense>
-        <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-          <v-card link href="#" hover>
-            <v-img
-              :src="card.src"
-              class="white--text align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
-            >
-              <v-card-title v-text="card.title"></v-card-title>
-            </v-img>
-            <v-card-text class="text--primary">
-              <div>Whitehaven Beach</div>
+      <v-row class="overflow-y-auto">
+        <v-col
+          v-for="(card, i) in cards"
+          :key="i"
+          class="col-xs-12 col-md-6 col-lg-4"
+        >
+          <v-hover v-slot:default="{ hover }">
+            <v-card link href="#" hover :class="{ 'on-hover': hover }">
+              <v-img
+                :src="card.src"
+                class="white--text align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                height="200px"
+              >
+                <v-card-title v-text="card.title"></v-card-title>
+              </v-img>
+              <v-card-text class="text--primary">
+                <div>Whitehaven Beach</div>
 
-              <div>Whitsunday Island, Whitsunday Islands</div>
-            </v-card-text>
-          </v-card>
+                <div>Whitsunday Island, Whitsunday Islands</div>
+              </v-card-text>
+            </v-card>
+          </v-hover>
         </v-col>
       </v-row>
     </v-container>
@@ -65,10 +71,17 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .link {
   height: 100%;
   background: url("/lib.jpg");
   background-size: cover;
+}
+.v-card {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.v-card:not(.on-hover) {
+  opacity: 0.7;
 }
 </style>

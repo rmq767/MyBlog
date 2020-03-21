@@ -7,7 +7,7 @@ module.exports = app => {
   const validateInformation = require('../../plugins/information')
 
   router.get("/", async (req, res) => {
-    const sql = `select * from informations where is_delete = 0`;
+    const sql = `select * from informations where is_delete = 0 ORDER BY id desc`;
     await db.query(sql, (err, data) => {
       if (err) {
         res.send({
@@ -111,7 +111,7 @@ module.exports = app => {
 
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from informations limit ${start},${end}`;
+    const sql = `select * from informations WHERE is_delete = 0 limit ${start},${end}`;
     await db.query(sql, (err, data) => {
       if (err) {
         res.send({

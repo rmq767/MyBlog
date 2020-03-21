@@ -1,0 +1,9 @@
+.page-enter-active,
+.page-leave-active {
+  transition: all .3s ease-in-out;
+}
+
+.page-enter,
+.page-leave-active {
+  transform: translateX(-100%);
+}

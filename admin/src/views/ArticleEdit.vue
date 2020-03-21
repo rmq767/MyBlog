@@ -7,7 +7,12 @@
       </el-form-item>
       <el-form-item label="文章内容">
         <div class="edit_container">
-          <mavon-editor v-model="article.content" :ishljs="true" ref="md" />
+          <mavon-editor
+            v-model="article.content"
+            :ishljs="true"
+            ref="md"
+            @imgAdd="$imgAdd"
+          />
         </div>
       </el-form-item>
       <el-form-item>
@@ -32,6 +37,7 @@ export default {
   },
   methods: {
     async save() {
+      this.article.content = this.$refs.md.d_render;
       if (this.id) {
         await this.$http.put(`/articles/${this.id}`, this.article);
       } else {
@@ -46,6 +52,15 @@ export default {
     async fetch() {
       const res = await this.$http.get(`/articles/${this.id}`);
       this.article = res.data;
+    },
+    $imgAdd(pos, $file) {
+      // 第一步.将图片上传到服务器.
+      var formdata = new FormData();
+      formdata.append("file", $file);
+      this.$http.post("/upload", formdata).then(url => {
+        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        this.$refs.md.$img2Url(pos, url.data.url);
+      });
     }
   },
   created() {

@@ -21,11 +21,11 @@ module.exports = function validateComment(data) {
     }
     if (!validator.isLength(data.comment, {
             min: 1,
-            max: 300
+            max: 240
         })) {
-        errors.comment = '评论的长度不超过300位'
+        errors.comment = '评论的长度不超过240位'
     }
-    if (validator.isEmpty(data.article_id)) {
+    if (validator.isEmpty(String(data.article_id))) {
         errors.article_id = '评论文章不能为空'
     }
     return {

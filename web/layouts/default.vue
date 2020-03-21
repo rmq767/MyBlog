@@ -70,7 +70,14 @@
     <v-content>
       <nuxt-child></nuxt-child>
     </v-content>
-
+    <div
+      style="position:fixed;bottom:8%;right:3%;"
+      @click="$vuetify.goTo(-9999)"
+    >
+      <v-btn fab large color="#B388FF">
+        <v-icon>mdi-arrow-up</v-icon>
+      </v-btn>
+    </div>
     <v-bottom-navigation
       grow
       color="deep-purple accent-1"

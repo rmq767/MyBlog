@@ -30,11 +30,6 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" prop="avatar" align="center" width="150">
-        <template slot-scope="scope">
-          <el-avatar size="medium" :src="scope.row.avatar"></el-avatar>
-        </template>
-      </el-table-column>
       <el-table-column
         label="昵称"
         align="center"

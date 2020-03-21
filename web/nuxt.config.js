@@ -1,4 +1,6 @@
 const colors = require('vuetify/es5/util/colors').default
+// const dotenv = require('@nuxtjs/dotenv')
+require('dotenv').config()
 
 module.exports = {
   mode: 'universal',
@@ -45,7 +47,9 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    'assets/page-transletion.css'
+  ],
   /*
    ** Plugins to load before mounting the App
    */

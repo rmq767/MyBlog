@@ -7,7 +7,7 @@ module.exports = app => {
   const validateMessage = require('../../plugins/message')
 
   router.get("/", async (req, res) => {
-    const sql = `select * from messages where is_delete = 0`;
+    const sql = `select * from messages where is_delete = 0 ORDER BY id desc`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
@@ -44,15 +44,14 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into messages (avatar, name,message,date) VALUES (?,?,?,?)";
+      "insert into messages (name,message,date) VALUES (?,?,?)";
     const {
-      avatar,
       name,
       message
     } = req.body;
     await db.query(
       sql,
-      [`${avatar}`, `${name}`, `${message}`, `${date}`],
+      [`${name}`, `${message}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -77,15 +76,14 @@ module.exports = app => {
       })
     }
     const id = req.params.id;
-    const sql = `UPDATE messages SET avatar = ?,name=?,message=?,date=? WHERE id = '${id}'`;
+    const sql = `UPDATE messages SET name=?,message=?,date=? WHERE id = '${id}'`;
     const {
-      avatar,
       name,
       message
     } = req.body;
     await db.query(
       sql,
-      [`${avatar}`, `${name}`, `${message}`, `${date}`],
+      [`${name}`, `${message}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -120,7 +118,7 @@ module.exports = app => {
 
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from messages limit ${start},${end}`;
+    const sql = `select * from messages WHERE is_delete = 0 limit ${start},${end}`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

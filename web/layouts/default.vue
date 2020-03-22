@@ -60,6 +60,7 @@
       <v-text-field
         flat
         solo-inverted
+        v-model="searchData"
         hide-details
         prepend-inner-icon="mdi-magnify"
         label="Search"
@@ -68,7 +69,7 @@
     </v-app-bar>
 
     <v-content>
-      <nuxt-child></nuxt-child>
+      <nuxt-child :searchData="searchData"></nuxt-child>
     </v-content>
     <div
       style="position:fixed;bottom:8%;right:3%;"
@@ -120,15 +121,21 @@ export default {
       {
         icon: "mdi-qqchat",
         title: "QQ",
-        image: "http://localhost:3000/qq.jpg"
+        image: "/qq.jpg"
       },
       {
         icon: "mdi-wechat",
         title: "微信",
-        image: "http://localhost:3000/wechat.png"
+        image: "/wechat.png"
       }
-    ]
-  })
+    ],
+    searchData: ""
+  }),
+  watch: {
+    searchData(newValue, oldValue) {
+      this.searchData = newValue;
+    }
+  }
 };
 </script>
 

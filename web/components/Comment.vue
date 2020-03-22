@@ -49,15 +49,16 @@
                 >
                 <div class="reply mt-4 overline" @click="loadReply(item.id, i)">
                   <v-icon size="medium">mdi-message-processing</v-icon>
-                  <span>123</span>
+                  <span>{{ item.reply_count ? item.reply_count : 0 }}</span>
                 </div>
               </div>
             </v-list-item>
-            <div v-if="index == i" :key="i" class="px-12">
-              <template v-for="item in commentReply">
+            <div :key="i" class="px-12">
+              <template v-for="comment in commentReply">
                 <v-list-item
-                  :key="item.id"
+                  :key="comment.id"
                   style="border-bottom:1px solid #ccc"
+                  v-if="item.id == comment.comment_id"
                 >
                   <v-list-item-avatar>
                     <v-img src="/user.jpg"></v-img>
@@ -65,11 +66,13 @@
 
                   <v-list-item-content>
                     <v-list-item-title
-                      v-html="item.name"
+                      v-html="comment.name"
                       class="font-weight-black"
                     ></v-list-item-title>
                     <v-list-item-subtitle
-                      v-html="type == 'comments' ? item.c_reply : item.m_reply"
+                      v-html="
+                        type == 'comments' ? comment.c_reply : comment.m_reply
+                      "
                     ></v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
@@ -102,7 +105,9 @@
         </v-bottom-sheet>
       </div>
     </v-container>
-    <pagination type="comments" @getPagination="getPagination"></pagination>
+    <div>
+      <pagination type="comments" @getPagination="getPagination"></pagination>
+    </div>
   </div>
 </template>
 

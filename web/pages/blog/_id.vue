@@ -18,6 +18,11 @@
           <span
             >点击阅读量 ：<span> {{ article.clicks }}</span>
           </span>
+          <span
+            >评论数量 ：<span>
+              {{ article.comment_count ? article.comment_count : 0 }}</span
+            >
+          </span>
         </div>
         <v-divider class="mb-8"></v-divider>
         <div class="content">
@@ -42,11 +47,6 @@
       <div class="mt-12">
         <comment type="comments"></comment>
       </div>
-      <!-- <pagination
-        type="comments"
-        :article_id="id"
-        @getPagination="getPagination"
-      ></pagination> -->
     </v-container>
   </div>
 </template>

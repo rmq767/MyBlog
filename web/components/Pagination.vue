@@ -33,9 +33,6 @@ export default {
           `/${this.type}/get/page?pageSize=${10}&currentPage=${1}`
         );
       }
-      if (this.type == "articles") {
-        res.data.map(v => (v.content = v.content.replace(/<[^<>]+>/g, "")));
-      }
       this.data = res.data;
       this.length = Math.ceil(total.data.length / 10);
     }

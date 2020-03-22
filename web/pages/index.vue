@@ -37,7 +37,8 @@
                 </v-card-text>
                 <div class="d-flex justify-space-around overline">
                   <span
-                    ><v-icon class="mr-2">mdi-comment</v-icon>{{ 123 }}</span
+                    ><v-icon class="mr-2">mdi-comment</v-icon
+                    >{{ item.comment_count ? item.comment_count : 0 }}</span
                   >
                   <span
                     ><v-icon class="mr-2">mdi-eye</v-icon
@@ -57,22 +58,26 @@
           <div>
             <v-card class="pa-2" outlined max-width="16rem">
               <v-list-item>
-                <v-list-item-avatar color="grey"></v-list-item-avatar>
+                <v-list-item-avatar color="grey">
+                  <img src="/dog.jpg" alt="" />
+                </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title class="headline">小阮</v-list-item-title>
-                  <v-list-item-subtitle>by vue+node</v-list-item-subtitle>
+                  <v-list-item-subtitle>bug工程师</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-
               <v-card-text>
-                Visit ten places on our planet that are undergoing the biggest
-                changes today.
+                欢迎来到我的bug博客，只要我写的够烂，bug就追不上我
               </v-card-text>
             </v-card>
           </div>
         </v-col>
       </v-row>
-      <pagination type="articles" @getPagination="getPagination"></pagination>
+      <pagination
+        type="articles"
+        @getPagination="getPagination"
+        v-if="!searchData"
+      ></pagination>
     </v-container>
   </div>
 </template>
@@ -80,6 +85,7 @@
 <script>
 import Pagination from "../components/Pagination.vue";
 export default {
+  props: ["searchData"],
   data() {
     return {
       articles: []
@@ -92,6 +98,14 @@ export default {
   },
   components: {
     Pagination
+  },
+  watch: {
+    async searchData(newValue, oldValue) {
+      const res = await this.$axios.post("/articles/get/search", {
+        search: newValue
+      });
+      this.articles = res.data;
+    }
   }
 };
 </script>

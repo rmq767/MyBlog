@@ -6,13 +6,15 @@ module.exports = app => {
   const db = require("../../database/db.config"); //引入数据库封装模块
 
   router.get("/", async (req, res) => {
-    const sql = "select * from articles where is_delete = 0 ORDER BY id desc";
+    const sql = `select * from articles where is_delete = 0 ORDER BY id desc;
+    `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
           message: "数据库查询错误"
         });
       } else {
+        data.map(v => (v.content = v.content.replace(/<[^<>]+>/g, "")))
         return res.send(data);
       }
     });
@@ -21,14 +23,24 @@ module.exports = app => {
   router.get("/:id", async (req, res) => {
     const sql = `
     UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
-    select * from articles where id='${req.params.id};
-    '`;
+    select * from articles where id='${req.params.id}';
+    SELECT id article_id,COUNT(*) comment_count FROM 
+    (SELECT articles.id,comments.article_id FROM articles RIGHT JOIN comments ON comments.article_id = articles.id) t 
+    GROUP BY article_id HAVING COUNT(article_id)>=1;
+    `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
           message: "数据库查询错误"
         });
       } else {
+        for (let m in data[1]) {
+          for (let n in data[2]) {
+            if (data[1][m].id == data[2][n].article_id) {
+              data[1][m].comment_count = data[2][n].comment_count
+            }
+          }
+        }
         return res.send(data[1][0]);
       }
     });
@@ -41,14 +53,26 @@ module.exports = app => {
     } = req.query;
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from articles WHERE is_delete = 0 ORDER BY id desc limit ${start},${end} `;
+    const sql = `select * from articles WHERE is_delete = 0 ORDER BY id desc limit ${start},${end};
+    SELECT id article_id,COUNT(*) comment_count FROM 
+    (SELECT articles.id,comments.article_id FROM articles RIGHT JOIN comments ON comments.article_id = articles.id) t 
+    GROUP BY article_id HAVING COUNT(article_id)>=1;
+     `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
           message: "数据库查询错误"
         });
       } else {
-        return res.send(data);
+        for (let m in data[0]) {
+          for (let n in data[1]) {
+            if (data[0][m].id == data[1][n].article_id) {
+              data[0][m].comment_count = data[1][n].comment_count
+            }
+          }
+        }
+        data[0].map(v => (v.content = v.content.replace(/<[^<>]+>/g, "")))
+        return res.send(data[0]);
       }
     });
   });
@@ -84,6 +108,23 @@ module.exports = app => {
       }
     });
   })
+
+  router.post("/get/search", async (req, res) => {
+    const {
+      search
+    } = req.body;
+    const sql = `select * from articles where (binary title like '%${search}%' or content like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
+    await db.query(sql, (err, data) => {
+      if (err) {
+        return res.send({
+          message: "数据库查询错误"
+        });
+      } else {
+        data.map(v => (v.content = v.content.replace(/<[^<>]+>/g, "")))
+        return res.send(data);
+      }
+    });
+  });
 
 
   app.use("/web/api/articles", router);

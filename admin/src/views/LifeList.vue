@@ -36,12 +36,21 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="想说的"
+        label="题目"
         align="center"
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.description }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="想说的"
+        align="center"
+        :show-overflow-tooltip="true"
+      >
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.content }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="180">

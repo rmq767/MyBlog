@@ -30,7 +30,12 @@
 
               <v-list-item-content>
                 <v-list-item-title
-                  v-html="item.name"
+                  v-html="
+                    item.name +
+                      `<span class='overline ml-5'>${
+                        item.date.split('T')[0]
+                      }</span>`
+                  "
                   class="font-weight-black"
                 ></v-list-item-title>
                 <v-list-item-subtitle
@@ -53,12 +58,17 @@
                 </div>
               </div>
             </v-list-item>
-            <div :key="i" class="px-12">
+            <div :key="item.id + item.date + item.name" class="px-12">
               <template v-for="comment in commentReply">
                 <v-list-item
                   :key="comment.id"
                   style="border-bottom:1px solid #ccc"
-                  v-if="item.id == comment.comment_id"
+                  v-if="
+                    item.id ==
+                      (comment.comment_id
+                        ? comment.comment_id
+                        : comment.message_id)
+                  "
                 >
                   <v-list-item-avatar>
                     <v-img src="/user.jpg"></v-img>
@@ -66,7 +76,12 @@
 
                   <v-list-item-content>
                     <v-list-item-title
-                      v-html="comment.name"
+                      v-html="
+                        comment.name +
+                          `<span class='overline ml-5'>${
+                            comment.date.split('T')[0]
+                          }</span>`
+                      "
                       class="font-weight-black"
                     ></v-list-item-title>
                     <v-list-item-subtitle
@@ -106,7 +121,7 @@
       </div>
     </v-container>
     <div>
-      <pagination type="comments" @getPagination="getPagination"></pagination>
+      <pagination :type="type" @getPagination="getPagination"></pagination>
     </div>
   </div>
 </template>
@@ -135,6 +150,11 @@ export default {
           comment: this.form.message,
           article_id: this.a_id
         });
+      } else {
+        await this.$axios.post("/messages", {
+          name: this.form.name,
+          message: this.form.message
+        });
       }
       this.form = {};
       this.fetch();
@@ -146,26 +166,38 @@ export default {
           c_reply: this.reply.message,
           comment_id: this.comment_id
         });
+      } else {
+        await this.$axios.post(`/messagereply`, {
+          name: this.reply.name,
+          m_reply: this.reply.message,
+          message_id: this.comment_id
+        });
       }
       this.sheet = false;
       this.loadReply(this.comment_id, this.index);
     },
     async fetch() {
+      let res;
       if (this.type == "comments") {
-        const res = await this.$axios.get(
+        res = await this.$axios.get(
           `/comments/get/page?pageSize=${10}&currentPage=${1}&article_id=${
             this.a_id
           }`
         );
-        this.listData = res.data;
       } else {
-        // const res = await this.$axios.get(`/messages`);
-        // this.listData = res.data;
-        console.log(111);
+        res = await this.$axios.get(
+          `/messages/get/page?pageSize=${10}&currentPage=${1}`
+        );
       }
+      this.listData = res.data;
     },
     async loadReply(id, i) {
-      const res = await this.$axios.get(`/commentreply?comment_id=${id}`);
+      let res;
+      if (this.type == "comments") {
+        res = await this.$axios.get(`/commentreply?comment_id=${id}`);
+      } else {
+        res = await this.$axios.get(`/messagereply?message_id=${id}`);
+      }
       this.commentReply = res.data;
       this.index = i;
     },

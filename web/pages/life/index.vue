@@ -1,12 +1,15 @@
 <template>
   <div class="life">
+    <h2 class="text-center white--text display-1 site__title font-weight-thin">
+      生活不止眼前的苟且，还有诗和远方
+    </h2>
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
-      <v-timeline-item v-for="n in 4" :key="n">
-        <span slot="opposite">Tus eu perfecto</span>
+      <v-timeline-item v-for="item in life" :key="item.id">
+        <span slot="opposite">{{ item.date.split("-")[0] }}</span>
         <v-hover v-slot:default="{ hover }">
           <v-card class="elevation-2">
             <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/house.jpg"
+              :src="item.image"
               class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="200px"
@@ -14,19 +17,18 @@
               <v-expand-transition>
                 <div
                   v-if="hover"
-                  class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
+                  class="d-flex transition-fast-in-fast-out white v-card--reveal display-1 black--text"
                   style="height: 100%;"
                 >
-                  你好
+                  {{ item.description }}
                 </div>
               </v-expand-transition>
             </v-img>
-            <v-card-subtitle class="pb-0">2020-3-17</v-card-subtitle>
+            <v-card-subtitle class="pb-0">{{
+              item.date.split("T")[0]
+            }}</v-card-subtitle>
             <v-card-text>
-              Lorem ipsum dolor sit amet, no nam oblique veritus. Commune
-              scaevola imperdiet nec ut, sed euismod convenire principes at. Est
-              et nobis iisque percipit, an vim zril disputando voluptatibus, vix
-              an salutandi sententiae.
+              {{ item.content }}
             </v-card-text>
           </v-card>
         </v-hover>
@@ -39,6 +41,12 @@
 export default {
   data() {
     return {};
+  },
+  async asyncData({ $axios }) {
+    const life = await $axios.$get("/life");
+    return {
+      life
+    };
   }
 };
 </script>
@@ -56,5 +64,23 @@ export default {
   opacity: 0.5;
   position: absolute;
   width: 100%;
+}
+.site__title {
+  color: #f35626;
+  font-family: 微软雅黑;
+  background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: hue 10s infinite linear;
+}
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+    -moz-filter: hue-rotate(0deg);
+  }
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+    -moz-filter: hue-rotate(-360deg);
+  }
 }
 </style>

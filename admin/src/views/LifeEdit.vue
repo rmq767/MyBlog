@@ -18,9 +18,12 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
+      <el-form-item label="题目（可选）">
+        <el-input v-model="life.description"></el-input>
+      </el-form-item>
       <el-form-item label="想说的">
         <el-input
-          v-model="life.description"
+          v-model="life.content"
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 6 }"
         ></el-input>

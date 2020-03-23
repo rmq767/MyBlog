@@ -1,6 +1,6 @@
 <template>
   <div class="message">
-    <comment type="message"></comment>
+    <comment type="messages"></comment>
   </div>
 </template>
 

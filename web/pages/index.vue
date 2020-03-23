@@ -4,16 +4,21 @@
       <v-row class="mb-6">
         <!-- 右侧通知栏 -->
         <v-col class="d-none d-sm-none d-md-flex col-2">
-          <div>
-            <v-expansion-panels focusable>
-              <v-expansion-panel v-for="(item, i) in 5" :key="i">
-                <v-expansion-panel-header>Item</v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
+          <div style="width:100%;" ref="notice" class="notice">
+            <v-card class="mx-auto" width="100%">
+              <v-card-text>
+                <div class="mb-4">最新公告</div>
+                <div v-for="item in notices" :key="item.id">
+                  <p class="caption">
+                    <v-icon color="#B388FF" size="small" class="star"
+                      >mdi-star</v-icon
+                    >
+                    {{ item.date.split("T")[0] }}
+                  </p>
+                  <div class="text--primary mb-4 body-2">{{ item.notice }}</div>
+                </div>
+              </v-card-text>
+            </v-card>
           </div>
         </v-col>
         <!-- 正文 -->
@@ -55,12 +60,17 @@
         </v-col>
         <!-- 右侧卡片 -->
         <v-col class="d-none d-sm-none d-md-flex col-2 ml-12">
-          <div>
+          <div ref="aboutme" class="about_me">
             <v-card class="pa-2" outlined max-width="16rem">
               <v-list-item>
-                <v-list-item-avatar color="grey">
-                  <img src="/dog.jpg" alt="" />
-                </v-list-item-avatar>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-avatar color="grey">
+                      <img src="/dog.jpg" alt="" v-on="on" />
+                    </v-list-item-avatar>
+                  </template>
+                  <span>哼，就这？</span>
+                </v-tooltip>
                 <v-list-item-content>
                   <v-list-item-title class="headline">小阮</v-list-item-title>
                   <v-list-item-subtitle>bug工程师</v-list-item-subtitle>
@@ -85,6 +95,12 @@
 <script>
 import Pagination from "../components/Pagination.vue";
 export default {
+  async asyncData({ $axios }) {
+    const notices = await $axios.$get("/notices");
+    return {
+      notices
+    };
+  },
   props: ["searchData"],
   data() {
     return {
@@ -94,6 +110,21 @@ export default {
   methods: {
     getPagination(val) {
       this.articles = val;
+    },
+    toScoll() {
+      //向下滑动动画
+      let notice = this.$refs.notice;
+      let aboutme = this.$refs.aboutme;
+      let long = document.documentElement.scrollTop;
+      let length =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      if (long > 100) {
+        notice.style.transform = `translateY(${length}px)`;
+        aboutme.style.transform = `translateY(${length}px)`;
+      } else {
+        notice.style.transform = `translateY(0px)`;
+        aboutme.style.transform = `translateY(0px)`;
+      }
     }
   },
   components: {
@@ -106,6 +137,22 @@ export default {
       });
       this.articles = res.data;
     }
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.toScoll);
+  },
+  mounted() {
+    window.addEventListener("scroll", this.toScoll);
+    console.log(
+      "%c%s",
+      "color: red; background: yellow; font-size: 12px;",
+      "欢迎来到小阮的个人博客"
+    );
+    console.log(
+      "%c%s",
+      "color: red; background: yellow; font-size: 12px;",
+      "大佬不要乱搞，磕头了，砰砰砰~"
+    );
   }
 };
 </script>
@@ -163,5 +210,25 @@ export default {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+}
+.home .star {
+  animation: star 1s ease-in-out infinite;
+}
+@keyframes star {
+  0% {
+    transform: scale(1.2, 1.2);
+  }
+  50% {
+    transform: scale(0.8, 0.8);
+  }
+  100% {
+    transform: scale(1.2, 1.2);
+  }
+}
+.home .notice {
+  transition: all 0.5s ease-in-out;
+}
+.home .about_me {
+  transition: all 0.5s ease-in-out;
 }
 </style>

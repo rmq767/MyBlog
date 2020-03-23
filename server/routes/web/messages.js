@@ -6,7 +6,7 @@ module.exports = app => {
   const db = require("../../database/db.config"); //引入数据库封装模块
   const moment = require("moment");
   const date = moment().format("YYYY-MM-DD HH:mm:ss");
-  const validateComment = require('../../plugins/comment')
+  const validateMessage = require('../../plugins/message')
 
   router.get("/", async (req, res) => {
     const sql = `select * from messages where is_delete = 0 ORDER BY id desc`;
@@ -25,7 +25,7 @@ module.exports = app => {
     const {
       errors,
       isValid
-    } = validateComment(req.body)
+    } = validateMessage(req.body)
     // 判断是否验证通过
     if (!isValid) {
       return res.status(500).send({
@@ -33,15 +33,14 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into messages (name,comment,date) VALUES (?,?,?)";
+      "insert into messages (name,message,date) VALUES (?,?,?)";
     const {
       name,
-      comment,
-      article_id
+      message,
     } = req.body;
     await db.query(
       sql,
-      [`${name}`, `${comment}`, `${date}`],
+      [`${name}`, `${message}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -77,14 +76,25 @@ module.exports = app => {
     } = req.query;
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from messages WHERE is_delete = 0 ORDER BY id desc limit ${start},${end} `;
+    const sql = `select * from messages WHERE is_delete = 0 ORDER BY id desc limit ${start},${end};
+    SELECT id message_id,COUNT(*) message_count FROM 
+    (SELECT messagereply.message_id,messages.id FROM messages RIGHT JOIN messagereply ON messagereply.message_id = messages.id) t 
+    GROUP BY message_id HAVING COUNT(message_id)>=1;
+    `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
           message: "数据库查询错误"
         });
       } else {
-        return res.send(data);
+        for (let m in data[0]) {
+          for (let n in data[1]) {
+            if (data[0][m].id == data[1][n].message_id) {
+              data[0][m].reply_count = data[1][n].message_count
+            }
+          }
+        }
+        return res.send(data[0]);
       }
     });
   });

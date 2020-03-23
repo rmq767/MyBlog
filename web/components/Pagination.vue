@@ -39,13 +39,20 @@ export default {
   },
   watch: {
     async page(newValue) {
-      const res = await this.$axios.get(
-        `/${
-          this.type
-        }/get/page?pageSize=${10}&currentPage=${newValue}&article_id=${
-          this.a_id
-        }`
-      );
+      let res;
+      if (this.type == "comments") {
+        res = await this.$axios.get(
+          `/${
+            this.type
+          }/get/page?pageSize=${10}&currentPage=${newValue}&article_id=${
+            this.a_id
+          }`
+        );
+      } else {
+        res = await this.$axios.get(
+          `/${this.type}/get/page?pageSize=${10}&currentPage=${newValue}`
+        );
+      }
       this.data = res.data;
     },
     async data() {

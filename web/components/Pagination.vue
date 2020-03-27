@@ -19,41 +19,21 @@ export default {
   },
   methods: {
     async fecth() {
-      let res, total;
-      if (this.type == "comments") {
-        total = await this.$axios.get(`/${this.type}?article_id=${this.a_id}`);
-        res = await this.$axios.get(
-          `/${this.type}/get/page?pageSize=${10}&currentPage=${1}&article_id=${
-            this.a_id
-          }`
-        );
-      } else {
-        total = await this.$axios.get(`/${this.type}`);
-        res = await this.$axios.get(
-          `/${this.type}/get/page?pageSize=${10}&currentPage=${1}`
-        );
-      }
+      const total = await this.$axios.get(`/${this.type}`);
+      const res = await this.$axios.get(
+        `/${this.type}/get/page?pageSize=${10}&currentPage=${1}`
+      );
       this.data = res.data;
       this.length = Math.ceil(total.data.length / 10);
     }
   },
   watch: {
     async page(newValue) {
-      let res;
-      if (this.type == "comments") {
-        res = await this.$axios.get(
-          `/${
-            this.type
-          }/get/page?pageSize=${10}&currentPage=${newValue}&article_id=${
-            this.a_id
-          }`
-        );
-      } else {
-        res = await this.$axios.get(
-          `/${this.type}/get/page?pageSize=${10}&currentPage=${newValue}`
-        );
-      }
+      const res = await this.$axios.get(
+        `/${this.type}/get/page?pageSize=${10}&currentPage=${newValue}`
+      );
       this.data = res.data;
+      document.documentElement.scrollTop = 0;
     },
     async data() {
       this.$emit("getPagination", this.data);

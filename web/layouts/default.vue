@@ -143,5 +143,6 @@ export default {
 #inspire {
   background-color: #fafafa;
   margin-bottom: 3rem;
+  height: 100%;
 }
 </style>

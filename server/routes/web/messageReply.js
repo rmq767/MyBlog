@@ -10,13 +10,14 @@ module.exports = app => {
 
   router.get("/", async (req, res) => {
     const {
-      message_id,
+      message_id
     } = req.query
-    const sql = `select * from messageReply where is_delete = 0 and message_id=${message_id} ORDER BY id desc`;
+    const sql =
+      `SELECT * FROM messagereply WHERE message_id = ${message_id}`
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: err
         });
       } else {
         return res.send(data);
@@ -36,15 +37,16 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into messageReply (name,m_reply,date,message_id) VALUES (?,?,?,?)";
+      "insert into messageReply (i_name,r_name,m_reply,date,message_id) VALUES (?,?,?,?,?)";
     const {
-      name,
+      i_name,
+      r_name,
       m_reply,
       message_id
     } = req.body;
     await db.query(
       sql,
-      [`${name}`, `${m_reply}`, `${date}`, `${message_id}`],
+      [`${i_name}`, `${r_name}`, `${m_reply}`, `${date}`, `${message_id}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -61,5 +63,5 @@ module.exports = app => {
 
 
 
-  app.use("/web/api/messageReply", router);
+  app.use("/web/api/messagereply", router);
 };

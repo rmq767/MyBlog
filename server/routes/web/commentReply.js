@@ -10,13 +10,14 @@ module.exports = app => {
 
   router.get("/", async (req, res) => {
     const {
-      comment_id,
+      comment_id
     } = req.query
-    const sql = `select * from commentreply where is_delete = 0 and comment_id=${comment_id} ORDER BY id desc`;
+    const sql =
+      `SELECT * FROM commentreply WHERE comment_id = ${comment_id}`
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: err
         });
       } else {
         return res.send(data);
@@ -36,15 +37,16 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into commentreply (name,c_reply,date,comment_id) VALUES (?,?,?,?)";
+      "insert into commentreply (i_name,r_name,c_reply,date,comment_id) VALUES (?,?,?,?,?)";
     const {
-      name,
+      i_name,
+      r_name,
       c_reply,
       comment_id
     } = req.body;
     await db.query(
       sql,
-      [`${name}`, `${c_reply}`, `${date}`, `${comment_id}`],
+      [`${i_name}`, `${r_name}`, `${c_reply}`, `${date}`, `${comment_id}`],
       (err, data) => {
         if (err) {
           return res.send({

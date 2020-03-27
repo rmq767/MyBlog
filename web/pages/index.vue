@@ -4,27 +4,31 @@
       <v-row class="mb-6">
         <!-- 右侧通知栏 -->
         <v-col class="d-none d-sm-none d-md-flex col-2">
-          <div style="width:100%;" ref="notice" class="notice">
-            <v-card class="mx-auto" width="100%">
-              <v-card-text>
-                <div class="mb-4">最新公告</div>
-                <div v-for="item in notices" :key="item.id">
-                  <p class="caption">
-                    <v-icon color="#B388FF" size="small" class="star"
-                      >mdi-star</v-icon
-                    >
-                    {{ item.date.split("T")[0] }}
-                  </p>
-                  <div class="text--primary mb-4 body-2">{{ item.notice }}</div>
-                </div>
-              </v-card-text>
-            </v-card>
+          <div style="position:relative; width:100%;">
+            <div style="width:100%;" ref="notice" class="notice">
+              <v-card class="mx-auto" width="100%">
+                <v-card-text>
+                  <div class="mb-4">最新公告</div>
+                  <div v-for="item in notices" :key="item.id">
+                    <p class="caption">
+                      <v-icon color="#B388FF" size="small" class="star"
+                        >mdi-star</v-icon
+                      >
+                      {{ item.date.split("T")[0] }}
+                    </p>
+                    <div class="text--primary mb-4 body-2">
+                      {{ item.notice }}
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
           </div>
         </v-col>
         <!-- 正文 -->
         <v-col class="col-xs-12 col-md-6 offset-md-1">
           <v-row dense>
-            <v-col v-for="(item, i) in articles" :key="i" cols="12">
+            <v-col v-for="(item, i) in articlesData" :key="i" cols="12">
               <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6">
                 <div class="subtitle-2 text-center">
                   <v-icon class="mb-5 mx-4 quote "
@@ -60,31 +64,33 @@
         </v-col>
         <!-- 右侧卡片 -->
         <v-col class="d-none d-sm-none d-md-flex col-2 ml-12">
-          <div ref="aboutme" class="about_me">
-            <v-card class="pa-2" outlined max-width="16rem">
-              <v-list-item>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-list-item-avatar color="grey">
-                      <img src="/dog.jpg" alt="" v-on="on" />
-                    </v-list-item-avatar>
-                  </template>
-                  <span>哼，就这？</span>
-                </v-tooltip>
-                <v-list-item-content>
-                  <v-list-item-title class="headline">小阮</v-list-item-title>
-                  <v-list-item-subtitle>bug工程师</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-card-text>
-                欢迎来到我的bug博客，只要我写的够烂，bug就追不上我
-              </v-card-text>
-            </v-card>
+          <div style="position:relative;width:100%;">
+            <div ref="aboutme" class="about_me">
+              <v-card class="pa-2" outlined max-width="16rem">
+                <v-list-item>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-avatar color="grey">
+                        <img src="/dog.jpg" alt="" v-on="on" />
+                      </v-list-item-avatar>
+                    </template>
+                    <span>哼，就这？</span>
+                  </v-tooltip>
+                  <v-list-item-content>
+                    <v-list-item-title class="headline">小阮</v-list-item-title>
+                    <v-list-item-subtitle>bug工程师</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-card-text>
+                  欢迎来到我的bug博客，只要我写的够烂，bug就追不上我
+                </v-card-text>
+              </v-card>
+            </div>
           </div>
         </v-col>
       </v-row>
       <pagination
-        type="articles"
+        :type="articles"
         @getPagination="getPagination"
         v-if="!searchData"
       ></pagination>
@@ -104,26 +110,25 @@ export default {
   props: ["searchData"],
   data() {
     return {
-      articles: []
+      articlesData: [],
+      articles: "articles"
     };
   },
   methods: {
     getPagination(val) {
-      this.articles = val;
+      this.articlesData = val;
     },
     toScoll() {
       //向下滑动动画
       let notice = this.$refs.notice;
       let aboutme = this.$refs.aboutme;
-      let long = document.documentElement.scrollTop;
-      let length =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      if (long > 100) {
-        notice.style.transform = `translateY(${length}px)`;
-        aboutme.style.transform = `translateY(${length}px)`;
+      let long = document.documentElement.scrollTop; //获取滚动条位置
+      if (long > 50) {
+        notice.style.top = long + "px";
+        aboutme.style.top = long + "px";
       } else {
-        notice.style.transform = `translateY(0px)`;
-        aboutme.style.transform = `translateY(0px)`;
+        notice.style.top = "0px";
+        aboutme.style.top = "0px";
       }
     }
   },
@@ -135,7 +140,7 @@ export default {
       const res = await this.$axios.post("/articles/get/search", {
         search: newValue
       });
-      this.articles = res.data;
+      this.articlesData = res.data;
     }
   },
   destroyed() {
@@ -226,9 +231,11 @@ export default {
   }
 }
 .home .notice {
-  transition: all 0.5s ease-in-out;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
 }
 .home .about_me {
-  transition: all 0.5s ease-in-out;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
 }
 </style>

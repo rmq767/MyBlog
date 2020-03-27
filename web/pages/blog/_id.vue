@@ -68,24 +68,18 @@ export default {
   data() {
     return {
       notLike: true
-      // comments: [],
-      // id: this.$route.params.id
     };
   },
   methods: {
     isLike() {
       this.notLike = !this.notLike;
     }
-    // getPagination(val) {
-    //   this.comments = val;
-    // }
   },
   updated() {
     this.$route.params.id;
   },
   components: {
     Comment
-    // Pagination
   }
 };
 </script>
@@ -100,7 +94,7 @@ export default {
 .blog .content img {
   /* overflow: hidden; */
   height: auto;
-  max-width: 60rem;
+  max-width: 90%;
 }
 .blog .content {
   overflow: hidden;

@@ -1,15 +1,15 @@
 const colors = require('vuetify/es5/util/colors').default
 // const dotenv = require('@nuxtjs/dotenv')
 require('dotenv').config()
+const axios = require('axios')
 
 module.exports = {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: '小阮的博客',
     meta: [{
         charset: 'utf-8'
       },
@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         hid: 'description',
-        name: 'description',
+        name: 'rmq',
         content: process.env.npm_package_description || ''
       }
     ],
@@ -106,5 +106,15 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
+  // generate: {
+  //   routes() {
+  //     return axios.get(process.env.API_URL)
+  //       .then((res) => {
+  //         return res.data.map((blog) => {
+  //           return '/blog/' + blog.id
+  //         })
+  //       })
+  //   }
+  // }
 }

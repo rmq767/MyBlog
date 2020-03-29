@@ -74,15 +74,15 @@
                         <img src="/dog.jpg" alt="" v-on="on" />
                       </v-list-item-avatar>
                     </template>
-                    <span>哼，就这？</span>
+                    <span>哼！</span>
                   </v-tooltip>
                   <v-list-item-content>
                     <v-list-item-title class="headline">小阮</v-list-item-title>
-                    <v-list-item-subtitle>bug工程师</v-list-item-subtitle>
+                    <v-list-item-subtitle>前端工程师</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-card-text>
-                  欢迎来到我的bug博客，只要我写的够烂，bug就追不上我
+                  欢迎来到我的博客，只要我写的够烂，bug就追不上我
                 </v-card-text>
               </v-card>
             </div>

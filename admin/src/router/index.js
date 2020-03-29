@@ -19,6 +19,8 @@ import AdminEdit from '../views/AdminEdit.vue'
 import LifeList from '../views/LifeList.vue'
 import LifeEdit from '../views/LifeEdit.vue'
 import Login from '../views/Login.vue'
+import MessageReplyList from '../views/MessageReplyList';
+import CommentReplyList from '../views/CommentReplyList';
 
 Vue.use(VueRouter)
 
@@ -51,6 +53,10 @@ const routes = [{
         component: CommentList
       },
       {
+        path: '/commentreply/list',
+        component: CommentReplyList
+      },
+      {
         path: '/comment/edit/:id',
         component: CommentEdit,
         props: true
@@ -62,6 +68,10 @@ const routes = [{
       {
         path: '/message/list',
         component: MessageList
+      },
+      {
+        path: '/messagereply/list',
+        component: MessageReplyList
       },
       {
         path: '/message/edit/:id',

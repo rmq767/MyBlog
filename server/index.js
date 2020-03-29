@@ -49,6 +49,8 @@ require("./routes/admin/life")(app);
 require("./routes/web/life")(app);
 require("./routes/web/commentReply")(app);
 require("./routes/web/messageReply")(app);
+require("./routes/admin/commentReply")(app);
+require("./routes/admin/messageReply")(app);
 // require("./routes/admin/page")(app);
 // require("./plugins/db")(app);
 

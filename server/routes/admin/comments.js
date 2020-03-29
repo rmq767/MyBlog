@@ -122,7 +122,10 @@ module.exports = app => {
 
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from comments WHERE is_delete = 0 limit ${start},${end}`;
+    const sql = `
+    select comments.id,name,comment,title 
+    from comments,articles 
+    where comments.article_id = articles.id and comments.is_delete = 0 ORDER BY comments.id desc limit ${start},${end}`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

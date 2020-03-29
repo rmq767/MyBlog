@@ -25,6 +25,9 @@
               <el-menu-item index="/article/list">文章列表</el-menu-item>
               <el-menu-item index="/comment/new">新增评论</el-menu-item>
               <el-menu-item index="/comment/list">评论列表</el-menu-item>
+              <el-menu-item index="/commentreply/list"
+                >评论回复列表</el-menu-item
+              >
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="message">
@@ -35,6 +38,9 @@
             <el-menu-item-group>
               <el-menu-item index="/message/new">添加留言</el-menu-item>
               <el-menu-item index="/message/list">留言列表</el-menu-item>
+              <el-menu-item index="/messagereply/list"
+                >留言回复列表</el-menu-item
+              >
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="notice">

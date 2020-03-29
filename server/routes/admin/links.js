@@ -122,7 +122,7 @@ module.exports = app => {
 
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
-    const sql = `select * from links WHERE is_delete = 0 limit ${start},${end}`;
+    const sql = `select * from links WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
     await db.query(sql, (err, data) => {
       if (err) {
         res.send({

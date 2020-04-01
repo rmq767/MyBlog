@@ -103,7 +103,7 @@
         <v-icon>mdi-pinwheel</v-icon>
       </v-btn>
       <v-btn append link to="/about">
-        <span>Nearby</span>
+        <span>关于我</span>
         <v-icon>mdi-face</v-icon>
       </v-btn>
     </v-bottom-navigation>
@@ -135,7 +135,8 @@ export default {
     searchData(newValue, oldValue) {
       this.searchData = newValue;
     }
-  }
+  },
+  components: {}
 };
 </script>
 

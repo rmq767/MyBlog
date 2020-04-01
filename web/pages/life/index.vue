@@ -52,11 +52,11 @@ export default {
 </script>
 
 <style scoped>
-.life {
+/* .life {
   height: 100%;
   background: url("/life.jpg");
   background-size: cover;
-}
+} */
 .v-card--reveal {
   align-items: center;
   bottom: 0;
@@ -81,6 +81,35 @@ export default {
   to {
     -webkit-filter: hue-rotate(-360deg);
     -moz-filter: hue-rotate(-360deg);
+  }
+}
+.life {
+  height: 100%;
+  position: relative;
+  background: -webkit-linear-gradient(45deg, #77c6ff 10%, #edf9ff 90%);
+  background: linear-gradient(45deg, #77c6ff 10%, #edf9ff 90%);
+  overflow: hidden;
+  background-size: 200% 100%;
+  -webkit-animation: move 10s ease infinite;
+  animation: move 10s ease infinite;
+}
+@-webkit-keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .life {
+    background: url("/life.jpg");
+    background-size: cover;
+    animation: none;
+    background-attachment: fixed;
   }
 }
 </style>

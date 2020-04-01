@@ -166,9 +166,9 @@ export default {
 .home {
   position: relative;
   height: 100%;
-  background: url("/pen.jpg");
+  /* background: url("/pen.jpg");
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; */
 }
 .subtitle {
   display: -webkit-box;

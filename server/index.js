@@ -66,5 +66,5 @@ app.post("/admin/api/upload", upload.single("file"), async (req, res) => {
 });
 
 app.listen(3002, () => {
-  console.log("http://47.115.83.172/");
+  console.log("http://localhost:3002/");
 });

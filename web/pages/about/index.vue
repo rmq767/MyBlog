@@ -1,14 +1,14 @@
 <template>
   <div class="about">
-    <v-parallax src="/myinfo.jpg" height="650">
+    <v-parallax src="/pen2.jpg" height="650" style="backgroundSize:cover">
       <div class="mb-12 display-1">我想说</div>
       <div class="display-3 shine">{{ info.my_message }}</div>
     </v-parallax>
-    <v-parallax src="/computer.jpg" height="650">
+    <v-parallax src="/computer.jpg" height="650" style="backgroundSize:cover">
       <div class="mb-12 display-1">这是我</div>
       <div class="display-3 shine">{{ info.my_info }}</div></v-parallax
     >
-    <v-parallax src="/pen2.jpg" height="650">
+    <v-parallax src="/road.jpg" height="650" style="backgroundSize:cover">
       <div class="mb-12 display-1">我梦想</div>
       <div class="display-3 shine">{{ info.my_hope }}</div></v-parallax
     >

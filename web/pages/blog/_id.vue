@@ -29,13 +29,13 @@
           <div class="text-justify" v-html="article.content"></div>
         </div>
         <div style="height:10rem;position:relative;">
-          <div v-if="pre" style="position:absolute;bottom:-3%;left:3%;">
+          <div v-if="pre" style="position:absolute;top:10%;left:3%;">
             <v-btn fab :to="`/blog/${pre.id}`">
               <v-icon>mdi-skip-previous</v-icon>
             </v-btn>
             <span class="ml-4">{{ pre.title }}</span>
           </div>
-          <div v-if="next" style="position:absolute;bottom:-3%;right:3%;">
+          <div v-if="next" style="position:absolute;bottom:10%;right:3%;">
             <span class="mr-4">{{ next.title }}</span>
             <v-btn fab :to="`/blog/${next.id}`">
               <v-icon>mdi-skip-next</v-icon>

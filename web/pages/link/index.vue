@@ -42,17 +42,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .link {
+  height: 100%;
+  position: relative;
+  background: -webkit-linear-gradient(45deg, #a27d52 10%, #e2e2e2 90%);
+  background: linear-gradient(45deg, #a27d52 10%, #e2e2e2 90%);
+  overflow: hidden;
+  background-size: 200% 100%;
+  -webkit-animation: move 10s ease infinite;
+  animation: move 10s ease infinite;
+}
+@-webkit-keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+/* .link {
   height: 100%;
   background: url("/lib.jpg");
   background-size: cover;
-}
+} */
 .v-card {
   transition: opacity 0.4s ease-in-out;
 }
-
 .v-card:not(.on-hover) {
   opacity: 0.7;
+}
+@media screen and (min-width: 1200px) {
+  .link {
+    background: url("/lib.jpg");
+    background-size: cover;
+    animation: none;
+    background-attachment: fixed;
+  }
 }
 </style>

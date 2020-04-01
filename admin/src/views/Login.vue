@@ -72,7 +72,7 @@ export default {
   methods: {
     async login() {
       const res = await this.$http.post(
-        "http://localhost:3002/login",
+        "http://47.115.83.172/login",
         this.loginForm
       );
       localStorage.token = res.data.token;

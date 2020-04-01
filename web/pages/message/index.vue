@@ -10,50 +10,8 @@ export default {
   data() {
     return {
       message: "message",
-
-      items: [
-        { header: "最新" },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          title: "abc",
-          subtitle:
-            "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-          title: 'fgh<span class="grey--text text--lighten-1">4</span>',
-          subtitle:
-            "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-          title: "789",
-          subtitle:
-            "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-          title: "Birthday gift",
-          subtitle:
-            "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?"
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-          title: "Recipe to try",
-          subtitle:
-            "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-        }
-      ]
+      items: []
     };
-  },
-  methods: {
-    submit() {
-      console.log(this.message);
-    }
   },
   components: {
     Comment
@@ -64,7 +22,36 @@ export default {
 <style>
 .message {
   height: 100%;
+  position: relative;
+  background: -webkit-linear-gradient(45deg, #a99589 10%, #e7e9eb 70%);
+  background: linear-gradient(45deg, #a99589 10%, #e7e9eb 70%);
+  overflow: hidden;
+  background-size: 200% 100%;
+  -webkit-animation: move 10s ease infinite;
+  animation: move 10s ease infinite;
+}
+@-webkit-keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .message {
+    background: url("/pen2.jpg");
+    background-size: cover;
+    animation: none;
+    background-attachment: fixed;
+  }
+}
+/* .message {
+  height: 100%;
   background: url("/pen2.jpg");
   background-size: cover;
-}
+} */
 </style>

@@ -4,7 +4,7 @@ const isEmpty = require('./isEmpty')
 module.exports = function validateArticle(data) {
     let errors = {}
     data.title = !isEmpty(data.title) ? data.title : ''
-    data.content = !isEmpty(data.content) ? data.content : ''
+    data.content_html = !isEmpty(data.content_html) ? data.content_html : ''
 
     if (validator.isEmpty(data.title)) {
         errors.title = '标题不能为空'
@@ -15,8 +15,8 @@ module.exports = function validateArticle(data) {
         })) {
         errors.title = '标题的长度不超过100位'
     }
-    if (validator.isEmpty(data.content)) {
-        errors.content = '内容不能为空'
+    if (validator.isEmpty(data.content_html)) {
+        errors.content_html = '内容不能为空'
     }
     return {
         errors,

@@ -9,7 +9,7 @@ module.exports = app => {
   const validateArticle = require('../../plugins/article') //验证请求体
 
   router.get("/", async (req, res) => {
-    const sql = "select * from articles where is_delete = 0 ORDER BY id desc";
+    const sql = "select id,title,content_md,date from articles where is_delete = 0 ORDER BY id desc";
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
@@ -23,8 +23,7 @@ module.exports = app => {
 
   router.get("/:id", async (req, res) => {
     const sql = `
-    UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
-    select * from articles where id='${req.params.id};
+    select title,content_md from articles where id='${req.params.id};
     '`;
     await db.query(sql, (err, data) => {
       if (err) {
@@ -32,7 +31,7 @@ module.exports = app => {
           message: "数据库查询错误"
         });
       } else {
-        return res.send(data[1][0]);
+        return res.send(data[0]);
       }
     });
   });
@@ -48,12 +47,13 @@ module.exports = app => {
         message: errors
       })
     }
-    const sql = "insert into articles (title, content,date) VALUES (?,?,?)";
+    const sql = "insert into articles (title, content_html,content_md,date) VALUES (?,?,?,?)";
     const {
       title,
-      content
+      content_html,
+      content_md
     } = req.body;
-    await db.query(sql, [`${title}`, `${content}`, `${date}`], (err, data) => {
+    await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`], (err, data) => {
       if (err) {
         return res.send({
           message: err
@@ -76,12 +76,13 @@ module.exports = app => {
       })
     }
     const id = req.params.id;
-    const sql = `UPDATE articles SET title = ?,content=?,date=? WHERE id = '${id}'`;
+    const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=? WHERE id = '${id}'`;
     const {
       title,
-      content
+      content_html,
+      content_md
     } = req.body;
-    await db.query(sql, [`${title}`, `${content}`, `${date}`], (err, data) => {
+    await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`], (err, data) => {
       if (err) {
         return res.send({
           message: "数据库查询错误"
@@ -130,7 +131,7 @@ module.exports = app => {
     const {
       search
     } = req.body;
-    const sql = `select * from articles where (binary title like '%${search}%' or content like '%${search}%') and is_delete = 0`;
+    const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

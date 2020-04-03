@@ -4,21 +4,23 @@ import router from "./router/index";
 
 const http = axios.create({
   // baseURL: "http://localhost:3002/admin/api"
-  baseURL: process.env.VUE_BLOG_API_URL || '/admin/api'
+  baseURL: process.env.VUE_BLOG_API_URL || "/admin/api"
 });
 
-http.interceptors.request.use((config) => {
-  if (localStorage.token) {
-    // 判断是否存在token，如果存在的话，则每个http header都加上token
+http.interceptors.request.use(
+  config => {
     if (localStorage.token) {
-      config.headers.authorization = "Bearer " + localStorage.token; //请求头加上token
+      // 判断是否存在token，如果存在的话，则每个http header都加上token
+      if (localStorage.token) {
+        config.headers.authorization = "Bearer " + localStorage.token; //请求头加上token
+      }
     }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
   }
-  return config;
-}, (error) => {
-
-  return Promise.reject(error);
-});
+);
 
 // 响应拦截
 http.interceptors.response.use(

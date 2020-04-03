@@ -41,7 +41,7 @@
                 </div>
                 <v-card-text class="text--primary">
                   <p class="subtitle font-weight-light">
-                    {{ item.content }}
+                    {{ item.content_html }}
                   </p>
                 </v-card-text>
                 <div class="d-flex justify-space-around overline">

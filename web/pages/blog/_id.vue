@@ -26,7 +26,7 @@
         </div>
         <v-divider class="mb-8"></v-divider>
         <div class="content">
-          <div class="text-justify" v-html="article.content"></div>
+          <div class="text-justify" v-html="article.content_html"></div>
         </div>
         <div style="height:10rem;position:relative;">
           <div v-if="pre" style="position:absolute;top:10%;left:3%;">

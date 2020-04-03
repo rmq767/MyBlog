@@ -5,7 +5,7 @@
         <v-col
           v-for="(link, i) in links"
           :key="i"
-          class="col-xs-12 col-md-6 col-lg-4"
+          class="col-12 col-md-6 col-lg-4"
         >
           <v-hover v-slot:default="{ hover }">
             <v-card link :href="link.link" hover :class="{ 'on-hover': hover }">

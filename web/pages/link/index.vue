@@ -69,10 +69,10 @@ export default {
   background: url("/lib.jpg");
   background-size: cover;
 } */
-.v-card {
+.link .v-card {
   transition: opacity 0.4s ease-in-out;
 }
-.v-card:not(.on-hover) {
+.link .v-card:not(.on-hover) {
   opacity: 0.7;
 }
 @media screen and (min-width: 1200px) {

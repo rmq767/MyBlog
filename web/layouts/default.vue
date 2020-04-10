@@ -49,7 +49,7 @@
       color="deep-purple accent-1"
       hide-on-scroll
       dark
-      height="54rem"
+      height="52rem"
       src="https://picsum.photos/1920/1080?random"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -79,13 +79,7 @@
         <v-icon>mdi-arrow-up</v-icon>
       </v-btn>
     </div>
-    <v-bottom-navigation
-      grow
-      color="deep-purple accent-1"
-      fixed
-      shift
-      height="3rem"
-    >
+    <v-bottom-navigation color="deep-purple accent-1" fixed shift height="3rem">
       <v-btn append link to="/">
         <span>我的文章</span>
         <v-icon>mdi-book</v-icon>

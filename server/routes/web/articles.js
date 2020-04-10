@@ -1,7 +1,7 @@
-module.exports = app => {
+module.exports = (app) => {
   const express = require("express");
   const router = express.Router({
-    mergeParams: true //合并参数
+    mergeParams: true, //合并参数
   });
   const db = require("../../database/db.config"); //引入数据库封装模块
 
@@ -11,11 +11,11 @@ module.exports = app => {
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         data.map(
-          v => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
+          (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
         );
         return res.send(data);
       }
@@ -33,7 +33,7 @@ module.exports = app => {
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         for (let m in data[1]) {
@@ -60,7 +60,7 @@ module.exports = app => {
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         for (let m in data[0]) {
@@ -71,7 +71,7 @@ module.exports = app => {
           }
         }
         data[0].map(
-          v => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
+          (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
         );
         return res.send(data[0]);
       }
@@ -84,7 +84,7 @@ module.exports = app => {
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         return res.send(data[0]);
@@ -98,7 +98,7 @@ module.exports = app => {
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         return res.send(data[0]);
@@ -108,15 +108,15 @@ module.exports = app => {
 
   router.post("/get/search", async (req, res) => {
     const { search } = req.body;
-    const sql = `select id,title,content_html,date,clicks from articles where (binary title like '%${search}%' or content like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
+    const sql = `select id,title,content_html,date,clicks from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({
-          message: "数据库查询错误"
+          message: "数据库查询错误",
         });
       } else {
         data.map(
-          v => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
+          (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
         );
         return res.send(data);
       }

@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(require("cors")());
 app.use("/uploads", express.static(__dirname + "/uploads")); //静态文件
 app.use("/admin", express.static(__dirname + "/admin")); //静态文件
-app.use("/", express.static(__dirname + "/web")); //静态文件
+app.use("/", express.static(__dirname + "/dist")); //静态文件
 
 // 中间件处理token
 app.use("/admin/api", async (req, res, next) => {

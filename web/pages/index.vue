@@ -111,7 +111,8 @@ export default {
   data() {
     return {
       articlesData: [],
-      articles: "articles"
+      articles: "articles",
+      timeout: null
     };
   },
   methods: {
@@ -130,6 +131,12 @@ export default {
         notice.style.top = "0px";
         aboutme.style.top = "0px";
       }
+    },
+    async getSearch(newValue) {
+      const res = await this.$axios.post("/articles/get/search", {
+        search: newValue
+      });
+      this.articlesData = res.data;
     }
   },
   components: {
@@ -137,10 +144,10 @@ export default {
   },
   watch: {
     async searchData(newValue, oldValue) {
-      const res = await this.$axios.post("/articles/get/search", {
-        search: newValue
-      });
-      this.articlesData = res.data;
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.getSearch(newValue);
+      }, 1000);
     }
   },
   destroyed() {

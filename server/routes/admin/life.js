@@ -44,14 +44,15 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into life (image,description,date) VALUES (?,?,?)";
+      "insert into life (image,title,description,date) VALUES (?,?,?,?)";
     const {
       image,
+      title,
       description
     } = req.body;
     await db.query(
       sql,
-      [`${image}`, `${description}`, `${date}`],
+      [`${image}`, `${title}`, `${description}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -76,14 +77,15 @@ module.exports = app => {
       })
     }
     const id = req.params.id;
-    const sql = `UPDATE life SET image = ?,description=?,date=? WHERE id = '${id}'`;
+    const sql = `UPDATE life SET image=?,title=?,description=?,date=? WHERE id = '${id}'`;
     const {
       image,
+      title,
       description
     } = req.body;
     await db.query(
       sql,
-      [`${image}`, `${description}`, `${date}`],
+      [`${image}`, `${title}`, `${description}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
@@ -134,7 +136,7 @@ module.exports = app => {
     const {
       search
     } = req.body;
-    const sql = `select * from life where (binary description like '%${search}%' or date like '%${search}%') and is_delete = 0`;
+    const sql = `select * from life where (binary description like '%${search}%' or title like '%${search}%') and is_delete = 0`;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

@@ -13,13 +13,13 @@
         </div>
         <div class="mt-12 d-flex justify-space-between">
           <span
-            >发布时间 ：<span> {{ article.date.split("T")[0] }}</span>
+            >更新时间：<span> {{ article.date.split("T")[0] }}</span>
           </span>
           <span
-            >点击阅读量 ：<span> {{ article.clicks }}</span>
+            >阅读量：<span> {{ article.clicks }}</span>
           </span>
           <span
-            >评论数量 ：<span>
+            >评论：<span>
               {{ article.comment_count ? article.comment_count : 0 }}</span
             >
           </span>

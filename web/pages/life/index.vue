@@ -1,8 +1,5 @@
 <template>
   <div class="life">
-    <h2 class="text-center white--text display-1 site__title font-weight-thin">
-      生活不止眼前的苟且，还有诗和远方
-    </h2>
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
       <v-timeline-item v-for="item in life" :key="item.id">
         <span slot="opposite">{{ item.date.split("-")[0] }}</span>

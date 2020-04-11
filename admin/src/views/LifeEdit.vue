@@ -19,11 +19,11 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="题目（可选）">
-        <el-input v-model="life.description"></el-input>
+        <el-input v-model="life.title"></el-input>
       </el-form-item>
       <el-form-item label="想说的">
         <el-input
-          v-model="life.content"
+          v-model="life.description"
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 6 }"
         ></el-input>

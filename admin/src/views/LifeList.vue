@@ -50,7 +50,7 @@
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.content }}</span>
+          <span style="margin-left: 10px">{{ scope.row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="180">

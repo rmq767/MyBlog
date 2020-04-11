@@ -17,7 +17,7 @@
                   class="d-flex transition-fast-in-fast-out white v-card--reveal display-1 black--text"
                   style="height: 100%;"
                 >
-                  {{ item.description }}
+                  {{ item.title }}
                 </div>
               </v-expand-transition>
             </v-img>
@@ -25,7 +25,7 @@
               item.date.split("T")[0]
             }}</v-card-subtitle>
             <v-card-text>
-              {{ item.content }}
+              {{ item.description }}
             </v-card-text>
           </v-card>
         </v-hover>

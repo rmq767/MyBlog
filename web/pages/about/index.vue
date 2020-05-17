@@ -2,27 +2,15 @@
   <div class="about">
     <!-- <div class="bg">WELCOME</div> -->
     <div class="pc">
-      <v-parallax
-        :src="img_src1 ? img_src1 : '/pen2.jpg'"
-        height="580"
-        style="backgroundSize:cover"
-      >
+      <v-parallax :src="img_src1" height="600" style="backgroundSize:cover">
         <div class="mb-12 display-1 text-center">『我想说』</div>
         <div class="display-2 shine text-center">{{ info.my_message }}</div>
       </v-parallax>
-      <v-parallax
-        :src="img_src2 ? img_src2 : '/computer.jpg'"
-        height="580"
-        style="backgroundSize:cover"
-      >
+      <v-parallax :src="img_src2" height="600" style="backgroundSize:cover">
         <div class="mb-12 display-1 text-center">『这是我』</div>
         <div class="display-2 shine text-center">{{ info.my_info }}</div>
       </v-parallax>
-      <v-parallax
-        :src="img_src3 ? img_src3 : '/load.jpg'"
-        height="580"
-        style="backgroundSize:cover"
-      >
+      <v-parallax :src="img_src3" height="600" style="backgroundSize:cover">
         <div class="mb-12 display-1 text-center">『我梦想』</div>
         <div class="display-2 shine text-center">{{ info.my_hope }}</div>
       </v-parallax>
@@ -55,15 +43,9 @@ export default {
       // color_num1: "",
       // color_num2: "",
       // color_num3: "",
-      img_src1: `https://i.picsum.photos/id/${Math.floor(
-        Math.random() * 999
-      )}/1280/800.jpg`,
-      img_src2: `https://i.picsum.photos/id/${Math.floor(
-        Math.random() * 999 + 1
-      )}/1280/800.jpg`,
-      img_src3: `https://i.picsum.photos/id/${Math.floor(
-        Math.random() * 999 + 2
-      )}/1280/800.jpg`
+      img_src1: `https://picsum.photos/seed/1/1280/800`,
+      img_src2: `https://picsum.photos/seed/2/1280/800`,
+      img_src3: `https://picsum.photos/seed/3/1280/800`
     };
   },
   async asyncData({ $axios }) {

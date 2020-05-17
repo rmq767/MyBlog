@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ id ? "编辑" : "新建" }}生活</h3>
+    <h3>{{ id ? '编辑' : '新建' }}生活</h3>
     <el-form
       label-width="120px"
       @submit.native.prevent="save"
@@ -13,6 +13,7 @@
           :show-file-list="false"
           :on-success="showAvatar"
           :headers="mixGetAuthHeaders()"
+          :before-upload="beforeAvatarUpload"
         >
           <img v-if="life.image" :src="life.image" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -38,41 +39,41 @@
 <script>
 export default {
   props: {
-    id: {}
+    id: {},
   },
   data() {
     return {
       life: {
-        image: ""
-      }
-    };
+        image: '',
+      },
+    }
   },
   methods: {
     async save() {
       if (this.id) {
-        await this.$http.put(`/life/${this.id}`, this.life);
+        await this.$http.put(`/life/${this.id}`, this.life)
       } else {
-        await this.$http.post("/life", this.life);
+        await this.$http.post('/life', this.life)
       }
-      this.$router.push("/life/list");
+      this.$router.push('/life/list')
       this.$message({
-        type: "success",
-        message: "保存成功"
-      });
+        type: 'success',
+        message: '保存成功',
+      })
     },
     showAvatar(val) {
-      this.life.image = val.url;
+      this.life.image = val.url
     },
     async fetch() {
-      const res = await this.$http.get(`/life/${this.id}`);
-      this.life = res.data;
-      this.life = Object.assign({}, this.life, res.data); //把 this.life{}中，再把res.data添加到{}中，如果有覆盖，没有保存
-    }
+      const res = await this.$http.get(`/life/${this.id}`)
+      this.life = res.data
+      this.life = Object.assign({}, this.life, res.data) //把 this.life{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+    },
   },
   created() {
-    this.id && this.fetch();
-  }
-};
+    this.id && this.fetch()
+  },
+}
 </script>
 
 <style>

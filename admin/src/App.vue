@@ -1,11 +1,9 @@
 <template>
   <div id="app">
-    <transition
-      enter-active-class="animated zoomIn faster"
-      leave-active-class="animated zoomOut faster"
-      mode="out-in"
-    >
-      <router-view class="show_animate" />
+    <transition enter-active-class="animated zoomIn faster"
+                leave-active-class="animated zoomOut faster"
+                mode="out-in">
+      <router-view />
     </transition>
   </div>
 </template>

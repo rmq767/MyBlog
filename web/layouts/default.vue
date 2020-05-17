@@ -7,10 +7,7 @@
       app
       color="deep-purple accent-1"
     >
-      <v-img
-        :aspect-ratio="16 / 9"
-        src="https://picsum.photos/1920/1080?random"
-      >
+      <v-img :aspect-ratio="16 / 9" src="https://picsum.photos/1280/800?random">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <div class="subheading">小阮</div>
@@ -50,7 +47,7 @@
       hide-on-scroll
       dark
       height="52rem"
-      src="https://picsum.photos/1920/1080?random"
+      src="https://picsum.photos/1280/800?random"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">

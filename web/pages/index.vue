@@ -150,7 +150,7 @@ export default {
       }, 1000);
     }
   },
-  destroyed() {
+  beforeDestroy() {
     window.removeEventListener("scroll", this.toScoll);
   },
   mounted() {

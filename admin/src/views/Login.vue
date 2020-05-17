@@ -37,62 +37,62 @@
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
+      if (value === '') {
+        callback(new Error('请输入密码'))
       } else if (value.length < 8) {
-        callback(new Error("密码不能小于8位"));
+        callback(new Error('密码不能小于8位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        password: "",
-        email: ""
+        password: '',
+        email: '',
       },
       rules: {
         password: [
           {
             validator: validatePass,
-            trigger: ["blur", "change"],
-            required: true
-          }
+            trigger: ['blur', 'change'],
+            required: true,
+          },
         ],
         email: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
-          }
-        ]
-      }
-    };
+            type: 'email',
+            message: '请输入正确的邮箱地址',
+            trigger: ['blur', 'change'],
+          },
+        ],
+      },
+    }
   },
   methods: {
     async login() {
       const res = await this.$http.post(
-        "http://47.115.83.172/login",
+        'http://47.115.83.172/login',
         this.loginForm
-      );
-      localStorage.token = res.data.token;
-      sessionStorage.setItem("username", res.data.username);
-      sessionStorage.setItem("u_id", res.data.id);
-      this.$router.push("/admin");
+      )
+      localStorage.token = res.data.token
+      localStorage.setItem('username', res.data.username)
+      localStorage.setItem('u_id', res.data.id)
+      this.$router.push('/admin')
       this.$message({
-        type: "success",
-        message: "登录成功"
-      });
-    }
-  }
-};
+        type: 'success',
+        message: '登录成功',
+      })
+    },
+  },
+}
 </script>
 
 <style>
 .login {
   height: 100%;
   widows: 100%;
-  background: url("../assets/bg_1.jpg");
+  background: url('../assets/bg_1.jpg');
   background-size: cover;
 }
 .form {

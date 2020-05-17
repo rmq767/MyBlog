@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ id ? "编辑" : "新建" }}链接</h3>
+    <h3>{{ id ? '编辑' : '新建' }}链接</h3>
     <el-form
       label-width="120px"
       @submit.native.prevent="save"
@@ -13,6 +13,7 @@
           :show-file-list="false"
           :on-success="showAvatar"
           :headers="mixGetAuthHeaders()"
+          :before-upload="beforeAvatarUpload"
         >
           <img v-if="link.image" :src="link.image" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -41,41 +42,41 @@
 <script>
 export default {
   props: {
-    id: {}
+    id: {},
   },
   data() {
     return {
       link: {
-        image: ""
-      }
-    };
+        image: '',
+      },
+    }
   },
   methods: {
     async save() {
       if (this.id) {
-        await this.$http.put(`/links/${this.id}`, this.link);
+        await this.$http.put(`/links/${this.id}`, this.link)
       } else {
-        await this.$http.post("/links", this.link);
+        await this.$http.post('/links', this.link)
       }
-      this.$router.push("/link/list");
+      this.$router.push('/link/list')
       this.$message({
-        type: "success",
-        message: "保存成功"
-      });
+        type: 'success',
+        message: '保存成功',
+      })
     },
     showAvatar(val) {
-      this.link.image = val.url;
+      this.link.image = val.url
     },
     async fetch() {
-      const res = await this.$http.get(`/links/${this.id}`);
-      this.link = res.data;
-      this.link = Object.assign({}, this.link, res.data); //把 this.link{}中，再把res.data添加到{}中，如果有覆盖，没有保存
-    }
+      const res = await this.$http.get(`/links/${this.id}`)
+      this.link = res.data
+      this.link = Object.assign({}, this.link, res.data) //把 this.link{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+    },
   },
   created() {
-    this.id && this.fetch();
-  }
-};
+    this.id && this.fetch()
+  },
+}
 </script>
 
 <style>

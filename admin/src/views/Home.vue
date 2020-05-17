@@ -118,27 +118,28 @@
 export default {
   data() {
     return {
-      is_super: "",
-      username: ""
-    };
+      is_super: '',
+      username: '',
+    }
   },
   methods: {
     handleCommand() {
-      localStorage.removeItem("token");
-      this.$router.go(0);
+      localStorage.removeItem('token')
+      this.$router.go(0)
     },
     async fetch() {
       const res = await this.$http.get(
-        `/admins/${sessionStorage.getItem("u_id")}`
-      );
-      this.is_super = res.data.is_super;
-      this.username = sessionStorage.getItem("username");
-    }
+        `/admins/${localStorage.getItem('u_id')}`
+      )
+      this.is_super = res.data.is_super
+      console.log(res.data.is_super)
+      this.username = localStorage.getItem('username')
+    },
   },
   created() {
-    this.fetch();
-  }
-};
+    this.fetch()
+  },
+}
 </script>
 
 <style>

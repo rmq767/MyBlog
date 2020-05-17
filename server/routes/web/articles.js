@@ -49,7 +49,10 @@ module.exports = (app) => {
   });
 
   router.get("/get/page", async (req, res) => {
-    const { pageSize, currentPage } = req.query;
+    const {
+      pageSize,
+      currentPage
+    } = req.query;
     const start = (Number(currentPage) - 1) * Number(pageSize);
     const end = Number(pageSize);
     const sql = `select id,title,content_html,date,clicks from articles WHERE is_delete = 0 ORDER BY id desc limit ${start},${end};
@@ -79,7 +82,9 @@ module.exports = (app) => {
   });
 
   router.get("/get/pre", async (req, res) => {
-    const { id } = req.query;
+    const {
+      id
+    } = req.query;
     const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id>${id} ORDER BY id LIMIT 1 ;`;
     await db.query(sql, (err, data) => {
       if (err) {
@@ -93,7 +98,9 @@ module.exports = (app) => {
   });
 
   router.get("/get/next", async (req, res) => {
-    const { id } = req.query;
+    const {
+      id
+    } = req.query;
     const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id<${id} ORDER BY id DESC LIMIT 1 ;`;
     await db.query(sql, (err, data) => {
       if (err) {
@@ -107,7 +114,9 @@ module.exports = (app) => {
   });
 
   router.post("/get/search", async (req, res) => {
-    const { search } = req.body;
+    const {
+      search
+    } = req.body;
     const sql = `select id,title,content_html,date,clicks from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
     await db.query(sql, (err, data) => {
       if (err) {

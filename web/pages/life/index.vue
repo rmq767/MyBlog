@@ -62,7 +62,7 @@ export default {
   position: absolute;
   width: 100%;
 }
-.site__title {
+/* .site__title {
   color: #f35626;
   font-family: 微软雅黑;
   background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
@@ -79,7 +79,7 @@ export default {
     -webkit-filter: hue-rotate(-360deg);
     -moz-filter: hue-rotate(-360deg);
   }
-}
+} */
 .life {
   height: 100%;
   position: relative;
@@ -103,7 +103,7 @@ export default {
 }
 @media screen and (min-width: 1200px) {
   .life {
-    background: url("/life.jpg");
+    background: url("https://picsum.photos/1280/800?random");
     background-size: cover;
     animation: none;
     background-attachment: fixed;

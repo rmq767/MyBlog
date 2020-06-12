@@ -98,7 +98,7 @@ module.exports = app => {
 
   router.delete("/:id", async (req, res) => {
     const id = req.params.id;
-    const sql = `UPDATE messages SET is_delete = 1 WHERE id = '${id}' `;
+    const sql = `delete from messages WHERE id = '${id}' `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

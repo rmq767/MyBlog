@@ -102,7 +102,7 @@ module.exports = app => {
 
   router.delete("/:id", async (req, res) => {
     const id = req.params.id;
-    const sql = `UPDATE comments SET is_delete = 1 WHERE id = '${id}' `;
+    const sql = `delete from comments WHERE id = '${id}' `;
     await db.query(sql, (err, data) => {
       if (err) {
         return res.send({

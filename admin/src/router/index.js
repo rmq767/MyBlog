@@ -10,14 +10,14 @@ import MessageList from '../views/MessageList.vue'
 import MessageEdit from '../views/MessageEdit.vue'
 import NoticeList from '../views/NoticeList.vue'
 import NoticeEdit from '../views/NoticeEdit.vue'
-import LinkList from '../views/LinkList.vue'
-import LinkEdit from '../views/LinkEdit.vue'
+// import LinkList from '../views/LinkList.vue'
+// import LinkEdit from '../views/LinkEdit.vue'
 import InformationList from '../views/InformationList.vue'
 import InformationEdit from '../views/InformationEdit.vue'
 import AdminList from '../views/AdminList.vue'
 import AdminEdit from '../views/AdminEdit.vue'
-import LifeList from '../views/LifeList.vue'
-import LifeEdit from '../views/LifeEdit.vue'
+// import LifeList from '../views/LifeList.vue'
+// import LifeEdit from '../views/LifeEdit.vue'
 import Login from '../views/Login.vue'
 import MessageReplyList from '../views/MessageReplyList';
 import CommentReplyList from '../views/CommentReplyList';
@@ -91,19 +91,19 @@ const routes = [{
         component: NoticeEdit,
         props: true
       },
-      {
-        path: '/link/new',
-        component: LinkEdit
-      },
-      {
-        path: '/link/list',
-        component: LinkList
-      },
-      {
-        path: '/link/edit/:id',
-        component: LinkEdit,
-        props: true
-      },
+      // {
+      //   path: '/link/new',
+      //   component: LinkEdit
+      // },
+      // {
+      //   path: '/link/list',
+      //   component: LinkList
+      // },
+      // {
+      //   path: '/link/edit/:id',
+      //   component: LinkEdit,
+      //   props: true
+      // },
       {
         path: '/information/new',
         component: InformationEdit
@@ -117,19 +117,19 @@ const routes = [{
         component: InformationEdit,
         props: true
       },
-      {
-        path: '/life/new',
-        component: LifeEdit
-      },
-      {
-        path: '/life/list',
-        component: LifeList
-      },
-      {
-        path: '/life/edit/:id',
-        component: LifeEdit,
-        props: true
-      },
+      // {
+      //   path: '/life/new',
+      //   component: LifeEdit
+      // },
+      // {
+      //   path: '/life/list',
+      //   component: LifeList
+      // },
+      // {
+      //   path: '/life/edit/:id',
+      //   component: LifeEdit,
+      //   props: true
+      // },
       {
         path: '/admin/edit',
         component: AdminEdit,

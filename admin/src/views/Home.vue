@@ -53,7 +53,7 @@
               <el-menu-item index="/notice/list">公告列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="links">
+          <!-- <el-submenu index="links">
             <template slot="title">
               <i class="el-icon-link"></i>
               <span slot="title">链接</span>
@@ -62,7 +62,7 @@
               <el-menu-item index="/link/new">添加链接</el-menu-item>
               <el-menu-item index="/link/list">链接列表</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
           <el-submenu index="information">
             <template slot="title">
               <i class="el-icon-edit-outline"></i>
@@ -73,7 +73,7 @@
               <el-menu-item index="/information/list">信息列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="life">
+          <!-- <el-submenu index="life">
             <template slot="title">
               <i class="el-icon-user"></i>
               <span slot="title">我的生活</span>
@@ -82,7 +82,7 @@
               <el-menu-item index="/life/new">添加生活</el-menu-item>
               <el-menu-item index="/life/list">生活列表</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
           <el-submenu index="admin" v-if="is_super == 1 ? true : false">
             <template slot="title">
               <i class="el-icon-edit"></i>

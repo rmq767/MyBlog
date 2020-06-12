@@ -85,14 +85,14 @@
         <span>留言板</span>
         <v-icon>mdi-file-document-edit</v-icon>
       </v-btn>
-      <v-btn append link to="/link">
+      <!-- <v-btn append link to="/link">
         <span>友情链接</span>
         <v-icon>mdi-share-variant</v-icon>
       </v-btn>
       <v-btn append link to="/life">
         <span>我的生活</span>
         <v-icon>mdi-pinwheel</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-btn append link to="/about">
         <span>关于我</span>
         <v-icon>mdi-face</v-icon>

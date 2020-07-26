@@ -4,11 +4,11 @@ import router from "./router/index";
 
 const http = axios.create({
   // baseURL: "http://localhost:3002/admin/api"
-  baseURL: process.env.VUE_BLOG_API_URL || "/admin/api"
+  baseURL: process.env.VUE_APP_API_URL || "/admin/api",
 });
 
 http.interceptors.request.use(
-  config => {
+  (config) => {
     if (localStorage.token) {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
       if (localStorage.token) {
@@ -17,21 +17,21 @@ http.interceptors.request.use(
     }
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 // 响应拦截
 http.interceptors.response.use(
-  res => {
+  (res) => {
     return res;
   },
-  err => {
+  (err) => {
     if (err.response.data.message) {
       Vue.prototype.$message({
         type: "error",
-        message: err.response.data.message //这是后台re.send({message:''})里面的数据
+        message: err.response.data.message, //这是后台re.send({message:''})里面的数据
       });
     }
     if (err.response.status == 401) {

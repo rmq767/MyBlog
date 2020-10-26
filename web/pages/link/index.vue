@@ -1,6 +1,6 @@
 <template>
     <div class="link-container">
-        <v-card flat tile>
+        <v-card flat>
             <v-container v-for="type in types" :key="type" class="grey lighten-4" fluid>
                 <v-subheader>{{ type }}</v-subheader>
                 <v-row>
@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             types: ["初级", "中级", "高级", "进阶", "其他"],
-            cards: ["Good", "Best", "Finest", "Finest"],
+            cards: ["Good", "Best", "Finest", "aaa"],
             socials: [
                 {
                     icon: "mdi-share",
@@ -52,4 +52,7 @@ export default {
 </script>
 
 <style scoped>
+.bg-color {
+    background: transparent;
+}
 </style>

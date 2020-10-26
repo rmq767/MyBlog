@@ -171,9 +171,6 @@ export default {
             }
             this.listData = res.data;
         },
-        getPagination(val) {
-            this.listData = val;
-        },
         async fetchReply(comment_id) {
             let res;
             if (this.type == "comments") {

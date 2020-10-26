@@ -146,8 +146,11 @@ export default {
     watch: {
         async searchData(newValue, oldValue) {
             clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.getSearch(newValue);
+            this.timeout = setTimeout(async () => {
+                if (newValue) {
+                    this.getSearch(newValue);
+                    document.documentElement.scrollTop = 0;
+                }
             }, 1000);
         },
     },

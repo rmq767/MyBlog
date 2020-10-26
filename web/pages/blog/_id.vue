@@ -9,13 +9,13 @@
             <div class="theme-type">
                 <v-card>
                     <div class="my-4 subtitle-1">同主题文章</div>
-                    <v-btn class="ma-2" color="secondary" rounded>
-                        Green Chip
-                    </v-btn>
+                    <div class="article-name" v-for="item in 5" :key="item">
+                        Green ChipGreen ChipGreen ChipGreen ChipGreen Chip
+                    </div>
                     <div class="my-4 subtitle-1">同分类文章</div>
-                    <v-btn class="ma-2" color="green" rounded>
+                    <div class="article-name">
                         Green Chip
-                    </v-btn>
+                    </div>
                 </v-card>
             </div>
             <div>
@@ -121,6 +121,16 @@ export default {
 .container .theme-type .v-card {
     padding: 20px;
 }
+.theme-type .article-name {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0px;
+    cursor: pointer;
+    color: rgb(179, 136, 255);
+}
 .mx-2 {
     position: fixed;
     left: 5%;
@@ -131,6 +141,9 @@ export default {
         width: 100%;
     }
     .mx-2 {
+        display: none;
+    }
+    .container .theme-type {
         display: none;
     }
 }

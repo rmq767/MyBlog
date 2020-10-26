@@ -57,7 +57,7 @@
                 <v-col class="d-none d-sm-none d-md-flex col-2 ml-12">
                     <div style="position:relative;width:100%;">
                         <div ref="aboutme" class="about_me">
-                            <v-card class="pa-2" outlined max-width="16rem">
+                            <v-card class="pa-2" outlined>
                                 <v-list-item>
                                     <v-tooltip top>
                                         <template v-slot:activator="{ on }">
@@ -78,13 +78,17 @@
                             </v-card>
                             <v-card style="padding:10px 20px;marginTop:20px">
                                 <div class="my-4 subtitle-1">文章主题</div>
-                                <v-btn class="ma-2" color="secondary" rounded>
-                                    Green Chip
-                                </v-btn>
+                                <div class="theme-type">
+                                    <v-btn class="ma-2" color="secondary" rounded v-for="item in 5" :key="item">
+                                        Green12
+                                    </v-btn>
+                                </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
-                                <v-btn class="ma-2" color="green" rounded>
-                                    Green Chip
-                                </v-btn>
+                                <div class="theme-type">
+                                    <v-btn class="ma-2" color="green" rounded>
+                                        Green123
+                                    </v-btn>
+                                </div>
                             </v-card>
                         </div>
                     </div>
@@ -182,6 +186,10 @@ export default {
 }
 .quote {
     animation: shake 3s ease infinite;
+}
+.theme-type {
+    display: flex;
+    flex-wrap: wrap;
 }
 @keyframes shake {
     0%,

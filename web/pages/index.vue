@@ -27,7 +27,13 @@
                 <v-col class="col-xs-12 col-md-6 offset-md-1">
                     <v-row dense>
                         <v-col v-for="(item, i) in articlesData" :key="i" cols="12">
-                            <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6">
+                            <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6 card-item">
+                                <v-chip class="ma-2 tag" color="#7c4dff" label text-color="white">
+                                    <v-icon left>
+                                        mdi-label
+                                    </v-icon>
+                                    主题
+                                </v-chip>
                                 <div class="subtitle-2 text-center">
                                     <v-icon class="mb-5 mx-4 quote ">mdi-format-quote-open</v-icon>
                                     <span class="headline">{{ item.title }}</span>
@@ -193,6 +199,14 @@ export default {
 .theme-type {
     display: flex;
     flex-wrap: wrap;
+}
+.card-item {
+    position: relative;
+}
+.card-item .tag {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 @keyframes shake {
     0%,

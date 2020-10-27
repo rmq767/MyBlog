@@ -118,6 +118,6 @@ export default {
     font-size: 100%;
     font-weight: normal;
     display: block;
-    /* color: #bababa; */
+    color: #a776ff;
 }
 </style>

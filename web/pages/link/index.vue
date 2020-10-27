@@ -1,6 +1,6 @@
 <template>
     <div class="link-container">
-        <v-card flat>
+        <v-card flat style="background:transparent">
             <!-- <v-container v-for="type in types" :key="type" class="grey lighten-4" fluid>
                 <v-subheader>{{ type }}</v-subheader>
                 <v-row>
@@ -22,10 +22,10 @@
                     </v-col>
                 </v-row>
             </v-container> -->
-            <v-container v-for="(item,index) in linkList" :key="index" class="grey lighten-4" fluid>
+            <v-container v-for="(item,index) in linkList" :key="index" fluid>
                 <v-subheader>{{ item.type }}</v-subheader>
                 <v-row>
-                    <v-col v-for="link in item.links" :key="link.name" cols="12" sm="4" md="3" lg='2'>
+                    <v-col v-for="link in item.links" :key="link.name" cols="12" sm="6" md="4" lg='3' xl='2'>
                         <v-card outlined shaped>
                             <v-img :src="link.img" :aspect-ratio="1/1" height='200'></v-img>
                             <v-card-title>{{link.name}}</v-card-title>
@@ -189,4 +189,13 @@ export default {
 </script>
 
 <style scoped>
+.link-container {
+    padding: 0rem 3rem;
+    background: linear-gradient(#ccfbff, #ef96c5);
+}
+@media screen and (max-width: 980px) {
+    .link-container {
+        padding: 0rem;
+    }
+}
 </style>

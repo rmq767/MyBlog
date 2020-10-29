@@ -68,7 +68,7 @@ const upload = multer({
 app.post("/admin/api/upload", upload.single("file"), async (req, res) => {
     // console.log(req.file)
     const file = req.file;
-    file.url = `http://47.115.83.172/uploads/${file.filename}`;
+    file.url = `http://localhost:3002/uploads/${file.filename}`;
     res.send(file);
 });
 

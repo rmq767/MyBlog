@@ -7,9 +7,9 @@ module.exports = app => {
     const moment = require("moment");
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
     const validateArticle = require('../../plugins/article') //验证请求体
-
+// 获取全部文章
     router.get("/", async (req, res) => {
-        const sql = "select id,title,content_md,date,clicks from articles where is_delete = 0 ORDER BY id desc";
+        const sql = "select * from articles where is_delete = 0 ORDER BY id desc";
         await db.query(sql, (err, data) => {
             if (err) {
                 return res.send({
@@ -20,10 +20,10 @@ module.exports = app => {
             }
         });
     });
-
+// 获取单个文章
     router.get("/:id", async (req, res) => {
         const sql = `
-    select title,content_md from articles where id='${req.params.id};
+    select * from articles where id='${req.params.id};
     '`;
         await db.query(sql, (err, data) => {
             if (err) {
@@ -35,7 +35,7 @@ module.exports = app => {
             }
         });
     });
-
+// 新增文章
     router.post("/", async (req, res) => {
         const {
             errors,
@@ -47,13 +47,15 @@ module.exports = app => {
                 message: errors
             })
         }
-        const sql = "insert into articles (title, content_html,content_md,date) VALUES (?,?,?,?)";
+        const sql = "insert into articles (title, content_html,content_md,date,type,theme) VALUES (?,?,?,?,?,?)";
         const {
             title,
             content_html,
-            content_md
+            content_md,
+            type,
+            theme
         } = req.body;
-        await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`], (err, data) => {
+        await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`,`${type}`,`${theme}`], (err, data) => {
             if (err) {
                 return res.send({
                     message: err
@@ -63,7 +65,7 @@ module.exports = app => {
             }
         });
     });
-
+// 编辑修改文章
     router.put("/:id", async (req, res) => {
         const {
             errors,
@@ -76,13 +78,15 @@ module.exports = app => {
             })
         }
         const id = req.params.id;
-        const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=? WHERE id = '${id}'`;
+        const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=?,type=?,theme=? WHERE id = '${id}'`;
         const {
             title,
             content_html,
-            content_md
+            content_md,
+            type,
+            theme
         } = req.body;
-        await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`], (err, data) => {
+        await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`,`${type}`,`${theme}`], (err, data) => {
             if (err) {
                 return res.send({
                     message: "数据库查询错误"
@@ -92,7 +96,7 @@ module.exports = app => {
             }
         });
     });
-
+// 删除文章
     router.delete("/:id", async (req, res) => {
         const id = req.params.id;
         const sql = `UPDATE articles SET is_delete = 1 WHERE id = '${id}' `;
@@ -106,7 +110,7 @@ module.exports = app => {
             }
         });
     });
-
+// 文章分页
     router.get("/get/page", async (req, res) => {
         const {
             pageSize,
@@ -126,12 +130,15 @@ module.exports = app => {
             }
         });
     });
-
+// 文章搜索
     router.post("/get/search", async (req, res) => {
         const {
-            search
+            title,
+            content,
+            theme,
+            type
         } = req.body;
-        const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0`;
+        const sql = `select * from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme }%" and type like "%${type}%" and is_delete = 0 ORDER BY id DESC`;
         await db.query(sql, (err, data) => {
             if (err) {
                 return res.send({
@@ -139,6 +146,48 @@ module.exports = app => {
                 });
             } else {
                 return res.send(data);
+            }
+        });
+    });
+// 获取文章主题
+    router.get("/get/theme", async (req, res) => {
+        const sql = "select theme from articles where is_delete = 0 ORDER BY id desc";
+        await db.query(sql, (err, data) => {
+            if (err) {
+                return res.send({
+                    message: "数据库查询错误"
+                });
+            } else {
+                let response = []
+                data.forEach((item)=>{
+                    if (item.theme) {
+                        response.push(item.theme)
+                    }
+                })
+                response =  response.toString()
+                response =  response.split(',')
+                return res.send(response);
+            }
+        });
+    });
+// 获取文章分类
+    router.get("/get/type", async (req, res) => {
+        const sql = "select type from articles where is_delete = 0 ORDER BY id desc";
+        await db.query(sql, (err, data) => {
+            if (err) {
+                return res.send({
+                    message: "数据库查询错误"
+                });
+            } else {
+                let response = []
+                data.forEach((item)=>{
+                    if (item.type) {
+                        response.push(item.type)
+                    }
+                })
+                response =  response.toString()
+                response =  response.split(',')
+                return res.send(response);
             }
         });
     });

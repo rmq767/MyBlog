@@ -28,12 +28,25 @@
                     <v-row dense>
                         <v-col v-for="(item, i) in articlesData" :key="i" cols="12">
                             <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6 card-item">
-                                <v-chip class="ma-2 tag" color="#7c4dff" label text-color="white">
-                                    <v-icon left>
-                                        mdi-label
-                                    </v-icon>
-                                    主题
-                                </v-chip>
+                                <div class="theme">
+                                    <v-chip class="mb-2" color="#7c4dff" label text-color="white" small>
+                                        <v-icon left>
+                                            mdi-label
+                                        </v-icon>
+                                        主题
+                                    </v-chip>
+                                </div>
+                                <div class="type">
+                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                        分类123321123
+                                    </v-chip>
+                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                        分类
+                                    </v-chip>
+                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                        分类
+                                    </v-chip>
+                                </div>
                                 <div class="subtitle-2 text-center">
                                     <v-icon class="mb-5 mx-4 quote ">mdi-format-quote-open</v-icon>
                                     <span class="headline">{{ item.title }}</span>
@@ -91,7 +104,7 @@
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
-                                    <v-btn class="ma-2" color="green" rounded>
+                                    <v-btn class="ma-2" color="green" rounded dark>
                                         Green123
                                     </v-btn>
                                 </div>
@@ -203,10 +216,18 @@ export default {
 .card-item {
     position: relative;
 }
-.card-item .tag {
+.card-item .theme {
     position: absolute;
     right: 0;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.card-item .type {
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 @keyframes shake {
     0%,

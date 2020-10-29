@@ -95,7 +95,7 @@
                         <span>{{ username }}</span>
                     </el-dropdown>
                 </el-header>
-                <el-main>
+                <el-main style="background:#fafafa">
                     <router-view :key="$route.path"></router-view>
                 </el-main>
             </el-container>

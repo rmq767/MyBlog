@@ -152,8 +152,8 @@ export default {
             form: {
                 title: "",
                 content: "",
-                theme: '',
-                type: '',
+                theme: "",
+                type: "",
             },
             themeOptions: [],
             typeOptions: [],

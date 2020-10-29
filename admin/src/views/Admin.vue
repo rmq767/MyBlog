@@ -1,10 +1,6 @@
 <template>
     <div class="echars-block">
-        <el-row :gutter="24">
-            <el-col :span="20">
-                <div ref="echarsBar" :style="{ width: '80rem', height: '30rem' }"></div>
-            </el-col>
-        </el-row>
+        <div ref="echarsBar" :style="{ width: '100%', height: '800px' }"></div>
     </div>
 </template>
 
@@ -19,6 +15,7 @@ export default {
     methods: {
         drawLine() {
             let myChart2 = this.$echarts.init(this.$refs.echarsBar);
+            myChart2.clear();
             myChart2.setOption({
                 title: {
                     text: "文章点击量",
@@ -38,6 +35,9 @@ export default {
                         data: this.s_data,
                     },
                 ],
+            });
+            window.addEventListener("resize", () => {
+                myChart2.resize();
             });
         },
         async fetchArticle() {

@@ -25,7 +25,7 @@
                             <el-button
                                 type="primary"
                                 native-type="submit"
-                                size="medium"
+                                style="width: 100%"
                                 round
                                 >登录</el-button
                             >
@@ -80,7 +80,7 @@ export default {
     methods: {
         async login() {
             const res = await this.$http.post(
-                "http://localhost:3002/login",
+                "http://47.115.83.172/login",
                 this.loginForm
             );
             localStorage.token = res.data.token;
@@ -100,7 +100,7 @@ export default {
 .login {
     height: 100%;
     widows: 100%;
-    background: url("../assets/bg_1.jpg");
+    background: linear-gradient(#ead6ee, #a0f1ea);
     background-size: cover;
 }
 .form {
@@ -120,20 +120,13 @@ export default {
 .login .el-card {
     width: 28%;
     padding: 0 2rem;
-    background: #4ca1af; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-        to bottom,
-        #4ca1af,
-        #c4e0e5
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #4ca1af, #c4e0e5);
+    background: white;
     opacity: 0.93;
     border-radius: 3rem;
 }
-.login .el-card .el-input .el-input__inner {
-    background-color: rgba(186, 211, 212, 0.5);
+/* .login .el-card .el-input .el-input__inner {
     border-color: #fff;
-}
+} */
 .login .el-card .el-form-item__error {
     color: #df0000;
 }

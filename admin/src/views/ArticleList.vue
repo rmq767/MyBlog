@@ -1,13 +1,7 @@
 <template>
     <div>
         <h3>文章列表</h3>
-        <el-form
-            :model="form"
-            ref="articleForm"
-            label-width="80px"
-            inline
-            style="float: right"
-        >
+        <el-form :model="form" ref="articleForm" label-width="80px" inline>
             <el-form-item label="文章题目" prop="title">
                 <el-input v-model="form.title"></el-input>
             </el-form-item>
@@ -15,50 +9,24 @@
                 <el-input v-model="form.content"></el-input>
             </el-form-item>
             <el-form-item label="文章主题" prop="theme">
-                <el-select
-                    v-model="form.theme"
-                    style="margin-left: 20px"
-                    placeholder="请选择主题"
-                >
-                    <el-option
-                        v-for="item in themeOptions"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                    >
+                <el-select v-model="form.theme" style="margin-left: 20px" placeholder="请选择主题">
+                    <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章分类" prop="type">
-                <el-select
-                    v-model="form.type"
-                    style="margin-left: 20px"
-                    placeholder="请选择主题"
-                >
-                    <el-option
-                        v-for="item in typeOptions"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                    >
+                <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择主题">
+                    <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="search" class="el-icon-search"
-                    >搜索</el-button
-                >
+                <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
                 <el-button @click="resetForm('articleForm')">重置</el-button>
             </el-form-item>
         </el-form>
         <el-table style="width: 100%" :data="articles">
-            <el-table-column
-                label="日期"
-                prop="date"
-                fixed
-                align="center"
-                width="150"
-            >
+            <el-table-column label="日期" prop="date" fixed align="center" width="150">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">{{
@@ -66,76 +34,36 @@
                     }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="题目"
-                align="center"
-                :show-overflow-tooltip="true"
-            >
+            <el-table-column label="题目" align="center" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="内容"
-                :show-overflow-tooltip="true"
-                align="center"
-            >
+            <el-table-column label="内容" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{
                         scope.row.content_md
                     }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="主题"
-                :show-overflow-tooltip="true"
-                align="center"
-            >
+            <el-table-column label="主题" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.theme }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="分类"
-                :show-overflow-tooltip="true"
-                align="center"
-            >
+            <el-table-column label="分类" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.type }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="操作"
-                fixed="right"
-                align="center"
-                width="180"
-            >
+            <el-table-column label="操作" fixed="right" align="center" width="180">
                 <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        @click="$router.push(`/article/edit/${scope.row.id}`)"
-                        >编辑</el-button
-                    >
-                    <el-button
-                        size="mini"
-                        type="danger"
-                        @click="remove(scope.row)"
-                        >删除</el-button
-                    >
+                    <el-button size="mini" @click="$router.push(`/article/edit/${scope.row.id}`)">编辑</el-button>
+                    <el-button size="mini" type="danger" @click="remove(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="pageSizes"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="count"
-            style="float: right"
-            :hide-on-single-page="hide"
-        >
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="count" style="float: right" :hide-on-single-page="hide">
         </el-pagination>
     </div>
 </template>

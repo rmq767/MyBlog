@@ -25,7 +25,7 @@
                         item.date.split('T')[1].split('.')[0]
                       }</span>`
                   " class="font-weight-black"></v-list-item-title>
-                                <v-list-item-subtitle v-html="type == 'comments' ? item.comment : item.message"></v-list-item-subtitle>
+                                <v-list-item-subtitle v-html=" item.comment "></v-list-item-subtitle>
                             </v-list-item-content>
                             <div class="handleReply">
                                 <span @click="
@@ -56,7 +56,7 @@
                           } ${item.date.split('T')[1].split('.')[0]}</span>`
                       " class="font-weight-black"></v-list-item-title>
                                         <v-list-item-subtitle v-html="
-                        type == 'comments' ? comment.c_reply : comment.m_reply
+                         comment.c_reply 
                       "></v-list-item-subtitle>
                                     </v-list-item-content>
                                     <div class="handleReply">
@@ -92,6 +92,7 @@
         <div class="my-2 text-center" v-else>
             <v-btn text small @click="fetch(10)">加载更多...</v-btn>
         </div>
+        <v-snackbar v-model="snackbar" :timeout="timeout">{{snackbarText}}</v-snackbar>
     </div>
 </template>
 
@@ -110,78 +111,63 @@ export default {
             show_reply: 0,
             r_name: "",
             count: "",
+            snackbar: false,
+            snackbarText: "",
+            timeout: 2000,
         };
     },
     methods: {
         async submit() {
-            if (this.type == "comments") {
+            if (!this.form.message || !this.form.name) {
+                this.snackbar = true;
+                this.snackbarText = "留言或者昵称不能为空";
+            } else {
                 await this.$axios.post("/comments", {
                     name: this.form.name,
                     comment: this.form.message,
                     article_id: this.a_id,
                 });
-            } else {
-                await this.$axios.post("/messages", {
-                    name: this.form.name,
-                    message: this.form.message,
-                });
+                this.form = {};
+                this.fetch();
             }
-            this.form = {};
-            this.fetch();
         },
         async submitReply(comment_id) {
-            if (this.type == "comments") {
+            if (!this.reply.message || !this.reply.name) {
+                this.snackbar = true;
+                this.snackbarText = "留言或者昵称不能为空";
+            } else {
                 await this.$axios.post(`/commentreply`, {
                     i_name: this.reply.name,
                     r_name: this.r_name,
                     c_reply: this.reply.message,
                     comment_id: this.comment_id,
                 });
-            } else {
-                await this.$axios.post(`/messagereply`, {
-                    i_name: this.reply.name,
-                    r_name: this.r_name,
-                    m_reply: this.reply.message,
-                    message_id: this.comment_id,
-                });
+                this.sheet = false;
+                this.fetch();
+                this.comment_id = comment_id;
+                this.fetchReply(comment_id);
             }
-            this.sheet = false;
-            this.fetch();
-            this.comment_id = comment_id;
-            this.fetchReply(comment_id);
         },
         async fetch(limit) {
             let res;
-            if (this.type == "comments") {
-                res = await this.$axios.get(
-                    `/comments/get?article_id=${this.a_id}&limit=${
-                        limit ? limit : ""
-                    }`
-                );
-                const c_count = await this.$axios.get(
-                    `/comments?article_id=${this.a_id}`
-                );
-                this.count = c_count.data.length;
-            } else {
-                res = await this.$axios.get(
-                    `/messages/get?limit=${limit ? limit : ""}`
-                );
-                const c_count = await this.$axios.get(`/messages`);
-                this.count = c_count.data.length;
-            }
+            res = await this.$axios.get(
+                `/comments/get?article_id=${this.a_id}&limit=${
+                    limit ? limit : ""
+                }`
+            );
+            const c_count = await this.$axios.get(
+                `/comments?article_id=${this.a_id}`
+            );
+            this.count = c_count.data.length;
+
             this.listData = res.data;
         },
         async fetchReply(comment_id) {
             let res;
-            if (this.type == "comments") {
-                res = await this.$axios.get(
-                    `/commentreply?comment_id=${comment_id}`
-                );
-            } else {
-                res = await this.$axios.get(
-                    `/messagereply?message_id=${comment_id}`
-                );
-            }
+            res = await this.$axios.get(
+                `/commentreply?comment_id=${comment_id}`
+            );
+
             this.commentReply = res.data;
             this.show_reply = comment_id;
             // this.comment_id = comment_id;
@@ -191,17 +177,17 @@ export default {
         this.fetch();
     },
     watch: {
-        type(newValue) {
-            this.type = newValue;
-            this.fetch();
-        },
+        // type(newValue) {
+        //     this.type = newValue;
+        //     this.fetch();
+        // },
         $route(to, from) {
             this.a_id = to.params.id;
             this.fetch();
         },
-        show_reply(newValue) {
-            console.log(newValue);
-        },
+        // show_reply(newValue) {
+        //     console.log(newValue);
+        // },
     },
 };
 </script>

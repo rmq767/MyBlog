@@ -279,7 +279,7 @@ export default {
                 let secendName = this.secendNickName[
                     Math.floor(Math.random() * this.secendNickName.length)
                 ];
-                this.messageList.push({
+                this.messageList.unshift({
                     nickName: firstName + secendName,
                     msg: this.message.msg,
                     background: `rgba(${r},${g},${b},0.8)`,

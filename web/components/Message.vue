@@ -126,6 +126,8 @@ export default {
         min-height: 2rem;
         font-size: small;
         padding: 0.2rem;
+        margin-bottom: 0px;
+        word-wrap: break-word;
     }
 }
 .page:after {

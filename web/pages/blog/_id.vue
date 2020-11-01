@@ -1,9 +1,13 @@
 <template>
     <div class="blog">
-        <v-btn class="mx-2" fab dark color="rgb(179, 136, 255)" @click="backHome">
-            <v-icon dark>
-                mdi-arrow-left
-            </v-icon>
+        <v-btn
+            class="mx-2"
+            fab
+            dark
+            color="rgb(179, 136, 255)"
+            @click="backHome"
+        >
+            <v-icon dark> mdi-arrow-left </v-icon>
         </v-btn>
         <v-container>
             <div class="theme-type">
@@ -13,34 +17,52 @@
                         Green ChipGreen ChipGreen ChipGreen ChipGreen Chip
                     </div>
                     <div class="my-4 subtitle-1">同分类文章</div>
-                    <div class="article-name">
-                        Green Chip
-                    </div>
+                    <div class="article-name">Green Chip</div>
                 </v-card>
             </div>
             <div>
                 <div class="display-1 text-center">{{ article.title }}</div>
                 <div class="mt-12 d-flex justify-space-between">
-                    <span>更新时间：<span> {{ article.date.split("T")[0] }}</span>
+                    <span
+                        >更新时间：<span>
+                            {{ article.date.split(" ")[0] }}</span
+                        >
                     </span>
-                    <span>阅读量：<span> {{ article.clicks }}</span>
+                    <span
+                        >阅读量：<span> {{ article.clicks }}</span>
                     </span>
-                    <span>评论：<span>
-                            {{ article.comment_count ? article.comment_count : 0 }}</span>
+                    <span
+                        >评论：<span>
+                            {{
+                                article.comment_count
+                                    ? article.comment_count
+                                    : 0
+                            }}</span
+                        >
                     </span>
                 </div>
                 <v-divider class="mb-8"></v-divider>
                 <div class="content">
-                    <div class="text-justify" v-html="article.content_html" v-highlight></div>
+                    <div
+                        class="text-justify"
+                        v-html="article.content_html"
+                        v-highlight
+                    ></div>
                 </div>
-                <div style="height:10rem;position:relative;">
-                    <div v-if="pre" style="position:absolute;top:10%;left:3%;">
+                <div style="height: 10rem; position: relative">
+                    <div
+                        v-if="pre"
+                        style="position: absolute; top: 10%; left: 3%"
+                    >
                         <v-btn fab :to="`/blog/${pre.id}`">
                             <v-icon>mdi-skip-previous</v-icon>
                         </v-btn>
                         <span class="ml-4">{{ pre.title }}</span>
                     </div>
-                    <div v-if="next" style="position:absolute;bottom:10%;right:3%;">
+                    <div
+                        v-if="next"
+                        style="position: absolute; bottom: 10%; right: 3%"
+                    >
                         <span class="mr-4">{{ next.title }}</span>
                         <v-btn fab :to="`/blog/${next.id}`">
                             <v-icon>mdi-skip-next</v-icon>

@@ -22,6 +22,44 @@ module.exports = (app) => {
     });
   });
 
+  router.get("/get/theme", async (req, res) => {
+    const sql = `SELECT theme FROM articles WHERE theme !=' '`;
+    await db.query(sql, (err, data) => {
+      if (err) {
+        return res.send({
+          message: "数据库查询错误",
+        });
+      } else {
+          let arr = []
+          data.forEach((item)=>{
+            arr.push(item.theme)
+          })
+          arr = arr.join(',').split(',')
+          arr = [...new Set(arr)]
+        return res.send(arr);
+      }
+    });
+  });
+
+  router.get("/get/type", async (req, res) => {
+    const sql = `SELECT type FROM articles WHERE type !=' '`;
+    await db.query(sql, (err, data) => {
+      if (err) {
+        return res.send({
+          message: "数据库查询错误",
+        });
+      } else {
+        let arr = []
+        data.forEach((item)=>{
+          arr.push(item.type)
+        })
+        arr = arr.join(',').split(',')
+        arr = [...new Set(arr)] 
+      return res.send(arr);
+      }
+    });
+  });
+
   router.get("/:id", async (req, res) => {
     const sql = `
     UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
@@ -131,6 +169,40 @@ module.exports = (app) => {
       }
     });
   });
+
+  router.get("/search/theme", async (req, res) => {
+    const {theme} = req.query
+    const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
+    await db.query(sql, (err, data) => {
+      if (err) {
+        return res.send({
+          message: "数据库查询错误",
+        });
+      } else {
+        data.map(
+            (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
+          );
+          return res.send(data);
+      }
+    });
+  });
+
+  router.get("/search/type", async (req, res) => {
+    const {type} = req.query
+  const sql = `SELECT * FROM articles WHERE theme LIKE '%${type}%'`;
+  await db.query(sql, (err, data) => {
+    if (err) {
+      return res.send({
+        message: "数据库查询错误",
+      });
+    } else {
+      data.map(
+          (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
+        );
+        return res.send(data);
+    }
+  });
+});
 
   app.use("/web/api/articles", router);
 };

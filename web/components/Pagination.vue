@@ -1,7 +1,11 @@
 <template>
     <div class="pagination">
         <div class="text-center">
-            <v-pagination v-model="page" :length="length" v-if="data"></v-pagination>
+            <v-pagination
+                v-model="page"
+                :length="length"
+                v-if="data.length"
+            ></v-pagination>
         </div>
     </div>
 </template>

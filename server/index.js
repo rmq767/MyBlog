@@ -43,12 +43,8 @@ require("./routes/admin/links")(app);
 require("./routes/web/links")(app);
 require("./routes/admin/admins")(app);
 require("./routes/admin/login")(app);
-require("./routes/admin/life")(app);
-require("./routes/web/life")(app);
 require("./routes/web/commentReply")(app);
-require("./routes/web/messageReply")(app);
 require("./routes/admin/commentReply")(app);
-require("./routes/admin/messageReply")(app);
 
 app.set("secret", "jfdsijf^&T(&UGFU0y80ydsf08;.]s.f");
 

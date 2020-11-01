@@ -3,7 +3,6 @@ module.exports = app => {
   const router = express.Router();
   const db = require("../../database/db.config"); //引入数据库封装模块
   const moment = require("moment");
-  const date = moment().format("YYYY-MM-DD HH:mm:ss");
   const validateInformation = require('../../plugins/information')
 
   router.get("/", async (req, res) => {
@@ -49,6 +48,7 @@ module.exports = app => {
       my_info,
       my_hope,
     } = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     await db.query(sql, [`${my_message}`, `${my_info}`, `${my_hope}`, `${date}`], (err, data) => {
       if (err) {
         res.send({
@@ -78,6 +78,7 @@ module.exports = app => {
       my_info,
       my_hope,
     } = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     await db.query(sql, [`${my_message}`, `${my_info}`, `${my_hope}`, `${date}`], (err, data) => {
       if (err) {
         res.send({

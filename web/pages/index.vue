@@ -4,15 +4,20 @@
             <v-row class="mb-6">
                 <!-- 右侧通知栏 -->
                 <v-col class="d-none d-sm-none d-md-flex col-2">
-                    <div style="position:relative; width:100%;">
-                        <div style="width:100%;" ref="notice" class="notice">
+                    <div style="position: relative; width: 100%">
+                        <div style="width: 100%" ref="notice" class="notice">
                             <v-card class="mx-auto" width="100%">
                                 <v-card-text>
                                     <div class="mb-4">最新公告</div>
                                     <div v-for="item in notices" :key="item.id">
                                         <p class="caption">
-                                            <v-icon color="#B388FF" size="small" class="star">mdi-star</v-icon>
-                                            {{ item.date.split("T")[0] }}
+                                            <v-icon
+                                                color="#B388FF"
+                                                size="small"
+                                                class="star"
+                                                >mdi-star</v-icon
+                                            >
+                                            {{ item.date.split(" ")[0] }}
                                         </p>
                                         <div class="text--primary mb-4 body-2">
                                             {{ item.notice }}
@@ -26,46 +31,89 @@
                 <!-- 正文 -->
                 <v-col class="col-xs-12 col-md-6 offset-md-1">
                     <v-row dense>
-                        <v-col v-for="(item, i) in articlesData" :key="i" cols="12">
-                            <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6 card-item">
+                        <v-col
+                            v-for="(item, i) in articlesData"
+                            :key="i"
+                            cols="12"
+                        >
+                            <v-card
+                                hover
+                                link
+                                :to="`/blog/${item.id}`"
+                                class="my-6 pa-6 card-item"
+                            >
                                 <div class="theme">
-                                    <v-chip class="mb-2" color="#7c4dff" label text-color="white" small>
-                                        <v-icon left>
-                                            mdi-label
-                                        </v-icon>
+                                    <v-chip
+                                        class="mb-2"
+                                        color="#7c4dff"
+                                        label
+                                        text-color="white"
+                                        small
+                                    >
+                                        <v-icon left> mdi-label </v-icon>
                                         主题
                                     </v-chip>
                                 </div>
                                 <div class="type">
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                    <v-chip
+                                        color="#4CAF50"
+                                        label
+                                        text-color="white"
+                                        x-small
+                                    >
                                         分类123321123
                                     </v-chip>
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                    <v-chip
+                                        color="#4CAF50"
+                                        label
+                                        text-color="white"
+                                        x-small
+                                    >
                                         分类
                                     </v-chip>
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
+                                    <v-chip
+                                        color="#4CAF50"
+                                        label
+                                        text-color="white"
+                                        x-small
+                                    >
                                         分类
                                     </v-chip>
                                 </div>
                                 <div class="subtitle-2 text-center">
-                                    <v-icon class="mb-5 mx-4 quote ">mdi-format-quote-open</v-icon>
-                                    <span class="headline">{{ item.title }}</span>
-                                    <v-icon class="mb-5 mx-4 quote">mdi-format-quote-close</v-icon>
+                                    <v-icon class="mb-5 mx-4 quote"
+                                        >mdi-format-quote-open</v-icon
+                                    >
+                                    <span class="headline">{{
+                                        item.title
+                                    }}</span>
+                                    <v-icon class="mb-5 mx-4 quote"
+                                        >mdi-format-quote-close</v-icon
+                                    >
                                 </div>
                                 <v-card-text class="text--primary">
                                     <p class="subtitle font-weight-light">
                                         {{ item.content_html }}
                                     </p>
                                 </v-card-text>
-                                <div class="d-flex justify-space-around overline">
+                                <div
+                                    class="d-flex justify-space-around overline"
+                                >
                                     <span>
-                                        <v-icon class="mr-2">mdi-comment</v-icon>{{ item.comment_count ? item.comment_count : 0 }}
+                                        <v-icon class="mr-2">mdi-comment</v-icon
+                                        >{{
+                                            item.comment_count
+                                                ? item.comment_count
+                                                : 0
+                                        }}
                                     </span>
                                     <span>
-                                        <v-icon class="mr-2">mdi-eye</v-icon>{{ item.clicks }}
+                                        <v-icon class="mr-2">mdi-eye</v-icon
+                                        >{{ item.clicks }}
                                     </span>
                                     <span>
-                                        <v-icon class="mr-2">mdi-clock</v-icon>{{ item.date.split("T")[0] }}
+                                        <v-icon class="mr-2">mdi-clock</v-icon
+                                        >{{ item.date.split(" ")[0] }}
                                     </span>
                                 </div>
                             </v-card>
@@ -74,38 +122,61 @@
                 </v-col>
                 <!-- 右侧卡片 -->
                 <v-col class="d-none d-sm-none d-md-flex col-2 ml-12">
-                    <div style="position:relative;width:100%;">
+                    <div style="position: relative; width: 100%">
                         <div ref="aboutme" class="about_me">
                             <v-card class="pa-2" outlined>
                                 <v-list-item>
                                     <v-tooltip top>
                                         <template v-slot:activator="{ on }">
                                             <v-list-item-avatar color="grey">
-                                                <img src="/dog.jpg" alt="" v-on="on" />
+                                                <img
+                                                    src="/dog.jpg"
+                                                    alt=""
+                                                    v-on="on"
+                                                />
                                             </v-list-item-avatar>
                                         </template>
                                         <span>哼！</span>
                                     </v-tooltip>
                                     <v-list-item-content>
-                                        <v-list-item-title class="headline">小阮</v-list-item-title>
-                                        <v-list-item-subtitle>前端工程师</v-list-item-subtitle>
+                                        <v-list-item-title class="headline"
+                                            >小阮</v-list-item-title
+                                        >
+                                        <v-list-item-subtitle
+                                            >前端工程师</v-list-item-subtitle
+                                        >
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-card-text>
                                     欢迎来到我的博客，只要我写的够烂，bug就追不上我
                                 </v-card-text>
                             </v-card>
-                            <v-card style="padding:10px 20px;marginTop:20px">
+                            <v-card style="padding: 10px 20px; margintop: 20px">
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
-                                    <v-btn class="ma-2" color="secondary" rounded v-for="item in 5" :key="item">
-                                        Green12
+                                    <v-btn
+                                        class="ma-2"
+                                        color="secondary"
+                                        rounded
+                                        v-for="item in themeList"
+                                        :key="item"
+                                        @click="chooseTheme(item)"
+                                    >
+                                        {{ item }}
                                     </v-btn>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
-                                    <v-btn class="ma-2" color="green" rounded dark>
-                                        Green123
+                                    <v-btn
+                                        class="ma-2"
+                                        color="green"
+                                        rounded
+                                        dark
+                                        v-for="item in typeList"
+                                        :key="item"
+                                        @click="chooseType(item)"
+                                    >
+                                        {{ item }}
                                     </v-btn>
                                 </div>
                             </v-card>
@@ -113,7 +184,11 @@
                     </div>
                 </v-col>
             </v-row>
-            <pagination :type="articles" @getPagination="getPagination" v-if="!searchData"></pagination>
+            <pagination
+                :type="articles"
+                @getPagination="getPagination"
+                v-if="!searchData && show"
+            ></pagination>
         </v-container>
     </div>
 </template>
@@ -133,11 +208,28 @@ export default {
             articlesData: [],
             articles: "articles",
             timeout: null,
+            themeList: [],
+            typeList: [],
+            show: true,
         };
     },
     methods: {
         getPagination(val) {
             this.articlesData = val;
+        },
+        async chooseTheme(theme) {
+            const articles = await this.$axios.get(
+                `/articles/search/theme?theme=${theme}`
+            );
+            this.articlesData = articles.data;
+            this.show = false;
+        },
+        async chooseType(type) {
+            const articles = await this.$axios.get(
+                `/articles/search/type?type${type}`
+            );
+            this.articlesData = articles.data;
+            this.show = false;
         },
         toScoll() {
             //向下滑动动画
@@ -158,6 +250,14 @@ export default {
             });
             this.articlesData = res.data;
         },
+        async getTheme() {
+            const theme = await this.$axios.$get("/articles/get/theme");
+            this.themeList = theme;
+        },
+        async getType() {
+            const type = await this.$axios.$get("/articles/get/type");
+            this.typeList = type;
+        },
     },
     components: {
         Pagination,
@@ -165,6 +265,7 @@ export default {
     watch: {
         async searchData(newValue, oldValue) {
             clearTimeout(this.timeout);
+            this.timeout = null;
             this.timeout = setTimeout(async () => {
                 if (newValue) {
                     this.getSearch(newValue);
@@ -172,11 +273,29 @@ export default {
                 }
             }, 1000);
         },
+        articlesData() {
+            document.documentElement.scrollTop = 0;
+        },
+    },
+    computed: {
+        // hidePagination() {
+        //     if (this.searchData) {
+        //         return false;
+        //     } else if (this.hide) {
+        //         return false;
+        //     } else {
+        //         return true;
+        //     }
+        // },
     },
     beforeDestroy() {
+        clearTimeout(this.timeout);
+        this.timeout = null;
         window.removeEventListener("scroll", this.toScoll);
     },
     mounted() {
+        this.getTheme();
+        this.getType();
         window.addEventListener("scroll", this.toScoll);
         console.log(
             "%c%s",

@@ -1,16 +1,36 @@
 <template>
     <div class="page-container">
         <div v-if="isWidth">
-            <div v-for="(item,index) in messageList" :key="index">
-                <div class="page" @mousedown="move" :style="{background:item.background,top:item.top+'px',left:item.left+'px'}">
-                    <p>{{item.nickName}}：{{item.msg}}</p>
+            <div v-for="(item, index) in messageList" :key="index">
+                <div
+                    class="page"
+                    @mousedown="move"
+                    :style="{
+                        background: item.background,
+                        top: item.posTop + 'px',
+                        left: item.posLeft + 'px',
+                    }"
+                >
+                    <p>{{ item.name }}：{{ item.message }}</p>
                 </div>
             </div>
         </div>
         <v-row v-else>
-            <v-col v-for="(item,index) in messageList" :key="index" cols="12" sm="6" md="4" lg='3' xl='2'>
-                <div class="page" @mousedown="move" :style="{background:item.background}">
-                    <p>{{item.nickName}}：{{item.msg}}</p>
+            <v-col
+                v-for="(item, index) in messageList"
+                :key="index"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
+                xl="2"
+            >
+                <div
+                    class="page"
+                    @mousedown="move"
+                    :style="{ background: item.background }"
+                >
+                    <p>{{ item.name }}：{{ item.message }}</p>
                 </div>
             </v-col>
         </v-row>

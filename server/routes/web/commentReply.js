@@ -5,7 +5,6 @@ module.exports = app => {
   });
   const db = require("../../database/db.config"); //引入数据库封装模块
   const moment = require("moment");
-  const date = moment().format("YYYY-MM-DD HH:mm:ss");
   const validateCommentReply = require('../../plugins/commentReply')
 
   router.get("/", async (req, res) => {
@@ -44,6 +43,7 @@ module.exports = app => {
       c_reply,
       comment_id
     } = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     await db.query(
       sql,
       [`${i_name}`, `${r_name}`, `${c_reply}`, `${date}`, `${comment_id}`],

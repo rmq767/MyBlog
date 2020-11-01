@@ -3,7 +3,6 @@ module.exports = app => {
   const router = express.Router();
   const db = require("../../database/db.config"); //引入数据库封装模块
   const moment = require("moment");
-  const date = moment().format("YYYY-MM-DD HH:mm:ss");
   const validateNotice = require('../../plugins/notice')
 
   router.get("/", async (req, res) => {
@@ -48,6 +47,7 @@ module.exports = app => {
       title,
       notice
     } = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     await db.query(sql, [`${title}`, `${notice}`, `${date}`], (err, data) => {
       if (err) {
         res.send({

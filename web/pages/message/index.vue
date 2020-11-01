@@ -1,12 +1,21 @@
 <template>
     <div class="message">
         <div class="input-block">
-            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage"></v-text-field>
+            <v-text-field
+                filled
+                rounded
+                solo
+                light
+                v-model="message.msg"
+                @change="sendMessage"
+            ></v-text-field>
         </div>
         <div class="message-block">
-            <message :messageList='messageList'></message>
+            <message :messageList="messageList"></message>
         </div>
-        <v-snackbar v-model="snackbar" :timeout="timeout">{{snackbarText}}</v-snackbar>
+        <v-snackbar v-model="snackbar" :timeout="timeout">{{
+            snackbarText
+        }}</v-snackbar>
     </div>
 </template>
 
@@ -260,7 +269,7 @@ export default {
         };
     },
     methods: {
-        sendMessage() {
+        async sendMessage() {
             if (!this.message.msg.trim()) {
                 this.snackbar = true;
                 this.snackbarText = "留言不能为空";
@@ -279,18 +288,33 @@ export default {
                 let secendName = this.secendNickName[
                     Math.floor(Math.random() * this.secendNickName.length)
                 ];
-                this.messageList.unshift({
-                    nickName: firstName + secendName,
-                    msg: this.message.msg,
+                const response = await this.$axios.post(`/messages`, {
+                    message: this.message.msg,
+                    name: firstName + secendName,
                     background: `rgba(${r},${g},${b},0.8)`,
                     left,
                     top,
                 });
-                this.message.msg = "";
+                if (response.data.success) {
+                    this.snackbar = true;
+                    this.snackbarText = "留言成功";
+                    this.message.msg = "";
+                    this.getMessageList();
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = "留言失败";
+                }
             }
         },
+        async getMessageList() {
+            const response = await this.$axios.get("/messages");
+            this.messageList = response.data;
+            console.log(response.data);
+        },
     },
-
+    mounted() {
+        this.getMessageList();
+    },
     components: {
         Message,
     },

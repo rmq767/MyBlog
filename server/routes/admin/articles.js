@@ -5,7 +5,6 @@ module.exports = app => {
     });
     const db = require("../../database/db.config"); //引入数据库封装模块
     const moment = require("moment");
-    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     const validateArticle = require('../../plugins/article') //验证请求体
 // 获取全部文章
     router.get("/", async (req, res) => {
@@ -55,6 +54,7 @@ module.exports = app => {
             type,
             theme
         } = req.body;
+        const date = moment().format("YYYY-MM-DD HH:mm:ss");
         await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`,`${type}`,`${theme}`], (err, data) => {
             if (err) {
                 return res.send({
@@ -86,6 +86,7 @@ module.exports = app => {
             type,
             theme
         } = req.body;
+        const date = moment().format("YYYY-MM-DD HH:mm:ss");
         await db.query(sql, [`${title}`, `${content_html}`, `${content_md}`, `${date}`,`${type}`,`${theme}`], (err, data) => {
             if (err) {
                 return res.send({

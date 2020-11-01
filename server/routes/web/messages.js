@@ -5,7 +5,6 @@ module.exports = app => {
   });
   const db = require("../../database/db.config"); //引入数据库封装模块
   const moment = require("moment");
-  const date = moment().format("YYYY-MM-DD HH:mm:ss");
   const validateMessage = require('../../plugins/message')
 
   router.get("/", async (req, res) => {
@@ -33,21 +32,25 @@ module.exports = app => {
       })
     }
     const sql =
-      "insert into messages (name,message,date) VALUES (?,?,?)";
+      "insert into messages (name,message,background,posTop,posLeft,date) VALUES (?,?,?,?,?,?)";
     const {
       name,
       message,
+      background,
+      top,
+      left
     } = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     await db.query(
       sql,
-      [`${name}`, `${message}`, `${date}`],
+      [`${name}`, `${message}`,`${background}`,`${top}`,`${left}`, `${date}`],
       (err, data) => {
         if (err) {
           return res.send({
             message: err
           });
         } else {
-          return res.send(data);
+          return res.send({success:true,data});
         }
       }
     );

@@ -1,19 +1,31 @@
 <template>
     <div class="about">
-        <!-- <div class="bg">WELCOME</div> -->
-        <div class="pc">
-            <v-parallax :src="img_src1" style="backgroundSize:cover;height:100vh">
-                <div class="mb-12 display-1 text-center">『我想说』</div>
-                <div class="display-2 shine text-center">{{ info.my_message }}</div>
-            </v-parallax>
-            <v-parallax :src="img_src2" style="backgroundSize:cover;height:100vh">
-                <div class="mb-12 display-1 text-center">『这是我』</div>
-                <div class="display-2 shine text-center">{{ info.my_info }}</div>
-            </v-parallax>
-            <v-parallax :src="img_src3" style="backgroundSize:cover;height:100vh">
-                <div class="mb-12 display-1 text-center">『我梦想』</div>
-                <div class="display-2 shine text-center">{{ info.my_hope }}</div>
-            </v-parallax>
+        <div class="avatar-block">
+            <v-tooltip v-model="show" right>
+                <template v-slot:activator="{  attrs }">
+                    <div class="avatar" ref="avatar-img" @click="mouseMove" v-bind="attrs">
+                        <img src="https://picsum.photos/200/200?random" />
+                    </div>
+                </template>
+                <span>{{showText}}</span>
+            </v-tooltip>
+        </div>
+        <div class="my-info">
+            <div class="avatar-pc">
+                <img src="https://picsum.photos/200/200?random" alt="">
+            </div>
+            <div class="info-item-social-contact">
+                <p class="shine">QQ:{{}}</p>
+                <p class="shine">WeChat:{{}}</p>
+                <p class="shine">GitHub:{{}}</p>
+                <p class="shine">CSDN:{{}}</p>
+            </div>
+            <div class="info-item-description">
+                <p class="shine">hahahahahahhahahahahahahahahahahahahaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhha</p>
+            </div>
+            <div class="info-item-message">
+                <p class="shine">hahahahahahhahahahahahahahahahahahahaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhh</p>
+            </div>
         </div>
     </div>
 </template>
@@ -22,15 +34,9 @@
 export default {
     data() {
         return {
-            // time1: "",
-            // time2: "",
-            // time3: "",
-            // color_num1: "",
-            // color_num2: "",
-            // color_num3: "",
-            img_src1: `https://picsum.photos/seed/1/1280/800`,
-            img_src2: `https://picsum.photos/seed/2/1280/800`,
-            img_src3: `https://picsum.photos/seed/3/1280/800`,
+            show: true,
+            showText: "点我试试 v_v",
+            CSDN: "https://blog.csdn.net/qq_44775782",
         };
     },
     async asyncData({ $axios }) {
@@ -40,100 +46,94 @@ export default {
         };
     },
     methods: {
-        //   move1 () {
-        //     let son = this.$refs.movefont1;
-        //     this.move(son, 10);
-        //   },
-        //   move2 () {
-        //     let son = this.$refs.movefont2;
-        //     this.move(son, 16);
-        //   },
-        //   move3 () {
-        //     let son = this.$refs.movefont3;
-        //     this.move(son, 20);
-        //   },
-        //   changeColor (son) {
-        //     this.color_num1 = Math.floor(Math.random() * 255 + 1);
-        //     this.color_num2 = Math.floor(Math.random() * 255 + 1);
-        //     this.color_num3 = Math.floor(Math.random() * 255 + 1);
-        //     let change_color = son;
-        //     change_color.style.backgroundImage = `-webkit-linear-gradient(left, rgb(${this.color_num1}, ${this.color_num2}, ${this.color_num3}) 25%, rgb(${this.color_num2}, ${this.color_num3}, ${this.color_num1}) 50%`;
-        //   },
-        //   move (son, time) {
-        //     let parent = this.$refs.phone;
-        //     //让元素动起来
-        //     // 添加两个变量，用于更换运动方向
-        //     var a = 1;
-        //     var b = 1;
-        //     // 获取元素的可运动空间，用父元素的宽高减去子元素的宽高
-        //     var w = parent.offsetWidth - son.offsetWidth;
-        //     var h = parent.offsetHeight - son.offsetHeight;
-        //     this.time3 = setInterval(() => {
-        //       // 获取元素当前left
-        //       var l = son.offsetLeft;
-        //       if (l == w || l <= -1) {
-        //         // 如果到达可运动空间最大值和最小值的时候，a 变成负值
-        //         a *= -1;
-        //         this.changeColor(son);
-        //       }
-        //       // 把元素距离左边的值每30ms加3px
-        //       // a变成负值可以改变运动方向
-        //       son.style.left = l + a + "px";
-        //       // 垂直方向同水平方向
-        //       var t = son.offsetTop;
-        //       if (t == h || t <= -1) {
-        //         b *= -1;
-        //         this.changeColor(son);
-        //       }
-        //       son.style.top = t + b + "px";
-        //     }, time);
-        //   }
-        // },
-        // mounted () {
-        //   this.move1();
-        //   this.move2();
-        //   this.move3();
-        // },
-        // beforeDestroy () {
-        //   clearInterval(this.time1);
-        //   clearInterval(this.time2);
-        //   clearInterval(this.time3);
-        // }
+        mouseMove() {
+            window.addEventListener("mousemove", this.moveTo, false);
+            this.show = true;
+            this.showText = "哈哈，甩不掉了吧";
+            setTimeout(() => {
+                this.show = false;
+                this.showText = "";
+            }, 1000);
+        },
+        moveTo(e) {
+            const avatar = this.$refs["avatar-img"];
+            avatar.style.top = e.clientY + "px";
+            avatar.style.left = e.clientX + "px";
+            avatar.style.width = 2 + "rem";
+            avatar.style.height = 2 + "rem";
+        },
     },
+    mounted() {},
 };
 </script>
 
-<style>
-/* .about .bg {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-family: fantasy;
-  font-size: 3.8em;
-  white-space: nowrap;
-  font-weight: bold;
-  background: url("../../static/phone1.jpg") no-repeat 100% 100%;
-  background-size: cover;
-  background-origin: border-box;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-} */
+<style lang='less'  scoped>
+.about {
+    background: url("https://picsum.photos/1920/1080?random");
+    background-size: cover;
+    animation: none;
+    background-attachment: fixed;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .avatar {
+        height: 5rem;
+        width: 5rem;
+        position: absolute;
+        left: 0%;
+        top: 5%;
+        transition-timing-function: linear;
+        > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    }
+    .my-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        align-content: space-around;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        width: 50%;
+        > div {
+            margin: 1rem 0rem;
+        }
+        .avatar-pc {
+            height: 5rem;
+            width: 5rem;
+            > img {
+                height: 100%;
+                width: 100%;
+                border-radius: 50%;
+            }
+        }
+        p {
+            word-break: break-all;
+        }
+    }
+}
 .about .shine {
     background: white;
     cursor: pointer;
     background-image: -webkit-linear-gradient(
         left,
-        #cddc39,
-        #ff9800 25%,
-        #b388ff 50%,
-        #7c4dff 75%,
-        #cddc39
+        #a18cd1,
+        #fbc2eb 25%,
+        #a6c1ee 50%,
+        #d57eeb 75%,
+        #a6c0fe
     );
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     -webkit-background-size: 200% 200%;
-    -webkit-animation: masked-animation 2s infinite linear;
+    -webkit-animation: masked-animation 5s infinite linear;
 }
 @-webkit-keyframes masked-animation {
     0% {
@@ -146,27 +146,12 @@ export default {
         background-position: 0 0;
     }
 }
-.pc {
-    height: 100%;
-}
-.phone {
-    height: 100vh;
-    position: relative;
-    box-sizing: border-box;
-}
-.phone div:nth-child(1) {
-    position: absolute;
-    top: 10vh;
-    left: 2vw;
-}
-.phone div:nth-child(2) {
-    position: absolute;
-    top: 20vh;
-    left: 2vw;
-}
-.phone div:nth-child(3) {
-    position: absolute;
-    top: 30vh;
-    left: 2vw;
+@media screen and (max-width: 960px) {
+    .avatar {
+        display: none;
+    }
+    .about .my-info {
+        width: 100%;
+    }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" bottom disable-route-watcher app color="deep-purple accent-1">
-            <v-img :aspect-ratio="16 / 9" src="https://picsum.photos/1280/800?random">
+            <v-img :aspect-ratio="16 / 9" src="https://picsum.photos/800/800?random">
                 <v-row align="end" class="lightbox white--text pa-2 fill-height">
                     <v-col>
                         <div class="subheading">小阮</div>
@@ -65,10 +65,6 @@
                 <span>学习链接</span>
                 <v-icon>mdi-share-variant</v-icon>
             </v-btn>
-            <!-- <v-btn append link to="/life">
-        <span>我的生活</span>
-        <v-icon>mdi-pinwheel</v-icon>
-      </v-btn> -->
             <v-btn append link to="/about">
                 <span>关于我</span>
                 <v-icon>mdi-face</v-icon>

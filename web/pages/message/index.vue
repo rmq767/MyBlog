@@ -1,14 +1,7 @@
 <template>
     <div class="message">
         <div class="input-block">
-            <v-text-field
-                filled
-                rounded
-                solo
-                light
-                v-model="message.msg"
-                @change="sendMessage"
-            ></v-text-field>
+            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage"></v-text-field>
         </div>
         <div class="message-block">
             <message :messageList="messageList"></message>
@@ -339,7 +332,7 @@ export default {
 }
 @media screen and (min-width: 1200px) {
     .message {
-        background: url("https://picsum.photos/1280/800?random");
+        background: url("https://picsum.photos/1920/1080?random=1");
         background-size: cover;
         animation: none;
         background-attachment: fixed;

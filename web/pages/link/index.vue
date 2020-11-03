@@ -26,18 +26,20 @@
                 <v-subheader>{{ item.type }}</v-subheader>
                 <v-row>
                     <v-col v-for="link in item.links" :key="link.name" cols="12" sm="6" md="4" lg='3' xl='2'>
-                        <v-card outlined shaped>
-                            <v-img :src="link.img" :aspect-ratio="1/1" height='200'></v-img>
-                            <v-card-title>{{link.name}}</v-card-title>
-                            <v-card-text>
-                                <p>{{link.desc}}</p>
-                            </v-card-text>
-                            <v-card-actions class="white justify-center">
-                                <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" class="white--text" fab icon small :href='link.link'>
-                                    <v-icon>{{ social.icon }}</v-icon>
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
+                        <v-hover v-slot="{ hover }">
+                            <v-card outlined shaped :class="{ 'on-hover': hover }" :elevation="hover ? 12 : 2">
+                                <v-img :src="link.img" :aspect-ratio="1/1" height='200'></v-img>
+                                <v-card-title>{{link.name}}</v-card-title>
+                                <v-card-text>
+                                    <p>{{link.desc}}</p>
+                                </v-card-text>
+                                <v-card-actions class="white justify-center">
+                                    <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" class="white--text" fab icon small :href='link.link'>
+                                        <v-icon>{{ social.icon }}</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-hover>
                     </v-col>
                 </v-row>
             </v-container>
@@ -188,7 +190,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='less' scoped>
 .link-container {
     padding: 0rem 3rem;
     background: linear-gradient(#ccfbff, #ef96c5);

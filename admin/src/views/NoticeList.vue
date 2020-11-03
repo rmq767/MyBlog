@@ -1,14 +1,20 @@
 <template>
     <div>
         <h3>留言列表</h3>
-        <el-form :model="form" ref="form" label-width="80px" inline style="float:right">
-            <el-form-item label="">
-                <el-input v-model="form.search"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-            </el-form-item>
-        </el-form>
+        <div class="header-form">
+            <el-form :model="form" ref="noticeForm" label-width="120px" inline style="width:100%">
+                <el-form-item label="公告题目：" prop='title'>
+                    <el-input v-model="form.title"></el-input>
+                </el-form-item>
+                <el-form-item label="公告内容：">
+                    <el-input v-model="form.content" prop='content'></el-input>
+                </el-form-item>
+                <el-form-item label=' '>
+                    <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
+                    <el-button @click="resetForm('noticeForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <el-table style="width: 100%" :data="notices">
             <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
@@ -49,7 +55,8 @@ export default {
             pageSize: 10,
             count: 10,
             form: {
-                search: "",
+                title: "",
+                content: "",
             },
             hide: false,
         };
@@ -102,14 +109,32 @@ export default {
             this.pageSize = res.data.length;
             this.hide = true;
         },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
     },
     created() {
         this.fetch();
     },
 };
 </script>
-<style scoped>
+<style lang='less' scoped>
 .el-tooltip__popper {
     display: none;
+}
+.header-form {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px 10px 0px;
+}
+/deep/.el-form-item {
+    &:last-of-type {
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 </style>

@@ -69,7 +69,7 @@ export default {
 
 <style lang='less'  scoped>
 .about {
-    background: url("https://picsum.photos/1920/1080?random");
+    background: url("https://picsum.photos/1920/940?random");
     background-size: cover;
     animation: none;
     background-attachment: fixed;

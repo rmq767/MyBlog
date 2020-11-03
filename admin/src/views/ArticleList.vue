@@ -1,30 +1,32 @@
 <template>
     <div>
         <h3>文章列表</h3>
-        <el-form :model="form" ref="articleForm" label-width="80px" inline>
-            <el-form-item label="文章题目" prop="title">
-                <el-input v-model="form.title"></el-input>
-            </el-form-item>
-            <el-form-item label="文章内容" prop="content">
-                <el-input v-model="form.content"></el-input>
-            </el-form-item>
-            <el-form-item label="文章主题" prop="theme">
-                <el-select v-model="form.theme" style="margin-left: 20px" placeholder="请选择主题">
-                    <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="文章分类" prop="type">
-                <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择主题">
-                    <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-                <el-button @click="resetForm('articleForm')">重置</el-button>
-            </el-form-item>
-        </el-form>
+        <div class="header-form">
+            <el-form :model="form" ref="articleForm" label-width="80px" inline style="width:100%">
+                <el-form-item label="文章题目" prop="title">
+                    <el-input v-model="form.title"></el-input>
+                </el-form-item>
+                <el-form-item label="文章内容" prop="content">
+                    <el-input v-model="form.content"></el-input>
+                </el-form-item>
+                <el-form-item label="文章主题" prop="theme">
+                    <el-select v-model="form.theme" style="margin-left: 20px" placeholder="请选择主题">
+                        <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="文章分类" prop="type">
+                    <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择主题">
+                        <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
+                    <el-button @click="resetForm('articleForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <el-table style="width: 100%" :data="articles">
             <el-table-column label="日期" prop="date" fixed align="center" width="150">
                 <template slot-scope="scope">
@@ -163,6 +165,15 @@ export default {
 <style lang='less' scoped>
 .el-tooltip__popper {
     display: none;
+}
+.header-form {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px 10px 0px;
 }
 /deep/.el-form-item {
     &:last-of-type {

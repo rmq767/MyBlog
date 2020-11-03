@@ -28,7 +28,6 @@
                         <el-menu-item-group>
                             <el-menu-item index="/message/new">添加留言</el-menu-item>
                             <el-menu-item index="/message/list">留言列表</el-menu-item>
-                            <el-menu-item index="/messagereply/list">留言回复列表</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="notice">
@@ -54,23 +53,13 @@
                     <el-submenu index="information">
                         <template slot="title">
                             <i class="el-icon-edit-outline"></i>
-                            <span slot="title">展示信息</span>
+                            <span slot="title">个人信息</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/information/new">添加信息</el-menu-item>
-                            <el-menu-item index="/information/list">信息列表</el-menu-item>
+                            <el-menu-item index="/information/new">信息修改</el-menu-item>
+                            <!-- <el-menu-item index="/information/list">信息列表</el-menu-item> -->
                         </el-menu-item-group>
                     </el-submenu>
-                    <!-- <el-submenu index="life">
-            <template slot="title">
-              <i class="el-icon-user"></i>
-              <span slot="title">我的生活</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="/life/new">添加生活</el-menu-item>
-              <el-menu-item index="/life/list">生活列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu> -->
                     <el-submenu index="admin" v-if="is_super == 1 ? true : false">
                         <template slot="title">
                             <i class="el-icon-edit"></i>
@@ -89,7 +78,7 @@
                     <el-dropdown @command="handleCommand">
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command='info'>我的信息</el-dropdown-item>
+                            <!-- <el-dropdown-item command='info'>我的信息</el-dropdown-item> -->
                             <el-dropdown-item command='out'>退出</el-dropdown-item>
                         </el-dropdown-menu>
                         <span>{{ username }}</span>

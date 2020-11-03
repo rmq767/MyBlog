@@ -1,28 +1,27 @@
 <template>
     <div>
         <h3>链接列表</h3>
-        <el-form :model="form" ref="form" label-width="120px" inline>
-            <el-form-item label="分类选择：">
-                <el-select v-model="form.type" placeholder="请选择链接分类">
-                    <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="题目：">
-                <el-input v-model="form.search"></el-input>
-            </el-form-item>
-
-            <el-form-item label=" ">
-                <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-            </el-form-item>
-
-        </el-form>
+        <div class="header-form">
+            <el-form :model="form" ref="linkForm" label-width="120px" inline style="width:100%">
+                <el-form-item label="分类选择：">
+                    <el-select v-model="form.type" placeholder="请选择链接分类">
+                        <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="题目：">
+                    <el-input v-model="form.search"></el-input>
+                </el-form-item>
+                <el-form-item label=" ">
+                    <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
+                    <el-button @click="resetForm('linkForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <el-table style="width: 100%" :data="links">
-            <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
+            <el-table-column label="分类" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{
-            scope.row.date.split("T")[0]
-          }}</span>
+                    <span style="margin-left: 10px">{{scope.row.type}}</span>
                 </template>
             </el-table-column>
             <el-table-column label="题目" align="center" :show-overflow-tooltip="true">
@@ -117,17 +116,35 @@ export default {
             this.pageSize = res.data.length;
             this.hide = true;
         },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
     },
     created() {
         this.fetch();
     },
 };
 </script>
-<style>
+<style lang='less' scoped>
 /* .el-tooltip__popper {
     display: none;
 } */
 .el-image-viewer__close {
     color: #fff;
+}
+.header-form {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px 10px 0px;
+}
+/deep/.el-form-item {
+    &:last-of-type {
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 </style>

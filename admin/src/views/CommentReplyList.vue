@@ -1,14 +1,20 @@
 <template>
     <div>
-        <h3>评论列表</h3>
-        <el-form :model="form" ref="form" label-width="80px" inline style="float:right">
-            <el-form-item label="">
-                <el-input v-model="form.search"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-            </el-form-item>
-        </el-form>
+        <h3>评论回复列表</h3>
+        <div class="header-form">
+            <el-form :model="form" ref="replyForm" label-width="80px" inline style="width:100%">
+                <el-form-item label="昵称：" prop='nickname'>
+                    <el-input v-model="form.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="评论：" prop='comment'>
+                    <el-input v-model="form.comment"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
+                    <el-button @click="resetForm('replyForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <el-table style="width: 100%" :data="commentreply">
             <el-table-column label="昵称" align="center" :show-overflow-tooltip="true" width="150">
                 <template slot-scope="scope">
@@ -46,7 +52,8 @@ export default {
             pageSize: 10,
             count: 10,
             form: {
-                search: "",
+                nickname: "",
+                comment: "",
             },
             hide: false,
         };
@@ -102,14 +109,32 @@ export default {
             this.pageSize = res.data.length;
             this.hide = true;
         },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
     },
     created() {
         this.fetch();
     },
 };
 </script>
-<style scoped>
+<style lang='less' scoped>
 .el-tooltip__popper {
     display: none;
+}
+.header-form {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px 10px 0px;
+}
+/deep/.el-form-item {
+    &:last-of-type {
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 </style>

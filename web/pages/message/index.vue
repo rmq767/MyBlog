@@ -332,7 +332,7 @@ export default {
 }
 @media screen and (min-width: 1200px) {
     .message {
-        background: url("https://picsum.photos/1920/1080?random=1");
+        background: url("https://picsum.photos/1920/940?random=1");
         background-size: cover;
         animation: none;
         background-attachment: fixed;

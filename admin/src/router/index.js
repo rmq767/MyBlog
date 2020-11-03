@@ -16,12 +16,8 @@ import InformationList from "../views/InformationList.vue";
 import InformationEdit from "../views/InformationEdit.vue";
 import AdminList from "../views/AdminList.vue";
 import AdminEdit from "../views/AdminEdit.vue";
-// import LifeList from '../views/LifeList.vue'
-// import LifeEdit from '../views/LifeEdit.vue'
 import Login from "../views/Login.vue";
-import MessageReplyList from "../views/MessageReplyList";
 import CommentReplyList from "../views/CommentReplyList";
-import Info from "../views/Info";
 
 Vue.use(VueRouter);
 
@@ -73,10 +69,6 @@ const routes = [
 				component: MessageList,
 			},
 			{
-				path: "/messagereply/list",
-				component: MessageReplyList,
-			},
-			{
 				path: "/message/edit/:id",
 				component: MessageEdit,
 				props: true,
@@ -120,19 +112,6 @@ const routes = [
 				component: InformationEdit,
 				props: true,
 			},
-			// {
-			//   path: '/life/new',
-			//   component: LifeEdit
-			// },
-			// {
-			//   path: '/life/list',
-			//   component: LifeList
-			// },
-			// {
-			//   path: '/life/edit/:id',
-			//   component: LifeEdit,
-			//   props: true
-			// },
 			{
 				path: "/admin/edit",
 				component: AdminEdit,
@@ -145,10 +124,6 @@ const routes = [
 				path: "/admin/edit/:id",
 				component: AdminEdit,
 				props: true,
-			},
-			{
-				path: "/admin/info",
-				component: Info,
 			},
 		],
 	},

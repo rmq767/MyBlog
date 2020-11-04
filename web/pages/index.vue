@@ -80,45 +80,27 @@
                 <v-col class="d-none d-sm-none d-md-flex col-2 ml-12">
                     <div style="position: relative; width: 100%">
                         <div ref="aboutme" class="about_me">
-                            <!-- <v-card class="pa-2" outlined>
-                                <v-list-item>
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on }">
-                                            <v-list-item-avatar color="grey">
-                                                <img
-                                                    src="/dog.jpg"
-                                                    alt=""
-                                                    v-on="on"
-                                                />
-                                            </v-list-item-avatar>
-                                        </template>
-                                        <span>哼！</span>
-                                    </v-tooltip>
-                                    <v-list-item-content>
-                                        <v-list-item-title class="headline"
-                                            >小阮</v-list-item-title
-                                        >
-                                        <v-list-item-subtitle
-                                            >前端工程师</v-list-item-subtitle
-                                        >
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-card-text>
-                                    欢迎来到我的博客，只要我写的够烂，bug就追不上我
-                                </v-card-text>
-                            </v-card> -->
-                            <v-card style="padding: 10px 20px; margintop: 20px">
+                            <v-card style="padding: 10px 20px">
+                                <div class="my-4 subtitle-1">热门文章</div>
+                                <div v-for="item in 5" :key="item" class="article-name">
+                                    <p>这是一篇文章的标题</p>
+                                    <span>
+                                        <v-icon class="ml-3 mr-1">mdi-eye</v-icon>111
+                                    </span>
+                                </div>
+                            </v-card>
+                            <v-card style="padding: 10px 20px; marginTop: 20px" outlined>
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
-                                    <v-btn class="ma-2" color="secondary" rounded v-for="item in themeList" :key="item" @click="chooseTheme(item)">
-                                        {{ item }}
-                                    </v-btn>
+                                    <div class="theme-item" v-for="item in themeList" :key="item" @click="chooseTheme(item)">
+                                        <span>{{item}}</span>
+                                    </div>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
-                                    <v-btn class="ma-2" color="green" rounded dark v-for="item in typeList" :key="item" @click="chooseType(item)">
-                                        {{ item }}
-                                    </v-btn>
+                                    <div class="type-item" v-for="item in typeList" :key="item" @click="chooseType(item)">
+                                        <span>{{item}}</span>
+                                    </div>
                                 </div>
                             </v-card>
                         </div>
@@ -248,7 +230,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='less' scoped>
 .home {
     position: relative;
     height: 100%;
@@ -268,6 +250,38 @@ export default {
 .theme-type {
     display: flex;
     flex-wrap: wrap;
+    .theme-item {
+        padding: 5px 10px;
+        border-radius: 10%;
+        background: #7c4dff;
+        border: 1px solid #7c4dff;
+        color: #ffffff;
+        cursor: pointer;
+        margin: 5px 5px;
+        &:hover {
+            color: #7c4dff;
+            background: #ffffff;
+        }
+        > span {
+            font-size: 12px;
+        }
+    }
+    .type-item {
+        padding: 0px 10px;
+        border-radius: 10%;
+        background: rgb(76, 175, 80);
+        border: 1px solid rgb(76, 175, 80);
+        color: #ffffff;
+        cursor: pointer;
+        margin: 5px 5px;
+        &:hover {
+            color: rgb(76, 175, 80);
+            background: #ffffff;
+        }
+        > span {
+            font-size: 12px;
+        }
+    }
 }
 .card-item {
     position: relative;
@@ -343,5 +357,31 @@ export default {
 .home .about_me {
     position: absolute;
     transition: all 0.3s ease-in-out;
+    .article-name {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.7rem;
+        > p {
+            word-break: break-all;
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+            cursor: pointer;
+            &:hover {
+                color: rgb(124, 77, 255);
+            }
+        }
+        > span {
+            font-size: 12px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            .v-icon {
+                font-size: 16px;
+                color: #ccc;
+            }
+        }
+    }
 }
 </style>

@@ -127,15 +127,15 @@ export default {
         #a18cd1,
         #fbc2eb 25%,
         #a6c1ee 50%,
-        #d57eeb 75%,
-        #a6c0fe
+        #a6c0fe 75%,
+        #d57eeb
     );
     -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
-    -webkit-background-size: 200% 200%;
-    -webkit-animation: masked-animation 5s infinite linear;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: masked-animation 5s infinite linear;
 }
-@-webkit-keyframes masked-animation {
+@keyframes masked-animation {
     0% {
         background-position: 0 0;
     }

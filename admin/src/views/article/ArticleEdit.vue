@@ -6,51 +6,20 @@
                 <el-input v-model="article.title"></el-input>
             </el-form-item>
             <el-form-item label="文章主题">
-                <el-select
-                    v-model="article.theme"
-                    multiple
-                    collapse-tags
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="请选择文章主题"
-                >
-                    <el-option
-                        v-for="item in themeOptions"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                    >
+                <el-select v-model="article.theme" filterable placeholder="请选择文章主题">
+                    <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章分类">
-                <el-select
-                    v-model="article.type"
-                    multiple
-                    collapse-tags
-                    filterable
-                    allow-create
-                    default-first-option
-                    placeholder="请选择文章类别"
-                >
-                    <el-option
-                        v-for="item in typeOptions"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                    >
+                <el-select v-model="article.type" multiple collapse-tags filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
+                    <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章内容">
                 <div class="edit_container">
-                    <mavon-editor
-                        v-model="article.content_md"
-                        :ishljs="true"
-                        ref="md"
-                        @imgAdd="$imgAdd"
-                    />
+                    <mavon-editor v-model="article.content_md" :ishljs="true" ref="md" @imgAdd="$imgAdd" />
                 </div>
             </el-form-item>
             <el-form-item>

@@ -2,22 +2,22 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Admin from "../views/Admin.vue";
-import ArticleEdit from "../views/ArticleEdit.vue";
-import ArticleList from "../views/ArticleList.vue";
-import CommentList from "../views/CommentList.vue";
-import CommentEdit from "../views/CommentEdit.vue";
-import MessageList from "../views/MessageList.vue";
-import MessageEdit from "../views/MessageEdit.vue";
-import NoticeList from "../views/NoticeList.vue";
-import NoticeEdit from "../views/NoticeEdit.vue";
-import LinkList from "../views/LinkList.vue";
-import LinkEdit from "../views/LinkEdit.vue";
-import InformationList from "../views/InformationList.vue";
-import InformationEdit from "../views/InformationEdit.vue";
-import AdminList from "../views/AdminList.vue";
-import AdminEdit from "../views/AdminEdit.vue";
+import ArticleEdit from "../views/article//ArticleEdit.vue";
+import ArticleList from "../views/article//ArticleList.vue";
+import ThemeTypeEdit from "../views/article/ThemeTypeEdit.vue";
+import ThemeTypeList from "../views/article/ThemeTypeList.vue";
+import CommentList from "../views/article/CommentList.vue";
+import CommentEdit from "../views/article/CommentEdit.vue";
+import MessageList from "../views/message/MessageList.vue";
+import MessageEdit from "../views/message/MessageEdit.vue";
+import NoticeList from "../views/notice/NoticeList.vue";
+import NoticeEdit from "../views/notice/NoticeEdit.vue";
+import LinkList from "../views/link/LinkList.vue";
+import LinkEdit from "../views/link/LinkEdit.vue";
+import InformationEdit from "../views/information/InformationEdit.vue";
+import AdminEdit from "../views/information/AdminEdit.vue";
 import Login from "../views/Login.vue";
-import CommentReplyList from "../views/CommentReplyList";
+import CommentReplyList from "../views/article/CommentReplyList";
 
 Vue.use(VueRouter);
 
@@ -25,6 +25,7 @@ const routes = [
 	{
 		path: "/",
 		component: Home,
+		redirect: "/admin",
 		children: [
 			{
 				path: "/admin",
@@ -41,6 +42,19 @@ const routes = [
 			{
 				path: "/article/edit/:id",
 				component: ArticleEdit,
+				props: true,
+			},
+			{
+				path: "/themetype/new",
+				component: ThemeTypeEdit,
+			},
+			{
+				path: "/themetype/list",
+				component: ThemeTypeList,
+			},
+			{
+				path: "/themetype/edit/:id",
+				component: ThemeTypeEdit,
 				props: true,
 			},
 			{
@@ -104,10 +118,6 @@ const routes = [
 				component: InformationEdit,
 			},
 			{
-				path: "/information/list",
-				component: InformationList,
-			},
-			{
 				path: "/information/edit/:id",
 				component: InformationEdit,
 				props: true,
@@ -115,15 +125,6 @@ const routes = [
 			{
 				path: "/admin/edit",
 				component: AdminEdit,
-			},
-			{
-				path: "/admin/list",
-				component: AdminList,
-			},
-			{
-				path: "/admin/edit/:id",
-				component: AdminEdit,
-				props: true,
 			},
 		],
 	},

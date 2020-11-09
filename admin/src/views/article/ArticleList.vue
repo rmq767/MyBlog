@@ -16,7 +16,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文章分类" prop="type">
-                    <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择主题">
+                    <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择分类">
                         <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
                         </el-option>
                     </el-select>

@@ -1,6 +1,23 @@
 <template>
-    <div class="echars-block">
-        <div ref="echarsBar" :style="{ width: '100%', height: '800px' }"></div>
+    <div class="panel">
+        <div class="statistics">
+            <div class="panel-item">
+                <p class="title">总阅读量</p>
+                <p class="count">1234</p>
+            </div>
+            <div class="panel-item">
+                <p class="title">总浏览量</p>
+                <p class="count">2222</p>
+            </div>
+            <div class="panel-item">
+                <p class="title">总留言量</p>
+                <p class="count">222</p>
+            </div>
+        </div>
+        <div class="echars-block">
+            <div ref="pv" :style="{ width: '100%', height: '400px' }"></div>
+            <div ref="cv" :style="{ width: '100%', height: '400px' }"></div>
+        </div>
     </div>
 </template>
 
@@ -13,16 +30,16 @@ export default {
         };
     },
     methods: {
-        drawLine() {
-            let myChart2 = this.$echarts.init(this.$refs.echarsBar);
-            myChart2.clear();
-            myChart2.setOption({
+        drawBar() {
+            let myChart1 = this.$echarts.init(this.$refs.pv);
+            myChart1.clear();
+            myChart1.setOption({
                 title: {
-                    text: "文章点击量",
+                    text: "文章阅读量",
                 },
                 tooltip: {},
                 legend: {
-                    data: ["阅读数"],
+                    data: ["阅读量"],
                 },
                 xAxis: {
                     data: this.x_data,
@@ -30,8 +47,35 @@ export default {
                 yAxis: {},
                 series: [
                     {
-                        name: "阅读数",
+                        name: "阅读量",
                         type: "bar",
+                        data: this.s_data,
+                    },
+                ],
+            });
+            window.addEventListener("resize", () => {
+                myChart1.resize();
+            });
+        },
+        drawLine() {
+            let myChart2 = this.$echarts.init(this.$refs.cv);
+            myChart2.clear();
+            myChart2.setOption({
+                title: {
+                    text: "网站访问量",
+                },
+                tooltip: {},
+                legend: {
+                    data: ["访问量"],
+                },
+                xAxis: {
+                    data: this.x_data,
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: "访问量",
+                        type: "line",
                         data: this.s_data,
                     },
                 ],
@@ -47,33 +91,45 @@ export default {
             this.s_data = articlesArr.map((v) => v.clicks);
         },
     },
-    mounted() {
-        // this.$nextTick(() => {
-        //   this.fetchArticle();
-        // });
-        this.fetchArticle();
-        setTimeout(() => {
+    async mounted() {
+        // await this.fetchArticle();
+        this.$nextTick(() => {
+            this.drawBar();
             this.drawLine();
-        }, 500);
+        });
     },
-    // created() {
-    //   this.fetchArticle();
-    // }
-    // watch: {
-    //   bar_data() {
-    //     const res = this.$http.get("/articles");
-    //     this.bar_data = res.data.map(v => ({
-    //       name: `${v.title}`,
-    //       value: v.clicks
-    //     }));
-    //   }
-    // }
 };
 </script>
 
-<style>
+<style lang='less' scoped>
+.statistics {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0px;
+    // background: #ffffff;
+    .panel-item {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        .title {
+            font-size: 16px;
+        }
+        .count {
+            color: red;
+            font-size: 32px;
+            font-weight: bold;
+        }
+    }
+}
 .echars-block {
     width: 100%;
     height: 100%;
+    display: flex;
 }
 </style>

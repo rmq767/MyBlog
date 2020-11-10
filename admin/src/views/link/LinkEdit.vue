@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import api from "../../api/index";
 export default {
     props: {
         id: {},
@@ -47,9 +48,9 @@ export default {
     methods: {
         async save() {
             if (this.id) {
-                await this.$http.put(`/links/${this.id}`, this.link);
+                await api.link.editLink(this.id, this.link);
             } else {
-                await this.$http.post("/links", this.link);
+                await api.link.addLink(this.link);
             }
             this.$router.push("/link/list");
             this.$message({
@@ -61,7 +62,7 @@ export default {
             this.link.image = val.url;
         },
         async fetch() {
-            const res = await this.$http.get(`/links/${this.id}`);
+            const res = await api.link.linkInfo(this.id);
             this.link = res.data;
             this.link = Object.assign({}, this.link, res.data); //把 this.link{}中，再把res.data添加到{}中，如果有覆盖，没有保存
         },

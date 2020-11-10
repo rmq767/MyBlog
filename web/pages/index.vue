@@ -169,14 +169,14 @@ export default {
             });
             this.articlesData = res.data;
         },
-        async getTheme() {
-            const theme = await this.$axios.$get("/articles/get/theme");
-            this.themeList = theme;
-        },
-        async getType() {
-            const type = await this.$axios.$get("/articles/get/type");
-            this.typeList = type;
-        },
+        // async getTheme() {
+        //     const theme = await this.$axios.$get("/articles/get/theme");
+        //     this.themeList = theme;
+        // },
+        // async getType() {
+        //     const type = await this.$axios.$get("/articles/get/type");
+        //     this.typeList = type;
+        // },
     },
     components: {
         Pagination,
@@ -213,8 +213,8 @@ export default {
         window.removeEventListener("scroll", this.toScoll);
     },
     mounted() {
-        this.getTheme();
-        this.getType();
+        // this.getTheme();
+        // this.getType();
         window.addEventListener("scroll", this.toScoll);
         console.log(
             "%c%s",

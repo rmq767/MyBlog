@@ -1,14 +1,10 @@
 <template>
     <div class="about">
         <div class="avatar-block">
-            <v-tooltip v-model="show" right>
-                <template v-slot:activator="{  attrs }">
-                    <div class="avatar" ref="avatar-img" @click="mouseMove" v-bind="attrs">
-                        <img src="https://picsum.photos/200/200?random" />
-                    </div>
-                </template>
-                <span>{{showText}}</span>
-            </v-tooltip>
+            <div class="avatar" ref="avatar-img" @click="mouseMove">
+                <img src="https://picsum.photos/200/200?random" />
+            </div>
+            <p class="tip" ref="tip" v-show="show">{{showText}}</p>
         </div>
         <div class="my-info">
             <div class="avatar-pc">
@@ -86,11 +82,36 @@ export default {
         left: 0%;
         top: 5%;
         transition-timing-function: linear;
+        cursor: pointer;
         > img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+        }
+    }
+    .avatar-block {
+        position: absolute;
+        left: 0;
+        top: 3rem;
+        .tip {
+            position: absolute;
+            top: 25px;
+            right: -200px;
+            background: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            &::before {
+                position: absolute;
+                left: -10px;
+                top: 8px;
+                content: "";
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-right: 10px solid #ffffff;
+            }
         }
     }
     .my-info {
@@ -147,11 +168,12 @@ export default {
     }
 }
 @media screen and (max-width: 960px) {
-    .avatar {
-        display: none;
+    .avatar-block {
+        display: none !important;
     }
     .about .my-info {
         width: 100%;
+        height: 100%;
     }
 }
 </style>

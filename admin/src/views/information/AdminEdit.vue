@@ -2,9 +2,9 @@
     <div>
         <h3>账号密码修改</h3>
         <el-form label-width="120px" @submit.native.prevent="save" style="width:45rem;">
-            <!-- <el-form-item label="管理员名">
-        <el-input v-model="admin.username"></el-input>
-      </el-form-item> -->
+            <el-form-item label="管理员名">
+                <el-input v-model="admin.username"></el-input>
+            </el-form-item>
             <el-form-item label="邮箱">
                 <el-input v-model="admin.email"></el-input>
             </el-form-item>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import api from "../../api/index";
 export default {
     props: {
         id: {},
@@ -29,6 +30,7 @@ export default {
     data() {
         return {
             admin: {
+                username: "",
                 eamil: "",
                 password: "",
             },
@@ -36,25 +38,15 @@ export default {
     },
     methods: {
         async save() {
-            if (this.id) {
-                await this.$http.put(`/admins/${this.id}`, this.admin);
-            } else {
-                await this.$http.post("/admins", this.admin);
-            }
-            this.$router.push("/admin/list");
+            await api.admin.editAdmin(this.id, this.admin);
             this.$message({
                 type: "success",
                 message: "保存成功",
             });
         },
         async fetch() {
-            const res = await this.$http.get(`/admins/${this.id}`);
-            this.admin = res.data;
-            if (res.data.is_super == 1) {
-                this.admin.is_super = true;
-            } else {
-                this.admin.is_super = false;
-            }
+            const res = await api.admin.getAdmin();
+            console.log(res.data);
             this.admin = Object.assign({}, this.admin, res.data); //把 this.admin{}中，再把res.data添加到{}中，如果有覆盖，没有保存
         },
     },

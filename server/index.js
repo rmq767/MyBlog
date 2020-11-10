@@ -11,26 +11,28 @@ app.use("/", express.static(__dirname + "/web")); //静态文件
 
 // 中间件处理token
 app.use("/admin/api", async (req, res, next) => {
-    const token = String(req.headers.authorization).split(" ").pop();
-    if (token == "undefined") {
-        return res.status(401).send({
-            message: "请先登录",
-        });
-    } else {
-        const {
-            id
-        } = jwt.verify(token, app.get("secret"));
-        if (id == "undefined") {
-            return res.status(401).send({
-                message: "请先登录",
-            });
-        }
-    }
-    await next();
+	const token = String(req.headers.authorization).split(" ").pop();
+	if (token == "undefined") {
+		return res.status(401).send({
+			message: "请先登录",
+		});
+	} else {
+		const { id } = jwt.verify(token, app.get("secret"));
+		if (id == "undefined") {
+			return res.status(401).send({
+				message: "请先登录",
+			});
+		}
+	}
+	await next();
 });
 
 require("./routes/admin/articles")(app);
 require("./routes/web/articles")(app);
+require("./routes/admin/articleTheme")(app);
+require("./routes/web/articleTheme")(app);
+require("./routes/admin/articleType")(app);
+require("./routes/web/articleType")(app);
 require("./routes/admin/comments")(app);
 require("./routes/web/comments")(app);
 require("./routes/admin/messages")(app);
@@ -51,23 +53,23 @@ app.set("secret", "jfdsijf^&T(&UGFU0y80ydsf08;.]s.f");
 // 上传文件接口
 const multer = require("multer");
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, __dirname + "/uploads");
-    },
-    // filename: function (req, file, cb) {
-    //   cb(null, file.fieldname + '-' + Date.now() + '.jpg')
-    // },
+	destination: function (req, file, cb) {
+		cb(null, __dirname + "/uploads");
+	},
+	// filename: function (req, file, cb) {
+	//   cb(null, file.fieldname + '-' + Date.now() + '.jpg')
+	// },
 });
 const upload = multer({
-    storage: storage,
+	storage: storage,
 });
 app.post("/admin/api/upload", upload.single("file"), async (req, res) => {
-    // console.log(req.file)
-    const file = req.file;
-    file.url = `http://localhost:3002/uploads/${file.filename}`;
-    res.send(file);
+	// console.log(req.file)
+	const file = req.file;
+	file.url = `http://localhost:3002/uploads/${file.filename}`;
+	res.send(file);
 });
 
 app.listen(3002, () => {
-    console.log("http://localhost:3002/");
+	console.log("http://localhost:3002/");
 });

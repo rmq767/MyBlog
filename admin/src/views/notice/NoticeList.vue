@@ -40,32 +40,34 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="count" style="float:right" :hide-on-single-page="hide">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="pageInfo.pageSizes" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.count" style="float:right">
         </el-pagination>
     </div>
 </template>
 
 <script>
+import api from "../../api/index";
 export default {
     data() {
         return {
             notices: [],
-            currentPage: 1,
-            pageSizes: [10, 15, 20],
-            pageSize: 10,
-            count: 10,
+            pageInfo: {
+                currentPage: 1,
+                pageSizes: [10, 20],
+                pageSize: 10,
+                count: 0,
+            },
             form: {
                 title: "",
                 content: "",
             },
-            hide: false,
         };
     },
     methods: {
         async fetch() {
-            const res = await this.$http.get("/notices");
-            this.count = res.data.length;
-            this.notices = res.data.slice(0, this.pageSize);
+            const res = await api.notice.getNoticeList();
+            this.pageInfo.count = res.data.length;
+            this.notices = res.data.slice(0, this.pageInfo.pageSize);
         },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
@@ -74,7 +76,7 @@ export default {
                 type: "warning",
             })
                 .then(async () => {
-                    await this.$http.delete(`/notices/${row.id}`);
+                    await api.notice.deleteNotice(row.id);
                     this.$message({
                         type: "success",
                         message: "删除成功!",
@@ -89,25 +91,29 @@ export default {
                 });
         },
         async handleSizeChange(val) {
-            this.pageSize = val;
-            const res = await this.$http.get(
-                `/notices/get/page?pageSize=${this.pageSize}&currentPage=${this.currentPage}`
-            );
-            this.notices = res.data;
+            this.pageInfo.pageSize = val;
+            this.pagination();
         },
         async handleCurrentChange(val) {
-            this.currentPage = val;
-            const res = await this.$http.get(
-                `/notices/get/page?pageSize=${this.pageSize}&currentPage=${this.currentPage}`
+            this.pageInfo.currentPage = val;
+            this.pagination();
+        },
+        /**
+         * @description 分页
+         */
+        async pagination() {
+            const res = await api.notice.pagination(
+                this.pageInfo.pageSize,
+                this.pageInfo.currentPage
             );
             this.notices = res.data;
         },
         async search() {
-            const res = await this.$http.post("/notices/get/search", this.form);
+            const params = Object.assign({}, this.form, this.pageInfo);
+            const res = await api.notice.searchNotice(params);
             this.notices = res.data;
-            this.count = res.data.length;
-            this.pageSize = res.data.length;
-            this.hide = true;
+            // this.pageInfo.count = res.data.length;
+            // this.pageInfo.pageSize = res.data.length;
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

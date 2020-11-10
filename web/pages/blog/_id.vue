@@ -36,14 +36,14 @@
                 </div>
                 <div style="height: 10rem; position: relative">
                     <div v-if="pre" style="position: absolute; top: 10%; left: 3%">
-                        <v-btn fab :to="`/blog/${pre.id}`">
+                        <v-btn fab :to="`/blog/${pre.id}`" small>
                             <v-icon>mdi-skip-previous</v-icon>
                         </v-btn>
                         <span class="ml-4">{{ pre.title }}</span>
                     </div>
                     <div v-if="next" style="position: absolute; bottom: 10%; right: 3%">
                         <span class="mr-4">{{ next.title }}</span>
-                        <v-btn fab :to="`/blog/${next.id}`">
+                        <v-btn fab :to="`/blog/${next.id}`" small>
                             <v-icon>mdi-skip-next</v-icon>
                         </v-btn>
                     </div>
@@ -91,7 +91,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 .blog {
     position: relative;
 }
@@ -128,9 +128,13 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     border-bottom: 1px solid #ccc;
-    padding: 10px 0px;
+    padding: 5px 0px;
+    font-size: 14px;
     cursor: pointer;
     color: rgb(179, 136, 255);
+    &:hover {
+        color: rgb(82, 0, 226);
+    }
 }
 .theme-type .article-type {
     max-width: 100%;
@@ -138,9 +142,13 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     border-bottom: 1px solid #ccc;
-    padding: 10px 0px;
+    padding: 5px 0px;
+    font-size: 14px;
     cursor: pointer;
     color: rgb(76, 175, 80);
+    &:hover {
+        color: #009606;
+    }
 }
 .mx-2 {
     position: fixed;

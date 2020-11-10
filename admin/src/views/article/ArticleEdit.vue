@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import api from "../../api/index";
 export default {
     props: {
         id: {},
@@ -52,9 +53,9 @@ export default {
             this.article.content_md = this.$refs.md.d_value;
             this.article.content_html = this.$refs.md.d_render;
             if (this.id) {
-                await this.$http.put(`/articles/${this.id}`, this.article);
+                await api.article.editArticle(this.id, this.article);
             } else {
-                await this.$http.post("/articles", this.article);
+                await api.article.addArticle(this.article);
             }
             this.$message({
                 type: "success",
@@ -63,7 +64,7 @@ export default {
             this.$router.push("/article/list");
         },
         async fetch() {
-            const res = await this.$http.get(`/articles/${this.id}`);
+            const res = await api.article.articleInfo(this.id);
             this.article = res.data;
             this.article.content_md = res.data.content_md;
             this.article.theme = res.data.theme.split(",");
@@ -80,12 +81,12 @@ export default {
         },
         // 获取文章主题
         async getTheme() {
-            const res = await this.$http.get(`/articles/get/theme`);
+            const res = await api.theme.getThemeList();
             this.themeOptions = res.data;
         },
         // 获取文章类型
         async getType() {
-            const res = await this.$http.get(`/articles/get/type`);
+            const res = await api.type.getTypeList();
             this.typeOptions = res.data;
         },
     },

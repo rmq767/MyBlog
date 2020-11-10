@@ -34,6 +34,8 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
+		const { name, comment, article_id } = req.body;
+		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateComment(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -41,10 +43,25 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
+		// 验证名称唯一
+		const namesql = "select name from comments where is_delete = 0";
+		await db.query(namesql, (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				for (const key in data) {
+					if (data[key] === name) {
+						return res.send({
+							message: "名称已存在",
+						});
+					}
+				}
+			}
+		});
 		const sql =
 			"insert into comments (name,comment,date,article_id) VALUES (?,?,?,?)";
-		const { name, comment, article_id } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[`${name}`, `${comment}`, `${date}`, `${article_id}`],

@@ -47,7 +47,7 @@
         <v-content>
             <nuxt-child :searchData="searchData"></nuxt-child>
         </v-content>
-        <div style="position:fixed;bottom:8%;right:3%;" @click="$vuetify.goTo(-9999)">
+        <div style="position:fixed;bottom:8%;right:1%;" @click="$vuetify.goTo(-9999)">
             <v-btn fab small dark color="#B388FF">
                 <v-icon dark>mdi-arrow-up</v-icon>
             </v-btn>

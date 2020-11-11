@@ -1,35 +1,17 @@
 <template>
     <div class="comment">
-        <v-container
-            style="backgroundcolor: rgba(245, 245, 245, 0.7); width: 100%"
-        >
+        <v-container style="backgroundcolor: rgba(245, 245, 245, 0.7); width: 100%">
             <h3>留言区</h3>
             <div>
                 <v-form>
-                    <v-textarea
-                        v-model="form.message"
-                        label="请输入留言（240字以内）"
-                        :counter="240"
-                        required
-                    ></v-textarea>
-                    <v-text-field
-                        v-model="form.name"
-                        :counter="20"
-                        label="昵称"
-                        required
-                    ></v-text-field>
+                    <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240" required></v-textarea>
+                    <v-text-field v-model="name" :counter="20" label="昵称" required></v-text-field>
                     <v-btn class="mr-4" @click="submit" large>提交</v-btn>
                 </v-form>
             </div>
             <h3 class="mt-12">评论区</h3>
             <div>
-                <v-list
-                    v-for="item in listData"
-                    :key="item.id"
-                    dense
-                    class="py-0 my-3"
-                    two-line
-                >
+                <v-list v-for="item in listData" :key="item.id" dense class="py-0 my-3" two-line>
                     <template>
                         <v-list-item link>
                             <v-list-item-avatar>
@@ -37,34 +19,20 @@
                             </v-list-item-avatar>
 
                             <v-list-item-content>
-                                <v-list-item-title
-                                    v-html="
+                                <v-list-item-title v-html="
                                         item.name +
                                         `<span class='overline ml-5'>${item.date} </span>`
-                                    "
-                                    class="font-weight-black"
-                                ></v-list-item-title>
-                                <v-list-item-subtitle
-                                    v-html="item.comment"
-                                ></v-list-item-subtitle>
+                                    " class="font-weight-black"></v-list-item-title>
+                                <v-list-item-subtitle v-html="item.comment"></v-list-item-subtitle>
                             </v-list-item-content>
                             <div class="handleReply">
-                                <span
-                                    @click="
+                                <span @click="
                                         sheet = !sheet;
                                         comment_id = item.id;
                                         r_name = item.name;
-                                    "
-                                    class="reply"
-                                    >回复</span
-                                >
-                                <div
-                                    class="reply mt-4 overline"
-                                    @click="fetchReply(item.id)"
-                                >
-                                    <v-icon size="medium"
-                                        >mdi-message-processing</v-icon
-                                    >
+                                    " class="reply">回复</span>
+                                <div class="reply mt-4 overline" @click="fetchReply(item.id)">
+                                    <v-icon size="medium">mdi-message-processing</v-icon>
                                     <span>{{
                                         item.reply_count ? item.reply_count : 0
                                     }}</span>
@@ -79,29 +47,20 @@
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>
-                                        <v-list-item-title
-                                            v-html="
+                                        <v-list-item-title v-html="
                                                 comment.i_name +
                                                 `<span class='caption mx-2'>回复</span> ` +
                                                 comment.r_name +
                                                 `<span class='overline ml-5'>${comment.date}</span>`
-                                            "
-                                            class="font-weight-black"
-                                        ></v-list-item-title>
-                                        <v-list-item-subtitle
-                                            v-html="comment.c_reply"
-                                        ></v-list-item-subtitle>
+                                            " class="font-weight-black"></v-list-item-title>
+                                        <v-list-item-subtitle v-html="comment.c_reply"></v-list-item-subtitle>
                                     </v-list-item-content>
                                     <div class="handleReply">
-                                        <span
-                                            @click="
+                                        <span @click="
                                                 sheet = !sheet;
                                                 comment_id = item.id;
                                                 r_name = comment.i_name;
-                                            "
-                                            class="reply"
-                                            >回复</span
-                                        >
+                                            " class="reply">回复</span>
                                     </div>
                                 </v-list-item>
                             </template>
@@ -114,24 +73,9 @@
                     <v-sheet class="text-center" height="18rem">
                         <div class="px-2 mt-2">
                             <v-form>
-                                <v-textarea
-                                    v-model="reply.message"
-                                    label="请输入留言（240字以内）"
-                                    :counter="240"
-                                    required
-                                ></v-textarea>
-                                <v-text-field
-                                    v-model="reply.name"
-                                    :counter="20"
-                                    label="昵称"
-                                    required
-                                ></v-text-field>
-                                <v-btn
-                                    class="mr-4"
-                                    @click="submitReply(comment_id)"
-                                    large
-                                    >提交</v-btn
-                                >
+                                <v-textarea v-model="reply.message" label="请输入留言（240字以内）" :counter="240" required></v-textarea>
+                                <v-text-field v-model="name" :counter="20" label="昵称" required></v-text-field>
+                                <v-btn class="mr-4" @click="submitReply(comment_id)" large>提交</v-btn>
                             </v-form>
                         </div>
                     </v-sheet>
@@ -155,8 +99,13 @@ export default {
     props: ["type", "article_id"],
     data() {
         return {
-            form: {},
-            reply: {},
+            form: {
+                message: "",
+            },
+            reply: {
+                message: "",
+            },
+            name: "",
             listData: [],
             sheet: false,
             commentReply: [],
@@ -170,32 +119,40 @@ export default {
             timeout: 2000,
         };
     },
+    mounted() {
+        if (localStorage.getItem("tourist")) {
+            this.name = localStorage.getItem("tourist");
+        }
+    },
     methods: {
         async submit() {
-            if (!this.form.message || !this.form.name) {
+            if (!this.form.message || !this.name) {
                 this.snackbar = true;
                 this.snackbarText = "留言或者昵称不能为空";
             } else {
                 await this.$axios.post("/comments", {
-                    name: this.form.name,
+                    name: this.name,
                     comment: this.form.message,
                     article_id: this.a_id,
                 });
-                this.form = {};
+                localStorage.setItem("tourist", this.name);
+                this.form.message = "";
                 this.fetch();
             }
         },
         async submitReply(comment_id) {
-            if (!this.reply.message || !this.reply.name) {
+            if (!this.reply.message || !this.name) {
                 this.snackbar = true;
                 this.snackbarText = "留言或者昵称不能为空";
             } else {
                 await this.$axios.post(`/commentreply`, {
-                    i_name: this.reply.name,
+                    i_name: this.name,
                     r_name: this.r_name,
                     c_reply: this.reply.message,
                     comment_id: this.comment_id,
                 });
+                localStorage.setItem("tourist", this.name);
+                this.reply.message = "";
                 this.sheet = false;
                 this.fetch();
                 this.comment_id = comment_id;

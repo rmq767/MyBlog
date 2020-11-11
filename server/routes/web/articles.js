@@ -9,8 +9,7 @@ module.exports = (app) => {
 	 * @description 获取文章
 	 */
 	router.get("/", async (req, res) => {
-		const sql = `select id,title,content_html,date,clicks from articles where is_delete = 0 ORDER BY id desc;
-    `;
+		const sql = `select * from articles where is_delete = 0 ORDER BY id desc;`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

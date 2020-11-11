@@ -28,25 +28,28 @@ app.use("/admin/api", async (req, res, next) => {
 });
 
 require("./routes/admin/articles")(app);
-require("./routes/web/articles")(app);
 require("./routes/admin/articleTheme")(app);
-require("./routes/web/articleTheme")(app);
 require("./routes/admin/articleType")(app);
-require("./routes/web/articleType")(app);
 require("./routes/admin/comments")(app);
-require("./routes/web/comments")(app);
 require("./routes/admin/messages")(app);
-require("./routes/web/messages")(app);
 require("./routes/admin/notices")(app);
-require("./routes/web/notices")(app);
 require("./routes/admin/informations")(app);
-require("./routes/web/informations")(app);
 require("./routes/admin/links")(app);
-require("./routes/web/links")(app);
 require("./routes/admin/admins")(app);
 require("./routes/admin/login")(app);
-require("./routes/web/commentReply")(app);
 require("./routes/admin/commentReply")(app);
+require("./routes/admin/statistics")(app);
+
+require("./routes/web/articles")(app);
+require("./routes/web/articleTheme")(app);
+require("./routes/web/articleType")(app);
+require("./routes/web/comments")(app);
+require("./routes/web/messages")(app);
+require("./routes/web/notices")(app);
+require("./routes/web/informations")(app);
+require("./routes/web/links")(app);
+require("./routes/web/commentReply")(app);
+require("./routes/web/statistics")(app);
 
 app.set("secret", "jfdsijf^&T(&UGFU0y80ydsf08;.]s.f");
 

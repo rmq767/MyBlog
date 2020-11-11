@@ -8,6 +8,7 @@ import information from "./modules/information";
 import link from "./modules/link";
 import message from "./modules/message";
 import notice from "./modules/notice";
+import statistics from "./modules/statistics";
 
 export default {
 	article,
@@ -20,4 +21,5 @@ export default {
 	link,
 	message,
 	notice,
+	statistics,
 };

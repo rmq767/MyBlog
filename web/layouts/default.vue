@@ -99,6 +99,9 @@ export default {
             this.searchData = newValue;
         },
     },
+    mounted() {
+        console.log(1);
+    },
     components: {},
 };
 </script>

@@ -1,11 +1,5 @@
 <template>
     <div class="about">
-        <div class="avatar-block">
-            <div class="avatar" ref="avatar-img" @click="mouseMove">
-                <img src="https://picsum.photos/200/200?random" />
-            </div>
-            <p class="tip" ref="tip" v-show="show">{{showText}}</p>
-        </div>
         <div class="my-info">
             <div class="avatar-pc">
                 <img src="https://picsum.photos/200/200?random" alt="">
@@ -23,10 +17,12 @@
                 <p class="shine">hahahahahahhahahahahahahahahahahahahaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhh</p>
             </div>
         </div>
+        <mouseMove></mouseMove>
     </div>
 </template>
 
 <script>
+import mouseMove from "../../components/mouseMove.vue";
 export default {
     data() {
         return {
@@ -42,24 +38,11 @@ export default {
         };
     },
     methods: {
-        mouseMove() {
-            window.addEventListener("mousemove", this.moveTo, false);
-            this.show = true;
-            this.showText = "哈哈，甩不掉了吧";
-            setTimeout(() => {
-                this.show = false;
-                this.showText = "";
-            }, 1000);
-        },
-        moveTo(e) {
-            const avatar = this.$refs["avatar-img"];
-            avatar.style.top = e.clientY + "px";
-            avatar.style.left = e.clientX + "px";
-            avatar.style.width = 2 + "rem";
-            avatar.style.height = 2 + "rem";
-        },
+        mouseMove() {},
     },
-    mounted() {},
+    components: {
+        mouseMove,
+    },
 };
 </script>
 
@@ -90,39 +73,16 @@ export default {
             border-radius: 50%;
         }
     }
-    .avatar-block {
-        position: absolute;
-        left: 0;
-        top: 3rem;
-        .tip {
-            position: absolute;
-            top: 25px;
-            right: -200px;
-            background: #ffffff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            &::before {
-                position: absolute;
-                left: -10px;
-                top: 8px;
-                content: "";
-                width: 0;
-                height: 0;
-                border-top: 10px solid transparent;
-                border-bottom: 10px solid transparent;
-                border-right: 10px solid #ffffff;
-            }
-        }
-    }
     .my-info {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        align-content: space-around;
         background: rgba(0, 0, 0, 0.5);
         padding: 2rem;
         width: 50%;
+        margin-top: -120px;
+        border-radius: 1rem;
+        position: relative;
+        z-index: 2;
         > div {
             margin: 1rem 0rem;
         }
@@ -174,6 +134,7 @@ export default {
     .about .my-info {
         width: 100%;
         height: 100%;
+        margin-top: 0;
     }
 }
 </style>

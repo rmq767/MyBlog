@@ -32,7 +32,7 @@ module.exports = (app) => {
 	 * @description 获取热门文章
 	 */
 	router.get("/hot", async (req, res) => {
-		const sql = `select id,title,clicks from articles where is_delete = 0 ORDER BY clicks desc;
+		const sql = `select id,title,clicks from articles where is_delete = 0 ORDER BY clicks desc limit 5;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {

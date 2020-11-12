@@ -15,23 +15,33 @@
             </div>
         </div>
         <div class="echars-block">
+            <div ref="read" :style="{ width: '100%', height: '400px' }"></div>
             <div ref="pv" :style="{ width: '100%', height: '400px' }"></div>
-            <div ref="cv" :style="{ width: '100%', height: '400px' }"></div>
         </div>
     </div>
 </template>
 
 <script>
+import api from "../api/index";
 export default {
     data() {
         return {
-            x_data: [],
-            s_data: [],
+            read: {
+                x_data: [],
+                s_data: [],
+            },
+            pv: {
+                x_data: [],
+                s_data: [],
+            },
         };
     },
     methods: {
+        /**
+         * @description 阅读量统计
+         */
         drawBar() {
-            let myChart1 = this.$echarts.init(this.$refs.pv);
+            let myChart1 = this.$echarts.init(this.$refs.read);
             myChart1.clear();
             myChart1.setOption({
                 title: {
@@ -42,14 +52,14 @@ export default {
                     data: ["阅读量"],
                 },
                 xAxis: {
-                    data: this.x_data,
+                    data: this.read.x_data,
                 },
                 yAxis: {},
                 series: [
                     {
                         name: "阅读量",
                         type: "bar",
-                        data: this.s_data,
+                        data: this.read.s_data,
                     },
                 ],
             });
@@ -57,8 +67,11 @@ export default {
                 myChart1.resize();
             });
         },
+        /**
+         * @description 网站访问量统计
+         */
         drawLine() {
-            let myChart2 = this.$echarts.init(this.$refs.cv);
+            let myChart2 = this.$echarts.init(this.$refs.pv);
             myChart2.clear();
             myChart2.setOption({
                 title: {
@@ -69,14 +82,14 @@ export default {
                     data: ["访问量"],
                 },
                 xAxis: {
-                    data: this.x_data,
+                    data: this.pv.x_data,
                 },
                 yAxis: {},
                 series: [
                     {
                         name: "访问量",
                         type: "line",
-                        data: this.s_data,
+                        data: this.pv.s_data,
                     },
                 ],
             });
@@ -84,19 +97,32 @@ export default {
                 myChart2.resize();
             });
         },
+        /**
+         * @description 获取看板数据
+         */
+        async getCountData() {
+            const res = await api.statistics.getCountData();
+            console.log(res);
+        },
         async fetchArticle() {
-            const res = await this.$http.get("/articles");
+            const res = await api.statistics.getReadData();
             let articlesArr = res.data.splice(0, 5);
-            this.x_data = articlesArr.map((v) => v.title);
-            this.s_data = articlesArr.map((v) => v.clicks);
+            this.read.x_data = articlesArr.map((v) => v.title);
+            this.read.s_data = articlesArr.map((v) => v.clicks);
+        },
+        /**
+         * @description 获取pv的图表数据
+         */
+        async getPvData() {
+            const res = await api.statistics.getPvData();
+            this.pv.x_data = res.data.map((v) => v.date);
+            this.pv.s_data = res.data.map((v) => v.count);
+            this.drawLine();
         },
     },
     async mounted() {
+        await this.getPvData();
         // await this.fetchArticle();
-        this.$nextTick(() => {
-            this.drawBar();
-            this.drawLine();
-        });
     },
 };
 </script>

@@ -10,8 +10,8 @@
                     <el-input v-model="form.comment"></el-input>
                 </el-form-item>
                 <el-form-item label="文章：" prop='article'>
-                    <el-select v-model="form.article" placeholder="请选择评论的文章">
-                        <el-option v-for="item in articleOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-select v-model="form.article_id" placeholder="请选择评论的文章">
+                        <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -64,30 +64,9 @@ export default {
             form: {
                 nickname: "",
                 comment: "",
-                article: 0,
+                article_id: null,
             },
-            articleOptions: [
-                {
-                    value: "选项1",
-                    label: "黄金糕",
-                },
-                {
-                    value: "选项2",
-                    label: "双皮奶",
-                },
-                {
-                    value: "选项3",
-                    label: "蚵仔煎",
-                },
-                {
-                    value: "选项4",
-                    label: "龙须面",
-                },
-                {
-                    value: "选项5",
-                    label: "北京烤鸭",
-                },
-            ],
+            articleOptions: [],
         };
     },
     methods: {
@@ -150,9 +129,22 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
+        /**
+         * @description 获取文章
+         */
+        async getArticleList() {
+            const res = await api.article.getArticleList();
+            this.articleOptions = res.data.map((v) => {
+                return {
+                    title: v.title,
+                    id: v.id,
+                };
+            });
+        },
     },
     created() {
         this.fetch();
+        this.getArticleList();
     },
 };
 </script>

@@ -5,6 +5,15 @@
             <el-form-item label="昵称">
                 <el-input v-model="message.name"></el-input>
             </el-form-item>
+            <el-form-item label="颜色">
+                <el-color-picker v-model="message.background" show-alpha></el-color-picker>
+            </el-form-item>
+            <el-form-item label="左边距">
+                <el-input-number v-model="message.posLeft" :min="1" :max="1660"></el-input-number>
+            </el-form-item>
+            <el-form-item label="上边距">
+                <el-input-number v-model="message.posTop" :min="1" :max="860"></el-input-number>
+            </el-form-item>
             <el-form-item label="评论">
                 <el-input v-model="message.message" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item>
@@ -23,7 +32,13 @@ export default {
     },
     data() {
         return {
-            message: {},
+            message: {
+                name: "",
+                message: "",
+                background: "",
+                posLeft: 0,
+                posTop: 0,
+            },
         };
     },
     methods: {

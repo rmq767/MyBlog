@@ -40,12 +40,19 @@ module.exports = (app) => {
 			});
 		}
 		const sql =
-			"insert into links (title,description,link,image,date) VALUES (?,?,?,?,?)";
-		const { title, description, link, image } = req.body;
+			"insert into links (title,description,link,image,type,date) VALUES (?,?,?,?,?,?)";
+		const { title, description, link, image, type } = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${image}`, `${date}`],
+			[
+				`${title}`,
+				`${description}`,
+				`${link}`,
+				`${image}`,
+				`${type}`,
+				`${date}`,
+			],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -67,12 +74,19 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE links SET title=?,description=?,link=?,image=?,date=? WHERE id = '${id}'`;
-		const { title, description, link, image } = req.body;
+		const sql = `UPDATE links SET title=?,description=?,link=?,image=?,type=?,date=? WHERE id = '${id}'`;
+		const { title, description, link, image, type } = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${image}`, `${date}`],
+			[
+				`${title}`,
+				`${description}`,
+				`${link}`,
+				`${image}`,
+				`${type}`,
+				`${date}`,
+			],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -118,7 +132,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { type, title } = req.body;
-		const sql = `select * from links where type like '%${type}%' and title like '%${title}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from links where type like '%${type}%' and title like '%${title}%' and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

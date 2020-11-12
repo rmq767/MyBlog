@@ -32,7 +32,7 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
-		const { name, message, background, top, left } = req.body;
+		const { name, message, background, posTop, posLeft } = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateMessage(req.body);
 		// 判断是否验证通过
@@ -67,8 +67,8 @@ module.exports = (app) => {
 				`${name}`,
 				`${message}`,
 				`${background}`,
-				`${top}`,
-				`${left}`,
+				`${posTop}`,
+				`${posLeft}`,
 				`${date}`,
 			],
 			(err, data) => {
@@ -93,15 +93,16 @@ module.exports = (app) => {
 		}
 		const id = req.params.id;
 		const sql = `UPDATE messages SET name=?,message=?,background=?,posTop=?,posLeft=?,date=? WHERE id = '${id}'`;
-		const { name, message, background, top, left } = req.body;
+		const { name, message, background, posTop, posLeft } = req.body;
+		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
 				`${name}`,
 				`${message}`,
 				`${background}`,
-				`${top}`,
-				`${left}`,
+				`${posTop}`,
+				`${posLeft}`,
 				`${date}`,
 			],
 			(err, data) => {
@@ -149,7 +150,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { nickname, message } = req.body;
-		const sql = `select * from messages where name like '%${nickname}%' and message like '%${message}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from messages where name like '%${nickname}%' and message like '%${message}%' and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

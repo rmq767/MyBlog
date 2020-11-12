@@ -116,7 +116,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { title, notice } = req.body;
-		const sql = `select * from notices where title like '%${title}%' and notice like '%${notice}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from notices where title like '%${title}%' and notice like '%${notice}%' and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

@@ -82,12 +82,16 @@ export default {
         // 获取文章主题
         async getTheme() {
             const res = await api.theme.getThemeList();
-            this.themeOptions = res.data;
+            res.data.forEach((item) => {
+                this.themeOptions.push(item.theme);
+            });
         },
         // 获取文章类型
         async getType() {
             const res = await api.type.getTypeList();
-            this.typeOptions = res.data;
+            res.data.forEach((item) => {
+                this.typeOptions.push(item.type);
+            });
         },
     },
     mounted() {

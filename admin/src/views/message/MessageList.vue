@@ -7,7 +7,7 @@
                     <el-input v-model="form.nickname"></el-input>
                 </el-form-item>
                 <el-form-item label="评论：">
-                    <el-input v-model="form.comment" prop='comment'></el-input>
+                    <el-input v-model="form.message" prop='message'></el-input>
                 </el-form-item>
                 <el-form-item label=' '>
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
@@ -19,7 +19,7 @@
             <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{
-            scope.row.date.split("T")[0]
+            scope.row.date.split(" ")[0]
           }}</span>
                 </template>
             </el-table-column>
@@ -59,7 +59,7 @@ export default {
             },
             form: {
                 nickname: "",
-                commment: "",
+                message: "",
             },
         };
     },

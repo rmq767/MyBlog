@@ -27,35 +27,35 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-table style="width: 100%" :data="articles">
+        <el-table style="width: 100%" :data="articles" v-loading='loadingData'>
             <el-table-column label="日期" prop="date" fixed align="center" width="150">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{
-                        scope.row.date.split("T")[0]
+                    <span>{{
+                        scope.row.date.split(" ")[0]
                     }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="题目" align="center" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.title }}</span>
+                    <span>{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="内容" :show-overflow-tooltip="true" align="center">
+            <el-table-column label="内容" align="center">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{
+                    <span style="maxWidth: 100%;overflow: hidden;whiteSpace: nowrap;textOverflow: ellipsis;">{{
                         scope.row.content_md
                     }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="主题" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.theme }}</span>
+                    <span>{{ scope.row.theme }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="分类" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.type }}</span>
+                    <span>{{ scope.row.type }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="180">
@@ -90,15 +90,16 @@ export default {
             },
             themeOptions: [],
             typeOptions: [],
+            loadingData: false,
         };
     },
     methods: {
-        async fetch() {
-            // const res = await this.$http.get("/articles");
-            const res = await api.article.getArticleList();
-            this.count = res.data.length;
-            this.articles = res.data.slice(0, this.pageInfo.pageSize);
-        },
+        // async fetch() {
+        //     // const res = await this.$http.get("/articles");
+        //     const res = await api.article.getArticleList();
+        //     this.pageInfo.count = res.data.length;
+        //     this.articles = res.data.slice(0, this.pageInfo.pageSize);
+        // },
         async remove(row) {
             this.$confirm(`是否删除${row.title}`, "提示", {
                 confirmButtonText: "确定",
@@ -122,28 +123,29 @@ export default {
         },
         async handleSizeChange(val) {
             this.pageInfo.pageSize = val;
-            this.pagination();
+            this.search();
         },
         async handleCurrentChange(val) {
             this.pageInfo.currentPage = val;
-            this.pagination();
+            this.search();
         },
-        /**
-         * @description 分页
-         */
-        async pagination() {
-            const res = await api.article.pagination(
-                this.pageInfo.pageSize,
-                this.pageInfo.currentPage
-            );
-            this.articles = res.data;
-        },
+        // /**
+        //  * @description 分页
+        //  */
+        // async pagination() {
+        //     const res = await api.article.pagination(
+        //         this.pageInfo.pageSize,
+        //         this.pageInfo.currentPage
+        //     );
+        //     this.articles = res.data;
+        // },
         async search() {
+            this.loadingData = true;
             const params = Object.assign({}, this.form, this.pageInfo);
             const res = await api.article.searchArticle(params);
             this.articles = res.data;
-            // this.pageInfo.count = res.data.length;
-            // this.pageInfo.pageSize = res.data.length;
+            this.pageInfo.count = res.data.length;
+            this.loadingData = false;
         },
         // 获取文章主题
         async getTheme() {
@@ -161,16 +163,13 @@ export default {
     },
     components: {},
     created() {
-        this.fetch();
+        this.search();
         this.getTheme();
         this.getType();
     },
 };
 </script>
 <style lang='less' scoped>
-/deep/.el-tooltip__popper {
-    display: none;
-}
 .header-form {
     min-height: 100px;
     display: flex;

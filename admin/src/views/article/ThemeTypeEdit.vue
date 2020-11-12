@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import api from "../../api";
 export default {
     props: {
         id: {},
@@ -43,9 +44,13 @@ export default {
         };
     },
     methods: {
-        save() {
-            console.log(this.theme);
-            console.log(this.type);
+        async save() {
+            await api.theme.addTheme({
+                theme: this.theme,
+            });
+            await api.type.addType({
+                type: this.type,
+            });
         },
         handleCloseTheme(tag) {
             this.theme.splice(this.theme.indexOf(tag), 1);

@@ -99,8 +99,13 @@ export default {
             this.searchData = newValue;
         },
     },
+    methods: {
+        async count() {
+            await this.$axios.get("/statistics");
+        },
+    },
     mounted() {
-        console.log(1);
+        this.count();
     },
     components: {},
 };

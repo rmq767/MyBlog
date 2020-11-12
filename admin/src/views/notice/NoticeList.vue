@@ -19,7 +19,7 @@
             <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{
-            scope.row.date.split("T")[0]
+            scope.row.date.split(" ")[0]
           }}</span>
                 </template>
             </el-table-column>

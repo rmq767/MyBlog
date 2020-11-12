@@ -3,18 +3,16 @@
         <div class="my-info">
             <div class="avatar-pc">
                 <img src="https://picsum.photos/200/200?random" alt="">
+                <p class="shine">{{info.profile}}</p>
             </div>
             <div class="info-item-social-contact">
-                <p class="shine">QQ:{{}}</p>
-                <p class="shine">WeChat:{{}}</p>
-                <p class="shine">GitHub:{{}}</p>
-                <p class="shine">CSDN:{{}}</p>
+                <p class="shine" v-if="info.qq">QQ:{{info.qq}}</p>
+                <p class="shine" v-if="info.wechat">WeChat:{{info.wechat}}</p>
+                <p class="shine" v-if="info.github">GitHub:{{info.github}}</p>
+                <p class="shine" v-if="info.csdn">CSDN:{{info.csdn}}</p>
             </div>
             <div class="info-item-description">
-                <p class="shine">hahahahahahhahahahahahahahahahahahahaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhha</p>
-            </div>
-            <div class="info-item-message">
-                <p class="shine">hahahahahahhahahahahahahahahahahahahaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhh</p>
+                <p class="shine">{{info.desc}}</p>
             </div>
         </div>
         <mouseMove></mouseMove>
@@ -33,6 +31,7 @@ export default {
     },
     async asyncData({ $axios }) {
         const info = await $axios.$get("/informations");
+        console.log(info);
         return {
             info,
         };
@@ -87,12 +86,14 @@ export default {
             margin: 1rem 0rem;
         }
         .avatar-pc {
-            height: 5rem;
-            width: 5rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
             > img {
-                height: 100%;
-                width: 100%;
+                height: 5rem;
+                width: 5rem;
                 border-radius: 50%;
+                margin-right: 2rem;
             }
         }
         p {

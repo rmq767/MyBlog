@@ -11,7 +11,11 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				let arr = [];
+				data.forEach((item) => {
+					arr.push(item.type);
+				});
+				return res.send(arr);
 			}
 		});
 	});
@@ -77,7 +81,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { type } = req.body;
-		const sql = `select * from types where  type like '%${type}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from types where  type like '%${type}%' and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

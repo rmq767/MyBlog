@@ -11,23 +11,45 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				let arr = [];
+				data.forEach((item) => {
+					arr.push(item.theme);
+				});
+				return res.send(arr);
 			}
 		});
 	});
 
 	router.post("/", async (req, res) => {
-		const sql = "insert into themes (theme) VALUES (?)";
-		const { theme } = req.body;
-		await db.query(sql, [`${theme}`], (err, data) => {
+		let themeArr = [];
+		const sql = `select * from themes where is_delete = 0 ORDER BY id desc`;
+		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: err,
+					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				data.forEach((item) => {
+					themeArr.push(item.theme);
+				});
 			}
 		});
+
+		const sql = "insert into themes (theme) VALUES (?)";
+		const { theme } = req.body;
+		let arr = [...theme, ...themeArr];
+        arr = [...new Set(arr)];
+        arr.forEach(item => {
+            await db.query(sql, [`${item}`], (err, data) => {
+                if (err) {
+                    return res.send({
+                        message: err,
+                    });
+                } else {
+                    return res.send({success:true,data:data});
+                }
+            });
+        })
 	});
 
 	router.put("/:id", async (req, res) => {
@@ -77,7 +99,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { theme } = req.body;
-		const sql = `select * from themes where  theme like '%${theme}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from themes where  theme like '%${theme}%' and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

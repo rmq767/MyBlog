@@ -31,7 +31,7 @@
                                 <div class="theme">
                                     <v-chip class="mb-2" color="#7c4dff" label text-color="white" small>
                                         <v-icon left> mdi-label </v-icon>
-                                        主题
+                                        {{item.theme}}
                                     </v-chip>
                                 </div>
                                 <div class="type">
@@ -82,24 +82,24 @@
                         <div ref="aboutme" class="about_me">
                             <v-card style="padding: 10px 20px">
                                 <div class="my-4 subtitle-1">热门文章</div>
-                                <div v-for="item in 5" :key="item" class="article-name">
-                                    <p>这是一篇文章的标题</p>
+                                <div v-for="(item,index) in hotArticles" :key="index" class="article-name" @click="toArticleInfo(item.id)">
+                                    <p>{{item.title}}</p>
                                     <span>
-                                        <v-icon class="ml-3 mr-1">mdi-eye</v-icon>111
+                                        <v-icon class="ml-3 mr-1">mdi-eye</v-icon>{{item.clicks}}
                                     </span>
                                 </div>
                             </v-card>
                             <v-card style="padding: 10px 20px; marginTop: 20px" outlined>
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
-                                    <div class="theme-item" v-for="item in themeList" :key="item" @click="chooseTheme(item)">
-                                        <span>{{item}}</span>
+                                    <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme)">
+                                        <span>{{item.theme}}</span>
                                     </div>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
-                                    <div class="type-item" v-for="item in typeList" :key="item" @click="chooseType(item)">
-                                        <span>{{item}}</span>
+                                    <div class="type-item" v-for="(item,index) in types" :key="index" @click="chooseType(item.type)">
+                                        <span>{{item.type}}</span>
                                     </div>
                                 </div>
                             </v-card>
@@ -117,8 +117,14 @@ import Pagination from "../components/Pagination.vue";
 export default {
     async asyncData({ $axios }) {
         const notices = await $axios.$get("/notices");
+        const themes = await $axios.$get("/get/themes");
+        const types = await $axios.$get("/get/types");
+        const hotArticles = await $axios.$get("/get/hot");
         return {
             notices,
+            themes,
+            types,
+            hotArticles,
         };
     },
     props: ["searchData"],
@@ -135,20 +141,6 @@ export default {
     methods: {
         getPagination(val) {
             this.articlesData = val;
-        },
-        async chooseTheme(theme) {
-            const articles = await this.$axios.get(
-                `/articles/search/theme?theme=${theme}`
-            );
-            this.articlesData = articles.data;
-            this.show = false;
-        },
-        async chooseType(type) {
-            const articles = await this.$axios.get(
-                `/articles/search/type?type${type}`
-            );
-            this.articlesData = articles.data;
-            this.show = false;
         },
         toScoll() {
             //向下滑动动画
@@ -169,14 +161,32 @@ export default {
             });
             this.articlesData = res.data;
         },
-        // async getTheme() {
-        //     const theme = await this.$axios.$get("/articles/get/theme");
-        //     this.themeList = theme;
-        // },
-        // async getType() {
-        //     const type = await this.$axios.$get("/articles/get/type");
-        //     this.typeList = type;
-        // },
+        /**
+         * @description 跳转文章详情
+         */
+        toArticleInfo(id) {
+            this.$router.push({
+                path: `/blog/${id}`,
+            });
+        },
+        /**
+         * @description 搜索同主题文章
+         */
+        async chooseTheme(theme) {
+            const res = await this.$axios.get(
+                `/articles/search/theme?theme=${theme}`
+            );
+            this.articlesData = res.data;
+        },
+        /**
+         * @description 搜索同分类文章
+         */
+        async chooseType(type) {
+            const res = await this.$axios.get(
+                `/articles/search/type?type=${type}`
+            );
+            this.articlesData = res.data;
+        },
     },
     components: {
         Pagination,
@@ -195,17 +205,6 @@ export default {
         articlesData() {
             document.documentElement.scrollTop = 0;
         },
-    },
-    computed: {
-        // hidePagination() {
-        //     if (this.searchData) {
-        //         return false;
-        //     } else if (this.hide) {
-        //         return false;
-        //     } else {
-        //         return true;
-        //     }
-        // },
     },
     beforeDestroy() {
         clearTimeout(this.timeout);

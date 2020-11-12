@@ -31,14 +31,14 @@ export default {
         return {
             admin: {
                 username: "",
-                eamil: "",
+                email: "",
                 password: "",
             },
         };
     },
     methods: {
         async save() {
-            await api.admin.editAdmin(this.id, this.admin);
+            await api.admin.editAdmin(this.admin.id, this.admin);
             this.$message({
                 type: "success",
                 message: "保存成功",
@@ -46,12 +46,11 @@ export default {
         },
         async fetch() {
             const res = await api.admin.getAdmin();
-            console.log(res.data);
-            this.admin = Object.assign({}, this.admin, res.data); //把 this.admin{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.admin = Object.assign({}, this.admin, res.data[0]); //把 this.admin{}中，再把res.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {
-        this.id && this.fetch();
+        this.fetch();
     },
 };
 </script>

@@ -8,6 +8,12 @@ export default {
 		return http.get("/themes");
 	},
 	/**
+	 * @description 新增主题
+	 */
+	addTheme(params) {
+		return http.post("/themes", params);
+	},
+	/**
 	 * @description 删除主题
 	 */
 	deleteTheme(id) {

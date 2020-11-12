@@ -39,12 +39,13 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="pageInfo.pageSizes" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.count" style="float: right" :hide-on-single-page="hide">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageInfo.currentPage" :page-sizes="pageInfo.pageSizes" :page-size="pageInfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageInfo.count" style="float: right">
         </el-pagination>
     </div>
 </template>
 
 <script>
+import api from "../../api/index";
 export default {
     data() {
         return {
@@ -52,11 +53,10 @@ export default {
             themeType: [],
             pageInfo: {
                 currentPage: 1,
-                pageSizes: [10, 15, 20],
+                pageSizes: [10, 20],
                 pageSize: 10,
-                count: 10,
+                count: 0,
             },
-            hide: false,
         };
     },
     methods: {
@@ -66,6 +66,20 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
+        // 获取文章主题
+        async getTheme() {
+            const res = await api.theme.getThemeList();
+            this.themeOptions = res.data;
+        },
+        // 获取文章类型
+        async getType() {
+            const res = await api.type.getTypeList();
+            this.typeOptions = res.data;
+        },
+    },
+    mounted() {
+        this.getTheme();
+        this.getType();
     },
 };
 </script>

@@ -25,7 +25,7 @@ module.exports = (app) => {
 
 	router.get("/read", async (req, res) => {
 		const sql = `
-        select title,clicks from articles where is_delete = 0 order by clicks desc limit 10;
+        select * from articles where is_delete = 0 order by clicks desc limit 10;
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -40,7 +40,7 @@ module.exports = (app) => {
 
 	router.get("/pv", async (req, res) => {
 		const sql = `
-        select count(*) as count,substr(t.date,1,10) as date  from articles t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) DESC LIMIT 10
+        select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) DESC LIMIT 10
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {

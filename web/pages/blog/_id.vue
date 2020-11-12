@@ -7,11 +7,11 @@
             <div class="theme-type">
                 <v-card>
                     <div class="my-4 subtitle-1">同主题文章</div>
-                    <div class="article-theme" v-for="item in 5" :key="item">
-                        Green ChipGreen ChipGreen ChipGreen ChipGreen Chip
+                    <div class="article-theme" v-for="item in sameThemeArticles" :key="item.id" @click="toArticleInfo(item.id)">
+                        {{item.title}}
                     </div>
                     <div class="my-4 subtitle-1">同分类文章</div>
-                    <div class="article-type">Green Chip</div>
+                    <div class="article-type" v-for="item in sameTypeArticles" :key="item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
                 </v-card>
             </div>
             <div>
@@ -65,12 +65,20 @@ import highlight from "../../plugins/highlight";
 export default {
     async asyncData({ $axios, params }) {
         const article = await $axios.$get(`/articles/${params.id}`);
+        const sameThemeArticles = await $axios.$get(
+            `/articles/get/sametheme?theme=${article.theme}`
+        );
+        const sameTypeArticles = await $axios.$get(
+            `/articles/get/sametype?type=${article.type}`
+        );
         const pre = await $axios.$get(`/articles/get/pre?id=${params.id}`);
         const next = await $axios.$get(`/articles/get/next?id=${params.id}`);
         return {
             article,
             pre,
             next,
+            sameThemeArticles,
+            sameTypeArticles,
         };
     },
     data() {
@@ -80,6 +88,14 @@ export default {
     methods: {
         backHome() {
             window.history.go(-1);
+        },
+        /**
+         * @description 跳转文章详情
+         */
+        toArticleInfo(id) {
+            this.$router.push({
+                path: `/blog/${id}`,
+            });
         },
     },
     updated() {

@@ -40,12 +40,12 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `update admins SET username=?,email=?,password=?,is_super=? WHERE id = '${id}'`;
-		const { username, email, password, is_super } = req.body;
+		const sql = `update admins SET username=?,email=?,password=? WHERE id = '${id}'`;
+		const { username, email, password } = req.body;
 		const pwd = bcrypt.hashSync(password, 8);
 		await db.query(
 			sql,
-			[`${username}`, `${email}`, `${pwd}`, `${is_super ? "1" : "0"}`],
+			[`${username}`, `${email}`, `${pwd}`],
 			(err, data) => {
 				if (err) {
 					return res.send({

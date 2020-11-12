@@ -31,7 +31,7 @@ module.exports = (app) => {
 	/**
 	 * @description 获取热门文章
 	 */
-	router.get("/hot", async (req, res) => {
+	router.get("/get/hot", async (req, res) => {
 		const sql = `select id,title,clicks from articles where is_delete = 0 ORDER BY clicks desc limit 5;
     `;
 		await db.query(sql, (err, data) => {
@@ -48,7 +48,7 @@ module.exports = (app) => {
 	/**
 	 * @description 获取同主题文章
 	 */
-	router.get("/sametheme", async (req, res) => {
+	router.get("/get/sametheme", async (req, res) => {
 		const { theme } = req.query;
 		const sql = `select id,title from articles where theme=${theme} is_delete = 0 ORDER BY clicks desc limit 5;
     `;
@@ -66,7 +66,7 @@ module.exports = (app) => {
 	/**
 	 * @description 获取同分类文章
 	 */
-	router.get("/sametype", async (req, res) => {
+	router.get("/get/sametype", async (req, res) => {
 		const { type } = req.query;
 		const sql = `select id,title from articles where type like '%${type}%' is_delete = 0 ORDER BY clicks desc limit 5;
     `;
@@ -122,7 +122,7 @@ module.exports = (app) => {
 	router.get("/:id", async (req, res) => {
 		const sql = `
     UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
-    select id,title,content_html,date,clicks from articles where id='${req.params.id}';
+    select * from articles where id='${req.params.id}';
     SELECT id article_id,COUNT(*) comment_count FROM 
     (SELECT articles.id,comments.article_id FROM articles RIGHT JOIN comments ON comments.article_id = articles.id) t 
     GROUP BY article_id HAVING COUNT(article_id)>=1;
@@ -209,7 +209,7 @@ module.exports = (app) => {
 
 	router.post("/get/search", async (req, res) => {
 		const { search } = req.body;
-		const sql = `select id,title,content_html,date,clicks from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
+		const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -228,39 +228,47 @@ module.exports = (app) => {
 		});
 	});
 
-	//   router.get("/search/theme", async (req, res) => {
-	//     const {theme} = req.query
-	//     const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
-	//     await db.query(sql, (err, data) => {
-	//       if (err) {
-	//         return res.send({
-	//           message: "数据库查询错误",
-	//         });
-	//       } else {
-	//         data.map(
-	//             (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
-	//           );
-	//           return res.send(data);
-	//       }
-	//     });
-	//   });
+	router.get("/search/theme", async (req, res) => {
+		const { theme } = req.query;
+		const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
+		await db.query(sql, (err, data) => {
+			if (err) {
+				return res.send({
+					message: "数据库查询错误",
+				});
+			} else {
+				data.map(
+					(v) =>
+						(v.content_html = v.content_html.replace(
+							/<[^<>]+>/g,
+							""
+						))
+				);
+				return res.send(data);
+			}
+		});
+	});
 
-	//   router.get("/search/type", async (req, res) => {
-	//     const {type} = req.query
-	//   const sql = `SELECT * FROM articles WHERE theme LIKE '%${type}%'`;
-	//   await db.query(sql, (err, data) => {
-	//     if (err) {
-	//       return res.send({
-	//         message: "数据库查询错误",
-	//       });
-	//     } else {
-	//       data.map(
-	//           (v) => (v.content_html = v.content_html.replace(/<[^<>]+>/g, ""))
-	//         );
-	//         return res.send(data);
-	//     }
-	//   });
-	// });
+	router.get("/search/type", async (req, res) => {
+		const { type } = req.query;
+		const sql = `SELECT * FROM articles WHERE type LIKE '%${type}%'`;
+		await db.query(sql, (err, data) => {
+			if (err) {
+				return res.send({
+					message: "数据库查询错误",
+				});
+			} else {
+				data.map(
+					(v) =>
+						(v.content_html = v.content_html.replace(
+							/<[^<>]+>/g,
+							""
+						))
+				);
+				return res.send(data);
+			}
+		});
+	});
 
 	app.use("/web/api/articles", router);
 };

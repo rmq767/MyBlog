@@ -76,7 +76,7 @@ export default {
     .my-info {
         display: flex;
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
         padding: 2rem;
         width: 50%;
         margin-top: -120px;

@@ -100,13 +100,13 @@ export default {
 	值为0deg，则图像无变化。若值未设置，默认值是0deg。
 	该值虽然没有最大值，超过360deg的值相当于又绕一圈。
 	*/
-        filter: hue-rotate(720deg);
+        filter: hue-rotate(1440deg);
         /*这里是浏览器兼容*/
         -webkit-transform: translate(-50%, -1000%);
         -moz-transform: translate(-50%, -1000%);
         -ms-transform: translate(-50%, -1000%);
         -o-transform: translate(-50%, -1000%);
-        -webkit-filter: hue-rotate(720deg);
+        -webkit-filter: hue-rotate(1440deg);
     }
 }
 </style>

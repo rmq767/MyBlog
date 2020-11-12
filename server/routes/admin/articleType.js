@@ -21,17 +21,35 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
-		const sql = "insert into types (type) VALUES (?)";
-		const { type } = req.body;
-		await db.query(sql, [`${type}`], (err, data) => {
+        let typeArr = [];
+		const sql1 = `select * from types where is_delete = 0 ORDER BY id desc`;
+		await db.query(sql1, (err, data) => {
 			if (err) {
 				return res.send({
-					message: err,
+					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				data.forEach((item) => {
+					typeArr.push(item.type);
+				});
 			}
-		});
+        });
+        
+        const sql2 = "insert into types (type) VALUES (?)";
+        const { type } = req.body;
+		let arr = [...type, ...typeArr];
+        arr = [...new Set(arr)];
+        arr.forEach(async (item) => {
+            await db.query(sql2, [`${item}`], (err, data) => {
+                if (err) {
+                    return res.send({
+                        message: err,
+                    });
+                } else {
+                    return res.send({success:true,data:data});
+                }
+            });
+        })
 	});
 
 	router.put("/:id", async (req, res) => {

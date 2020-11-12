@@ -22,8 +22,8 @@ module.exports = (app) => {
 
 	router.post("/", async (req, res) => {
 		let themeArr = [];
-		const sql = `select * from themes where is_delete = 0 ORDER BY id desc`;
-		await db.query(sql, (err, data) => {
+		const sql1 = `select * from themes where is_delete = 0 ORDER BY id desc`;
+		await db.query(sql1, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
@@ -35,12 +35,12 @@ module.exports = (app) => {
 			}
 		});
 
-		const sql = "insert into themes (theme) VALUES (?)";
+		const sql2 = "insert into themes (theme) VALUES (?)";
 		const { theme } = req.body;
 		let arr = [...theme, ...themeArr];
         arr = [...new Set(arr)];
-        arr.forEach(item => {
-            await db.query(sql, [`${item}`], (err, data) => {
+        arr.forEach(async (item) => {
+            await db.query(sql2, [`${item}`], (err, data) => {
                 if (err) {
                     return res.send({
                         message: err,

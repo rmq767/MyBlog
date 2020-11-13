@@ -37,19 +37,27 @@ module.exports = (app) => {
 
 		const sql2 = "insert into themes (theme) VALUES (?)";
 		const { theme } = req.body;
-		let arr = [...theme, ...themeArr];
-		arr = [...new Set(arr)];
-		arr.forEach(async (item) => {
-			await db.query(sql2, [`${item}`], (err, data) => {
-				if (err) {
-					return res.send({
-						message: err,
-					});
-				} else {
-					return res.send({ success: true, data: data });
-				}
-			});
+		// 获取数据库中没有的值
+		let arr = [];
+		theme.forEach((item) => {
+			if (!themeArr.includes(item)) {
+				arr.push(item);
+			}
 		});
+		// 如果有，存数据库
+		if (arr.length) {
+			arr.forEach(async (item) => {
+				await db.query(sql2, [`${item}`], (err, data) => {
+					if (err) {
+						return res.send({
+							message: err,
+						});
+					} else {
+						return res.send({ success: true, data: data });
+					}
+				});
+			});
+		}
 	});
 
 	router.put("/:id", async (req, res) => {
@@ -82,31 +90,24 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
+		const { pageSize, currentPage, theme } = req.query;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from themes WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+		const sql = `
+        SELECT * FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
-
-	router.post("/get/search", async (req, res) => {
-		const { theme } = req.body;
-		const sql = `select * from themes where  theme like '%${theme}%' and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					success: true,
+					data: data[0],
+					total: data[1],
 				});
-			} else {
-				return res.send({ success: true, data: data });
 			}
 		});
 	});

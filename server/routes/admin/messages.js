@@ -49,12 +49,9 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
-				for (const key in data) {
-					if (data[key] === name) {
-						return res.send({
-							message: "名称已存在",
-						});
-					}
+				let sameName = data.some((item) => item.name === name);
+				if (sameName) {
+					return res.send({ message: "已有相同昵称" });
 				}
 			}
 		});
@@ -132,35 +129,54 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
-
+		const {
+			pageSize,
+			currentPage,
+			nickname,
+			message,
+			startTime,
+			endTime,
+		} = req.query;
+		let time;
+		if (startTime && endTime) {
+			time = `and date >= ${startTime} and date <= ${endTime}`;
+		} else {
+			time = "";
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from messages WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+		const sql = `
+        SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${time} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
+				return res.send({
+					success: true,
+					data: data[0],
+					total: data[1],
+				});
 			}
 		});
 	});
 
-	router.post("/get/search", async (req, res) => {
-		const { nickname, message } = req.body;
-		const sql = `select * from messages where name like '%${nickname}%' and message like '%${message}%' and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
+	// router.post("/get/search", async (req, res) => {
+	// 	const { nickname, message } = req.body;
+	// 	const sql = `select * from messages where name like '%${nickname}%' and message like '%${message}%' and is_delete = 0 ORDER BY id DESC`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			return res.send({ success: true, data: data });
+	// 		}
+	// 	});
+	// });
 
 	app.use("/admin/api/messages", router);
 };

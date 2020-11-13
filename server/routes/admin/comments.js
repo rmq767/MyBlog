@@ -51,12 +51,9 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
-				for (const key in data) {
-					if (data[key] === name) {
-						return res.send({
-							message: "名称已存在",
-						});
-					}
+				let sameName = data.some((item) => item.name === name);
+				if (sameName) {
+					return res.send({ message: "已有相同昵称" });
 				}
 			}
 		});

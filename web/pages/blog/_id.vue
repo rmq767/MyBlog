@@ -71,14 +71,16 @@ export default {
         const sameTypeArticles = await $axios.$get(
             `/articles/get/sametype?type=${article.type}`
         );
-        const pre = await $axios.$get(`/articles/get/pre?id=${params.id}`);
-        const next = await $axios.$get(`/articles/get/next?id=${params.id}`);
+        const nextPre = await $axios.$get(
+            `/articles/get/nextpre?id=${params.id}`
+        );
+        console.log(nextPre);
         return {
-            article,
-            pre,
-            next,
-            sameThemeArticles,
-            sameTypeArticles,
+            article: article.data,
+            pre: nextPre.data[1],
+            next: nextPre.data[0],
+            sameThemeArticles: sameThemeArticles.data,
+            sameTypeArticles: sameTypeArticles.data,
         };
     },
     data() {

@@ -16,17 +16,17 @@ export default {
 	/**
 	 * @description 公告分页
 	 */
-	pagination(size, page) {
+	searchNotice(params) {
 		return http.get(
-			`/notices/get/page?pageSize=${size}&currentPage=${page}`
+			`/notices/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&title=${params.title}&content=${params.content}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
-	/**
-	 * @description 公告搜索
-	 */
-	searchNotice(params) {
-		return http.post("/notices/get/search", params);
-	},
+	// /**
+	//  * @description 公告搜索
+	//  */
+	// searchNotice(params) {
+	// 	return http.post("/notices/get/search", params);
+	// },
 	/**
 	 * @description 添加公告
 	 */

@@ -16,17 +16,17 @@ export default {
 	/**
 	 * @description 留言分页
 	 */
-	pagination(size, page) {
+	searchMessage(params) {
 		return http.get(
-			`/messages/get/page?pageSize=${size}&currentPage=${page}`
+			`/messages/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&nickname=${params.nickname}&message=${params.message}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
-	/**
-	 * @description 留言搜索
-	 */
-	searchMessage(params) {
-		return http.post("/messages/get/search", params);
-	},
+	// /**
+	//  * @description 留言搜索
+	//  */
+	// searchMessage(params) {
+	// 	return http.post("/messages/get/search", params);
+	// },
 	/**
 	 * @description 添加留言
 	 */

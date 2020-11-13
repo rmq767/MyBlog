@@ -50,7 +50,7 @@ module.exports = (app) => {
 	 */
 	router.get("/get/sametheme", async (req, res) => {
 		const { theme } = req.query;
-		const sql = `select id,title from articles where theme=${theme} is_delete = 0 ORDER BY clicks desc limit 5;
+		const sql = `select id,title from articles where theme=${theme} and is_delete = 0 ORDER BY clicks desc limit 5;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -68,7 +68,7 @@ module.exports = (app) => {
 	 */
 	router.get("/get/sametype", async (req, res) => {
 		const { type } = req.query;
-		const sql = `select id,title from articles where type like '%${type}%' is_delete = 0 ORDER BY clicks desc limit 5;
+		const sql = `select id,title from articles where type like '%${type}%' and is_delete = 0 ORDER BY clicks desc limit 5;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {

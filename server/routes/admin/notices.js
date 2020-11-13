@@ -98,35 +98,50 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
-
+		const {
+			pageSize,
+			currentPage,
+			title,
+			notice,
+			startTime,
+			endTime,
+		} = req.query;
+		let time;
+		if (startTime && endTime) {
+			time = `and date >= ${startTime} and date <= ${endTime}`;
+		} else {
+			time = "";
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from notices WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+		const sql = `
+        SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send({ success: true, data: data });
+				res.send({ success: true, data: data[0], total: data[1] });
 			}
 		});
 	});
 
-	router.post("/get/search", async (req, res) => {
-		const { title, notice } = req.body;
-		const sql = `select * from notices where title like '%${title}%' and notice like '%${notice}%' and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				res.send({ success: true, data: data });
-			}
-		});
-	});
+	// router.post("/get/search", async (req, res) => {
+	// 	const { title, notice } = req.body;
+	// 	const sql = `select * from notices where title like '%${title}%' and notice like '%${notice}%' and is_delete = 0 ORDER BY id DESC`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			res.send({ success: true, data: data });
+	// 		}
+	// 	});
+	// });
 
 	app.use("/admin/api/notices", router);
 };

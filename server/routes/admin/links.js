@@ -118,21 +118,10 @@ module.exports = (app) => {
 
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from links WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				res.send({ success: true, data: data });
-			}
-		});
-	});
-
-	router.post("/get/search", async (req, res) => {
-		const { type, title } = req.body;
-		const sql = `select * from links where type like '%${type}%' and title like '%${title}%' and is_delete = 0 ORDER BY id DESC`;
+		const sql = `
+        SELECT * FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

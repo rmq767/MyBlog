@@ -107,6 +107,16 @@ export default {
     },
     mounted() {
         this.count();
+        console.log(
+            "%c%s",
+            "color: red; background: yellow; font-size: 12px;",
+            "欢迎来到小阮的个人博客"
+        );
+        console.log(
+            "%c%s",
+            "color: red; background: yellow; font-size: 12px;",
+            "大佬不要乱搞，磕头了，砰砰砰~"
+        );
     },
     components: {},
 };

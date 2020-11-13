@@ -23,17 +23,12 @@
 import mouseMove from "../../components/mouseMove.vue";
 export default {
     data() {
-        return {
-            show: true,
-            showText: "点我试试 v_v",
-            CSDN: "https://blog.csdn.net/qq_44775782",
-        };
+        return {};
     },
     async asyncData({ $axios }) {
         const info = await $axios.$get("/informations");
-        console.log(info);
         return {
-            info,
+            info: info.data,
         };
     },
     methods: {

@@ -69,36 +69,5 @@ module.exports = (app) => {
 		);
 	});
 
-	//   router.get("/get", async (req, res) => {
-	//     const {
-	//       limit
-	//     } = req.query;
-	//     let count = 10;
-	//     if (limit) {
-	//       count += limit
-	//     }
-	//     const sql = `SELECT * FROM messages WHERE is_delete = 0 ORDER BY id DESC LIMIT ${count};
-	//     SELECT id message_id,COUNT(*) message_count FROM
-	//     (SELECT messagereply.message_id,messages.id FROM messages RIGHT JOIN messagereply ON messagereply.message_id = messages.id) t
-	//     GROUP BY message_id HAVING COUNT(message_id)>=1;
-	//     `;
-	//     await db.query(sql, (err, data) => {
-	//       if (err) {
-	//         return res.send({
-	//           message: "数据库查询错误"
-	//         });
-	//       } else {
-	//         for (let m in data[0]) {
-	//           for (let n in data[1]) {
-	//             if (data[0][m].id == data[1][n].message_id) {
-	//               data[0][m].reply_count = data[1][n].message_count;
-	//             }
-	//           }
-	//         }
-	//         return res.send(data[0]);
-	//       }
-	//     });
-	//   });
-
 	app.use("/web/api/messages", router);
 };

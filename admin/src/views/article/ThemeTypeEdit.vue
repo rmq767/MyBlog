@@ -1,27 +1,31 @@
 <template>
     <div>
         <h3>{{ id ? "编辑" : "新建" }}主题分类</h3>
-        <el-form label-width="80px" style="width:600px">
-            <el-form-item label="文章主题">
+        <div class="theme">
+            <p>新增主题</p>
+            <div>
                 <el-tag :key="tag" v-for="tag in theme" closable :disable-transitions="false" @close="handleCloseTheme(tag)" style="marginRight:10px">
                     {{tag}}
                 </el-tag>
                 <el-input class="input-new-tag" v-if="inputVisible1" v-model="article.theme" ref="theme" size="small" @keyup.enter.native="handleThemeConfirm" @blur="handleThemeConfirm">
                 </el-input>
                 <el-button v-else class="button-new-tag" size="small" @click="showTheme">+ 新增文章主题</el-button>
-            </el-form-item>
-            <el-form-item label="文章分类">
+            </div>
+            <el-button type="primary" @click="saveTheme">立即保存</el-button>
+        </div>
+        <div class="type">
+            <p>新增分类</p>
+            <div>
                 <el-tag :key="tag" v-for="tag in type" closable :disable-transitions="false" @close="handleCloseType(tag)" style="marginRight:10px">
                     {{tag}}
                 </el-tag>
                 <el-input class="input-new-tag" v-if="inputVisible2" v-model="article.type" ref="type" size="small" @keyup.enter.native="handleTypeConfirm" @blur="handleTypeConfirm">
                 </el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showType">+ 新增文章分类</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="save()">立即保存</el-button>
-            </el-form-item>
-        </el-form>
+                <el-button v-else class="button-new-tag" size="small " @click="showType">+ 新增文章分类</el-button>
+            </div>
+            <el-button type="primary" @click="saveType">立即保存</el-button>
+        </div>
+
     </div>
 </template>
 
@@ -44,12 +48,24 @@ export default {
         };
     },
     methods: {
-        async save() {
+        // async save() {
+        //     if (this.theme.length) {
+        //         await this.saveTheme();
+        //     }
+        //     if (this.type.length) {
+        //         await this.saveType();
+        //     }
+        // },
+        async saveTheme() {
+            const themeArr = this.theme;
             await api.theme.addTheme({
-                theme: this.theme,
+                theme: themeArr,
             });
+        },
+        async saveType() {
+            const typeArr = this.type;
             await api.type.addType({
-                type: this.type,
+                type: typeArr,
             });
         },
         handleCloseTheme(tag) {
@@ -90,5 +106,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang='less' scoped>
+.theme,
+.type {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    > div {
+        margin-bottom: 20px;
+    }
+}
 </style>

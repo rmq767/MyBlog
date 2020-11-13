@@ -301,8 +301,7 @@ export default {
         },
         async getMessageList() {
             const response = await this.$axios.get("/messages");
-            this.messageList = response.data;
-            console.log(response.data);
+            this.messageList = response.data.data;
         },
     },
     mounted() {

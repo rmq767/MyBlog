@@ -9,6 +9,9 @@
                 <el-form-item label="公告内容：">
                     <el-input v-model="form.content" prop='content'></el-input>
                 </el-form-item>
+                <el-form-item label="时间筛选" prop="date">
+                    <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
+                </el-form-item>
                 <el-form-item label=' '>
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
                     <el-button @click="resetForm('noticeForm')">重置</el-button>
@@ -47,6 +50,7 @@
 
 <script>
 import api from "../../api/index";
+import datePicker from "../../components/datePicker";
 export default {
     data() {
         return {
@@ -60,15 +64,33 @@ export default {
             form: {
                 title: "",
                 content: "",
+                date: [],
+            },
+            date: {
+                startTime: "",
+                endTime: "",
             },
         };
     },
-    methods: {
-        async fetch() {
-            const res = await api.notice.getNoticeList();
-            this.pageInfo.count = res.data.data.length;
-            this.notices = res.data.data.slice(0, this.pageInfo.pageSize);
+    computed: {
+        searchData() {
+            const params = {
+                pageSize: this.pageInfo.pageSize,
+                currentPage: this.pageInfo.currentPage,
+                title: this.form.title,
+                content: this.form.content,
+                startTime: this.date.startTime,
+                endTime: this.date.endTime,
+            };
+            return params;
         },
+    },
+    methods: {
+        // async fetch() {
+        //     const res = await api.notice.getNoticeList();
+        //     this.pageInfo.count = res.data.data.length;
+        //     this.notices = res.data.data.slice(0, this.pageInfo.pageSize);
+        // },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
                 confirmButtonText: "确定",
@@ -92,35 +114,46 @@ export default {
         },
         async handleSizeChange(val) {
             this.pageInfo.pageSize = val;
-            this.pagination();
+            this.search();
         },
         async handleCurrentChange(val) {
             this.pageInfo.currentPage = val;
-            this.pagination();
+            this.search();
         },
-        /**
-         * @description 分页
-         */
-        async pagination() {
-            const res = await api.notice.pagination(
-                this.pageInfo.pageSize,
-                this.pageInfo.currentPage
-            );
-            this.notices = res.data.data;
-        },
+        // /**
+        //  * @description 分页
+        //  */
+        // async pagination() {
+        //     const res = await api.notice.pagination(
+        //         this.pageInfo.pageSize,
+        //         this.pageInfo.currentPage
+        //     );
+        //     this.notices = res.data.data;
+        // },
         async search() {
-            const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.notice.searchNotice(params);
+            const res = await api.notice.searchNotice(this.searchData);
             this.notices = res.data.data;
             // this.pageInfo.count = res.data.data.length;
             // this.pageInfo.pageSize = res.data.data.length;
+        },
+        /**
+         * @description 选择时间
+         */
+        chooseDate(date) {
+            this.date.startTime = date[0];
+            this.date.endTime = date[1];
+            this.search();
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
     },
     created() {
-        this.fetch();
+        // this.fetch();
+        this.search();
+    },
+    components: {
+        datePicker,
     },
 };
 </script>

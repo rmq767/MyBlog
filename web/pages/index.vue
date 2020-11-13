@@ -87,7 +87,7 @@
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
                                     <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme)">
-                                        <span>{{item.theme}}</span>
+                                        <span>{{item.theme||""}}</span>
                                     </div>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
@@ -101,12 +101,13 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-pagination v-model="pageInfo.page" :length="pageInfo.length"></v-pagination>
+            <v-pagination @input="changePage" v-model="pageInfo.page" :length="pageInfo.length"></v-pagination>
         </v-container>
     </div>
 </template>
 
 <script>
+import notice from "../../admin/src/api/modules/notice";
 // import Pagination from "../components/Pagination.vue";
 export default {
     async asyncData({ $axios }) {
@@ -115,10 +116,10 @@ export default {
         const types = await $axios.$get("/types");
         const hotArticles = await $axios.$get("/articles/get/hot");
         return {
-            notices,
-            themes,
-            types,
-            hotArticles,
+            notices: notices.data,
+            themes: themes.data,
+            types: types.data,
+            hotArticles: hotArticles.data,
         };
     },
     props: ["searchData"],
@@ -150,7 +151,7 @@ export default {
                 theme: this.search.theme,
                 type: this.search.type,
             };
-            return this.data;
+            return params;
         },
     },
     methods: {
@@ -167,12 +168,14 @@ export default {
                 aboutme.style.top = "0px";
             }
         },
-        async getSearch(newValue) {
-            const res = await this.$axios.post(
-                "/articles/get/search",
-                this.searchParams
+        async getSearch() {
+            const res = await this.$axios.get(
+                `/articles/get/page?size=${this.searchParams.size}&page=${this.searchParams.page}&titleContent=${this.searchParams.titleContent}&theme=${this.searchParams.theme}&type=${this.searchParams.type}`
             );
             this.articlesData = res.data.data;
+            this.pageInfo.length = Math.ceil(
+                res.data.count[0].article_count / this.pageInfo.size
+            );
         },
         /**
          * @description 跳转文章详情
@@ -187,12 +190,20 @@ export default {
          */
         async chooseTheme(theme) {
             this.search.theme = theme;
+            this.getSearch();
         },
         /**
          * @description 搜索同分类文章
          */
         async chooseType(type) {
             this.search.type = type;
+            this.getSearch();
+        },
+        /**
+         * @description 分页
+         */
+        changePage(val) {
+            this.getSearch();
         },
     },
     watch: {
@@ -200,10 +211,7 @@ export default {
             clearTimeout(this.timeout);
             this.timeout = null;
             this.timeout = setTimeout(async () => {
-                if (newValue) {
-                    this.getSearch(newValue);
-                    document.documentElement.scrollTop = 0;
-                }
+                this.getSearch();
             }, 1000);
         },
         articlesData() {
@@ -216,19 +224,8 @@ export default {
         window.removeEventListener("scroll", this.toScoll);
     },
     mounted() {
-        // this.getTheme();
-        // this.getType();
+        this.getSearch();
         window.addEventListener("scroll", this.toScoll);
-        console.log(
-            "%c%s",
-            "color: red; background: yellow; font-size: 12px;",
-            "欢迎来到小阮的个人博客"
-        );
-        console.log(
-            "%c%s",
-            "color: red; background: yellow; font-size: 12px;",
-            "大佬不要乱搞，磕头了，砰砰砰~"
-        );
     },
 };
 </script>

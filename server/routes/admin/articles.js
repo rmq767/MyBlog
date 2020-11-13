@@ -119,50 +119,71 @@ module.exports = (app) => {
 	});
 	// 文章分页
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
-
+		const {
+			pageSize,
+			currentPage,
+			title,
+			content,
+			theme,
+			type,
+			startTime,
+			endTime,
+		} = req.query;
+		let time;
+		if (startTime && endTime) {
+			time = `and date >= ${startTime} and date <= ${endTime}`;
+		} else {
+			time = "";
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from articles WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+		const sql = `
+        SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
+				return res.send({
+					success: true,
+					data: data[0],
+					total: data[1],
+				});
 			}
 		});
 	});
 	// 文章搜索
-	router.post("/get/search", async (req, res) => {
-		const { title, content, theme, type, currentPage, pageSize } = req.body;
-		const start = (Number(currentPage) - 1) * Number(pageSize);
-		const end = Number(pageSize);
-		const sql1 = `select count(*) as total from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0`;
-		const sql2 = `select * from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
-		let total;
-		await db.query(sql1, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				total = data.total;
-			}
-		});
+	// router.post("/get/search", async (req, res) => {
+	// 	const { title, content, theme, type, currentPage, pageSize } = req.body;
+	// 	const start = (Number(currentPage) - 1) * Number(pageSize);
+	// 	const end = Number(pageSize);
+	// 	const sql1 = `select count(*) as total from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0`;
+	// 	const sql2 = `select * from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+	// 	let total;
+	// 	await db.query(sql1, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			total = data.total;
+	// 		}
+	// 	});
 
-		await db.query(sql2, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				data["total"] = total;
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
+	// 	await db.query(sql2, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			data["total"] = total;
+	// 			return res.send({ success: true, data: data });
+	// 		}
+	// 	});
+	// });
 	// 获取文章主题
 	router.get("/get/theme", async (req, res) => {
 		const sql =

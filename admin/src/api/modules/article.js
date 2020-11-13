@@ -14,18 +14,12 @@ export default {
 		return http.delete(`/articles/${id}`);
 	},
 	/**
-	 * @description 文章分页
-	 */
-	pagination(size, page) {
-		return http.get(
-			`/articles/get/page?pageSize=${size}&currentPage=${page}`
-		);
-	},
-	/**
 	 * @description 文章搜索
 	 */
 	searchArticle(params) {
-		return http.post("/articles/get/search", params);
+		return http.get(
+			`/articles/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&title=${params.title}&content=${params.content}&theme=${params.theme}&type=${params.type}&startTime=${params.startTime}&endTime=${params.endTime}`
+		);
 	},
 	/**
 	 * @description 添加文章

@@ -10,7 +10,7 @@ module.exports = (app) => {
 		const count = 1;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const sql = `
-        select sum(count) from datas;
+        select sum(count) as pv from datas;
         insert into datas (count,date) VALUES (${count},${date})
         `;
 		await db.query(sql, (err, data) => {
@@ -19,7 +19,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
+				return res.send({ success: true, data: data[0] });
 			}
 		});
 	});

@@ -37,19 +37,27 @@ module.exports = (app) => {
 
 		const sql2 = "insert into types (type) VALUES (?)";
 		const { type } = req.body;
-		let arr = [...type, ...typeArr];
-		arr = [...new Set(arr)];
-		arr.forEach(async (item) => {
-			await db.query(sql2, [`${item}`], (err, data) => {
-				if (err) {
-					return res.send({
-						message: err,
-					});
-				} else {
-					return res.send({ success: true, data: data });
-				}
-			});
+		// 获取数据库中没有的值
+		let arr = [];
+		type.forEach((item) => {
+			if (!typeArr.includes(item)) {
+				arr.push(item);
+			}
 		});
+		// 如果有，存数据库
+		if (arr.length) {
+			arr.forEach(async (item) => {
+				await db.query(sql2, [`${item}`], (err, data) => {
+					if (err) {
+						return res.send({
+							message: err,
+						});
+					} else {
+						return res.send({ success: true, data: data });
+					}
+				});
+			});
+		}
 	});
 
 	router.put("/:id", async (req, res) => {
@@ -82,31 +90,24 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
+		const { pageSize, currentPage, type } = req.query;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `select * from types WHERE is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
+		const sql = `
+        SELECT * FROM types WHERE type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM types WHERE type LIKE '%${type}%' AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
-
-	router.post("/get/search", async (req, res) => {
-		const { type } = req.body;
-		const sql = `select * from types where  type like '%${type}%' and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					success: true,
+					data: data[0],
+					total: data[1],
 				});
-			} else {
-				return res.send({ success: true, data: data });
 			}
 		});
 	});

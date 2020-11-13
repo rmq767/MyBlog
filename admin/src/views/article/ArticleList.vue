@@ -21,6 +21,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="时间筛选" prop="date">
+                    <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
                     <el-button @click="resetForm('articleForm')">重置</el-button>
@@ -72,6 +75,7 @@
 
 <script>
 import api from "../../api/index";
+import datePicker from "../../components/datePicker";
 export default {
     data() {
         return {
@@ -87,11 +91,31 @@ export default {
                 content: "",
                 theme: "",
                 type: "",
+                date: [],
             },
             themeOptions: [],
             typeOptions: [],
             loadingData: false,
+            date: {
+                startTime: "",
+                endTime: "",
+            },
         };
+    },
+    computed: {
+        searchData() {
+            const params = {
+                pageSize: this.pageInfo.pageSize,
+                currentPage: this.pageInfo.currentPage,
+                title: this.form.title,
+                content: this.form.content,
+                theme: this.form.theme,
+                type: this.form.type,
+                startTime: this.date.startTime,
+                endTime: this.date.endTime,
+            };
+            return params;
+        },
     },
     methods: {
         // async fetch() {
@@ -141,10 +165,9 @@ export default {
         // },
         async search() {
             this.loadingData = true;
-            const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.article.searchArticle(params);
+            const res = await api.article.searchArticle(this.searchData);
             this.articles = res.data.data;
-            this.pageInfo.count = res.data.data.length;
+            // this.pageInfo.count = res.data.total.total;
             this.loadingData = false;
         },
         // 获取文章主题
@@ -157,11 +180,21 @@ export default {
             const res = await api.type.getTypeList();
             this.typeOptions = res.data.data;
         },
+        /**
+         * @description 选择时间
+         */
+        chooseDate(date) {
+            this.date.startTime = date[0];
+            this.date.endTime = date[1];
+            this.search();
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
     },
-    components: {},
+    components: {
+        datePicker,
+    },
     created() {
         this.search();
         this.getTheme();

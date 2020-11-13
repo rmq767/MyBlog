@@ -6,8 +6,8 @@
                 <el-form-item label="公告题目：" prop='title'>
                     <el-input v-model="form.title"></el-input>
                 </el-form-item>
-                <el-form-item label="公告内容：">
-                    <el-input v-model="form.content" prop='content'></el-input>
+                <el-form-item label="公告内容：" prop='content'>
+                    <el-input v-model="form.content"></el-input>
                 </el-form-item>
                 <el-form-item label="时间筛选" prop="date">
                     <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
@@ -18,7 +18,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-table style="width: 100%" :data="notices">
+        <el-table style="width: 100%" :data="notices" v-loading='loading'>
             <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{
@@ -70,6 +70,7 @@ export default {
                 startTime: "",
                 endTime: "",
             },
+            loading: false,
         };
     },
     computed: {
@@ -78,7 +79,7 @@ export default {
                 pageSize: this.pageInfo.pageSize,
                 currentPage: this.pageInfo.currentPage,
                 title: this.form.title,
-                content: this.form.content,
+                notice: this.form.content,
                 startTime: this.date.startTime,
                 endTime: this.date.endTime,
             };
@@ -131,10 +132,11 @@ export default {
         //     this.notices = res.data.data;
         // },
         async search() {
+            this.loading = true;
             const res = await api.notice.searchNotice(this.searchData);
             this.notices = res.data.data;
-            // this.pageInfo.count = res.data.data.length;
-            // this.pageInfo.pageSize = res.data.data.length;
+            this.pageInfo.count = res.data.total[0].total;
+            this.loading = false;
         },
         /**
          * @description 选择时间

@@ -7,13 +7,13 @@
             </el-form-item>
             <el-form-item label="文章主题">
                 <el-select v-model="article.theme" filterable placeholder="请选择文章主题">
-                    <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
+                    <el-option v-for="(item,index) in themeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章分类">
                 <el-select v-model="article.type" multiple collapse-tags filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
-                    <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
+                    <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -82,16 +82,12 @@ export default {
         // 获取文章主题
         async getTheme() {
             const res = await api.theme.getThemeList();
-            res.data.data.forEach((item) => {
-                this.themeOptions.push(item.theme);
-            });
+            this.themeOptions = res.data.data;
         },
         // 获取文章类型
         async getType() {
             const res = await api.type.getTypeList();
-            res.data.data.forEach((item) => {
-                this.typeOptions.push(item.type);
-            });
+            this.typeOptions = res.data.data;
         },
     },
     mounted() {

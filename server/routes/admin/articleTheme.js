@@ -15,7 +15,7 @@ module.exports = (app) => {
 				data.forEach((item) => {
 					arr.push(item.theme);
 				});
-				return res.send(arr);
+				return res.send({ success: true, data: arr });
 			}
 		});
 	});

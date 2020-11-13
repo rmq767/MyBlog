@@ -67,6 +67,7 @@ export default {
                 article_id: null,
             },
             articleOptions: [],
+            loading: false,
         };
     },
     methods: {

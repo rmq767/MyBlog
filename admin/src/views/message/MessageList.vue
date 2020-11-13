@@ -6,8 +6,8 @@
                 <el-form-item label="昵称：" prop='nickname'>
                     <el-input v-model="form.nickname"></el-input>
                 </el-form-item>
-                <el-form-item label="评论：">
-                    <el-input v-model="form.message" prop='message'></el-input>
+                <el-form-item label="评论：" prop='message'>
+                    <el-input v-model="form.message"></el-input>
                 </el-form-item>
                 <el-form-item label="时间筛选" prop="date">
                     <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
@@ -18,7 +18,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-table style="width: 100%;" :data="messages">
+        <el-table style="width: 100%;" :data="messages" v-loading='loading'>
             <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{
@@ -70,6 +70,7 @@ export default {
                 startTime: "",
                 endTime: "",
             },
+            loading: false,
         };
     },
     computed: {
@@ -131,10 +132,11 @@ export default {
         //     this.messages = res.data.data;
         // },
         async search() {
+            this.loading = true;
             const res = await api.message.searchMessage(this.searchData);
             this.messages = res.data.data;
-            // this.pageInfo.count = res.data.data.length;
-            // this.pageInfo.pageSize = res.data.data.length;
+            this.pageInfo.count = res.data.total[0].total;
+            this.loading = false;
         },
         /**
          * @description 选择时间

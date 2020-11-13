@@ -167,7 +167,7 @@ export default {
             this.loadingData = true;
             const res = await api.article.searchArticle(this.searchData);
             this.articles = res.data.data;
-            // this.pageInfo.count = res.data.total.total;
+            this.pageInfo.count = res.data.total[0].total;
             this.loadingData = false;
         },
         // 获取文章主题
@@ -184,8 +184,13 @@ export default {
          * @description 选择时间
          */
         chooseDate(date) {
-            this.date.startTime = date[0];
-            this.date.endTime = date[1];
+            if (date) {
+                this.date.startTime = date[0];
+                this.date.endTime = date[1];
+            } else {
+                this.date.startTime = "";
+                this.date.endTime = "";
+            }
             this.search();
         },
         resetForm(formName) {

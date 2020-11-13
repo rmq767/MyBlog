@@ -18,7 +18,7 @@ export default {
 	 */
 	searchNotice(params) {
 		return http.get(
-			`/notices/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&title=${params.title}&content=${params.content}&startTime=${params.startTime}&endTime=${params.endTime}`
+			`/notices/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&title=${params.title}&notice=${params.notice}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
 	// /**

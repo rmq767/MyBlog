@@ -38,18 +38,18 @@ module.exports = (app) => {
 		const sql2 = "insert into themes (theme) VALUES (?)";
 		const { theme } = req.body;
 		let arr = [...theme, ...themeArr];
-        arr = [...new Set(arr)];
-        arr.forEach(async (item) => {
-            await db.query(sql2, [`${item}`], (err, data) => {
-                if (err) {
-                    return res.send({
-                        message: err,
-                    });
-                } else {
-                    return res.send({success:true,data:data});
-                }
-            });
-        })
+		arr = [...new Set(arr)];
+		arr.forEach(async (item) => {
+			await db.query(sql2, [`${item}`], (err, data) => {
+				if (err) {
+					return res.send({
+						message: err,
+					});
+				} else {
+					return res.send({ success: true, data: data });
+				}
+			});
+		});
 	});
 
 	router.put("/:id", async (req, res) => {
@@ -62,7 +62,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -76,7 +76,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -92,7 +92,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -106,7 +106,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});

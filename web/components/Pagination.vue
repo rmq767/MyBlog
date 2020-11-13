@@ -1,11 +1,7 @@
 <template>
     <div class="pagination">
         <div class="text-center">
-            <v-pagination
-                v-model="page"
-                :length="length"
-                v-if="data.length"
-            ></v-pagination>
+            <v-pagination v-model="page" :length="length" v-if="data.length"></v-pagination>
         </div>
     </div>
 </template>
@@ -27,7 +23,7 @@ export default {
             const res = await this.$axios.get(
                 `/${this.type}/get/page?pageSize=${10}&currentPage=${1}`
             );
-            this.data = res.data;
+            this.data = res.data.data;
             this.length = Math.ceil(total.data.length / 10);
         },
     },
@@ -36,7 +32,7 @@ export default {
             const res = await this.$axios.get(
                 `/${this.type}/get/page?pageSize=${10}&currentPage=${newValue}`
             );
-            this.data = res.data;
+            this.data = res.data.data;
             document.documentElement.scrollTop = 0;
         },
         async data() {

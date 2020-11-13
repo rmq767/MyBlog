@@ -23,7 +23,7 @@ module.exports = (app) => {
 							""
 						))
 				);
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -40,7 +40,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -58,7 +58,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -76,48 +76,10 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
-
-	//   router.get("/get/theme", async (req, res) => {
-	//     const sql = `SELECT theme FROM articles WHERE theme !=' '`;
-	//     await db.query(sql, (err, data) => {
-	//       if (err) {
-	//         return res.send({
-	//           message: "数据库查询错误",
-	//         });
-	//       } else {
-	//           let arr = []
-	//           data.forEach((item)=>{
-	//             arr.push(item.theme)
-	//           })
-	//           arr = arr.join(',').split(',')
-	//           arr = [...new Set(arr)]
-	//         return res.send(arr);
-	//       }
-	//     });
-	//   });
-
-	//   router.get("/get/type", async (req, res) => {
-	//     const sql = `SELECT type FROM articles WHERE type !=' '`;
-	//     await db.query(sql, (err, data) => {
-	//       if (err) {
-	//         return res.send({
-	//           message: "数据库查询错误",
-	//         });
-	//       } else {
-	//         let arr = []
-	//         data.forEach((item)=>{
-	//           arr.push(item.type)
-	//         })
-	//         arr = arr.join(',').split(',')
-	//         arr = [...new Set(arr)]
-	//       return res.send(arr);
-	//       }
-	//     });
-	//   });
 
 	router.get("/:id", async (req, res) => {
 		const sql = `
@@ -140,19 +102,19 @@ module.exports = (app) => {
 						}
 					}
 				}
-				return res.send(data[1][0]);
+				return res.send({ success: true, data: data[1][0] });
 			}
 		});
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
-		const start = (Number(currentPage) - 1) * Number(pageSize);
-		const end = Number(pageSize);
-		const sql = `select id,title,content_html,date,clicks from articles WHERE is_delete = 0 ORDER BY id desc limit ${start},${end};
-    SELECT id article_id,COUNT(*) comment_count FROM 
-    (SELECT articles.id,comments.article_id FROM articles RIGHT JOIN comments ON comments.article_id = articles.id) t 
-    GROUP BY article_id HAVING COUNT(article_id)>=1;
+		const { size, page, titleContent, theme, type } = req.query;
+		const start = (Number(page) - 1) * Number(size);
+		const end = Number(size);
+		const sql = `
+        SELECT * FROM articles WHERE title LIKE '%${titleContent}%' AND content_md LIKE '%${titleContent}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
+        SELECT COUNT(*) AS article_count FROM articles WHERE title LIKE '%${titleContent}%' AND content_md LIKE '%${titleContent}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
      `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -174,101 +136,133 @@ module.exports = (app) => {
 							""
 						))
 				);
-				return res.send(data[0]);
+				return res.send({
+					success: true,
+					data: data[0],
+					count: data[2],
+				});
 			}
 		});
 	});
 
-	router.get("/get/pre", async (req, res) => {
+	router.get("/get/nextpre", async (req, res) => {
 		const { id } = req.query;
-		const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id>${id} ORDER BY id LIMIT 1 ;`;
+		const sql = `
+        select * from articles where id in
+        (select
+        case 
+        when SIGN(id-${id})>0 THEN MIN(id)
+        when SIGN(id-${id})<0 THEN MAX(id)
+        ELSE id
+        end 
+        from articles
+        where id !=${id}
+        GROUP BY SIGN(id-${id})
+        ORDER BY SIGN(id-${id})
+        )
+        ORDER BY id
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data[0]);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
 
-	router.get("/get/next", async (req, res) => {
-		const { id } = req.query;
-		const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id<${id} ORDER BY id DESC LIMIT 1 ;`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				return res.send(data[0]);
-			}
-		});
-	});
+	// router.get("/get/pre", async (req, res) => {
+	// 	const { id } = req.query;
+	// 	const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id>${id} ORDER BY id LIMIT 1 ;`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			return res.send(data[0]);
+	// 		}
+	// 	});
+	// });
 
-	router.post("/get/search", async (req, res) => {
-		const { search } = req.body;
-		const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				data.map(
-					(v) =>
-						(v.content_html = v.content_html.replace(
-							/<[^<>]+>/g,
-							""
-						))
-				);
-				return res.send(data);
-			}
-		});
-	});
+	// router.get("/get/next", async (req, res) => {
+	// 	const { id } = req.query;
+	// 	const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id<${id} ORDER BY id DESC LIMIT 1 ;`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			return res.send(data[0]);
+	// 		}
+	// 	});
+	// });
 
-	router.get("/search/theme", async (req, res) => {
-		const { theme } = req.query;
-		const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				data.map(
-					(v) =>
-						(v.content_html = v.content_html.replace(
-							/<[^<>]+>/g,
-							""
-						))
-				);
-				return res.send(data);
-			}
-		});
-	});
+	// router.post("/get/search", async (req, res) => {
+	// 	const { search } = req.body;
+	// 	const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			data.map(
+	// 				(v) =>
+	// 					(v.content_html = v.content_html.replace(
+	// 						/<[^<>]+>/g,
+	// 						""
+	// 					))
+	// 			);
+	// 			return res.send({success:true,data});
+	// 		}
+	// 	});
+	// });
 
-	router.get("/search/type", async (req, res) => {
-		const { type } = req.query;
-		const sql = `SELECT * FROM articles WHERE type LIKE '%${type}%'`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				data.map(
-					(v) =>
-						(v.content_html = v.content_html.replace(
-							/<[^<>]+>/g,
-							""
-						))
-				);
-				return res.send(data);
-			}
-		});
-	});
+	// router.get("/search/theme", async (req, res) => {
+	// 	const { theme } = req.query;
+	// 	const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			data.map(
+	// 				(v) =>
+	// 					(v.content_html = v.content_html.replace(
+	// 						/<[^<>]+>/g,
+	// 						""
+	// 					))
+	// 			);
+	// 			return res.send({success:true,data});
+	// 		}
+	// 	});
+	// });
+
+	// router.get("/search/type", async (req, res) => {
+	// 	const { type } = req.query;
+	// 	const sql = `SELECT * FROM articles WHERE type LIKE '%${type}%'`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			data.map(
+	// 				(v) =>
+	// 					(v.content_html = v.content_html.replace(
+	// 						/<[^<>]+>/g,
+	// 						""
+	// 					))
+	// 			);
+	// 			return res.send({success:true,data});
+	// 		}
+	// 	});
+	// });
 
 	app.use("/web/api/articles", router);
 };

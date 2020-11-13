@@ -64,8 +64,8 @@ export default {
     methods: {
         async fetch() {
             const res = await api.commentReply.getCommentReplyList();
-            this.pageInfo.count = res.data.length;
-            this.commentreply = res.data.slice(0, this.pageInfo.pageSize);
+            this.pageInfo.count = res.data.data.length;
+            this.commentreply = res.data.data.slice(0, this.pageInfo.pageSize);
         },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
@@ -104,14 +104,14 @@ export default {
                 this.pageInfo.pageSize,
                 this.pageInfo.currentPage
             );
-            this.commentreply = res.data;
+            this.commentreply = res.data.data;
         },
         async search() {
             const res = await api.commentReply.searchCommentReply(this.form);
-            console.log(res.data);
-            // this.commentreply = res.data;
-            // this.pageInfo.count = res.data.length;
-            // this.pageInfo.pageSize = res.data.length;
+            console.log(res.data.data);
+            // this.commentreply = res.data.data;
+            // this.pageInfo.count = res.data.data.length;
+            // this.pageInfo.pageSize = res.data.data.length;
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

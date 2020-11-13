@@ -15,13 +15,13 @@ module.exports = (app) => {
 				data.forEach((item) => {
 					arr.push(item.type);
 				});
-				return res.send(arr);
+				return res.send({ success: true, data: arr });
 			}
 		});
 	});
 
 	router.post("/", async (req, res) => {
-        let typeArr = [];
+		let typeArr = [];
 		const sql1 = `select * from types where is_delete = 0 ORDER BY id desc`;
 		await db.query(sql1, (err, data) => {
 			if (err) {
@@ -33,23 +33,23 @@ module.exports = (app) => {
 					typeArr.push(item.type);
 				});
 			}
-        });
-        
-        const sql2 = "insert into types (type) VALUES (?)";
-        const { type } = req.body;
+		});
+
+		const sql2 = "insert into types (type) VALUES (?)";
+		const { type } = req.body;
 		let arr = [...type, ...typeArr];
-        arr = [...new Set(arr)];
-        arr.forEach(async (item) => {
-            await db.query(sql2, [`${item}`], (err, data) => {
-                if (err) {
-                    return res.send({
-                        message: err,
-                    });
-                } else {
-                    return res.send({success:true,data:data});
-                }
-            });
-        })
+		arr = [...new Set(arr)];
+		arr.forEach(async (item) => {
+			await db.query(sql2, [`${item}`], (err, data) => {
+				if (err) {
+					return res.send({
+						message: err,
+					});
+				} else {
+					return res.send({ success: true, data: data });
+				}
+			});
+		});
 	});
 
 	router.put("/:id", async (req, res) => {
@@ -62,7 +62,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -76,7 +76,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -92,7 +92,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -106,7 +106,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});

@@ -30,7 +30,7 @@ export default {
                     number: this.pageSize,
                 },
             });
-            this.tableData = res.data;
+            this.tableData = res.data.data;
             await this.$emit("getPage", this.tableData);
         },
         async handleCurrentChange(val) {
@@ -41,7 +41,7 @@ export default {
                     number: this.pageSize,
                 },
             });
-            this.tableData = res.data;
+            this.tableData = res.data.data;
             await this.$emit("getPage", this.tableData);
         },
         async fetch() {
@@ -53,7 +53,7 @@ export default {
                     number: this.pageSize,
                 },
             });
-            this.tableData = res.data;
+            this.tableData = res.data.data;
             await this.$emit("getPage", this.tableData);
         },
     },

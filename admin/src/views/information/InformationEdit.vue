@@ -65,8 +65,8 @@ export default {
         },
         async fetch() {
             const res = await api.information.getInformation();
-            this.info = res.data[0];
-            this.info = Object.assign({}, this.info, res.data); //把 this.information{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.info = res.data.data[0];
+            this.info = Object.assign({}, this.info, res.data.data); //把 this.information{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

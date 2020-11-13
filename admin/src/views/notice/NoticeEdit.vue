@@ -41,8 +41,8 @@ export default {
         },
         async fetch() {
             const res = await api.notice.noticeInfo(this.id);
-            this.notice = res.data;
-            this.notice = Object.assign({}, this.notice, res.data); //把 this.notice{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.notice = res.data.data;
+            this.notice = Object.assign({}, this.notice, res.data.data); //把 this.notice{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

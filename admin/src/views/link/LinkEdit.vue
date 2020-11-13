@@ -63,8 +63,8 @@ export default {
         },
         async fetch() {
             const res = await api.link.linkInfo(this.id);
-            this.link = res.data;
-            this.link = Object.assign({}, this.link, res.data); //把 this.link{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.link = res.data.data;
+            this.link = Object.assign({}, this.link, res.data.data); //把 this.link{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

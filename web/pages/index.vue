@@ -35,14 +35,8 @@
                                     </v-chip>
                                 </div>
                                 <div class="type">
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
-                                        分类123321123
-                                    </v-chip>
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
-                                        分类
-                                    </v-chip>
-                                    <v-chip color="#4CAF50" label text-color="white" x-small>
-                                        分类
+                                    <v-chip color="#4CAF50" label text-color="white" class="ml-1" x-small v-for="(type,i) in typeList" :key="i">
+                                        {{type}}
                                     </v-chip>
                                 </div>
                                 <div class="subtitle-2 text-center">
@@ -107,19 +101,19 @@
                     </div>
                 </v-col>
             </v-row>
-            <pagination :type="articles" @getPagination="getPagination" v-if="!searchData && show"></pagination>
+            <v-pagination v-model="pageInfo.page" :length="pageInfo.length"></v-pagination>
         </v-container>
     </div>
 </template>
 
 <script>
-import Pagination from "../components/Pagination.vue";
+// import Pagination from "../components/Pagination.vue";
 export default {
     async asyncData({ $axios }) {
         const notices = await $axios.$get("/notices");
-        const themes = await $axios.$get("/get/themes");
-        const types = await $axios.$get("/get/types");
-        const hotArticles = await $axios.$get("/get/hot");
+        const themes = await $axios.$get("/themes");
+        const types = await $axios.$get("/types");
+        const hotArticles = await $axios.$get("/articles/get/hot");
         return {
             notices,
             themes,
@@ -131,17 +125,35 @@ export default {
     data() {
         return {
             articlesData: [],
-            articles: "articles",
+            // articles: "articles",
             timeout: null,
-            themeList: [],
+            // show: true,
             typeList: [],
-            show: true,
+            pageInfo: {
+                page: 1,
+                size: 10,
+                // length:Math.ceil(total.data.length / 10)
+                length: 0,
+            },
+            search: {
+                theme: "",
+                type: "",
+            },
         };
     },
-    methods: {
-        getPagination(val) {
-            this.articlesData = val;
+    computed: {
+        searchParams() {
+            const params = {
+                page: this.pageInfo.page,
+                size: this.pageInfo.size,
+                titleContent: this.searchData,
+                theme: this.search.theme,
+                type: this.search.type,
+            };
+            return this.data;
         },
+    },
+    methods: {
         toScoll() {
             //向下滑动动画
             let notice = this.$refs.notice;
@@ -156,10 +168,11 @@ export default {
             }
         },
         async getSearch(newValue) {
-            const res = await this.$axios.post("/articles/get/search", {
-                search: newValue,
-            });
-            this.articlesData = res.data;
+            const res = await this.$axios.post(
+                "/articles/get/search",
+                this.searchParams
+            );
+            this.articlesData = res.data.data;
         },
         /**
          * @description 跳转文章详情
@@ -173,23 +186,14 @@ export default {
          * @description 搜索同主题文章
          */
         async chooseTheme(theme) {
-            const res = await this.$axios.get(
-                `/articles/search/theme?theme=${theme}`
-            );
-            this.articlesData = res.data;
+            this.search.theme = theme;
         },
         /**
          * @description 搜索同分类文章
          */
         async chooseType(type) {
-            const res = await this.$axios.get(
-                `/articles/search/type?type=${type}`
-            );
-            this.articlesData = res.data;
+            this.search.type = type;
         },
-    },
-    components: {
-        Pagination,
     },
     watch: {
         async searchData(newValue, oldValue) {

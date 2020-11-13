@@ -171,7 +171,7 @@ export default {
             );
             this.count = c_count.data.length;
 
-            this.listData = res.data;
+            this.listData = res.data.data;
         },
         async fetchReply(comment_id) {
             let res;
@@ -179,7 +179,7 @@ export default {
                 `/commentreply?comment_id=${comment_id}`
             );
 
-            this.commentReply = res.data;
+            this.commentReply = res.data.data;
             this.show_reply = comment_id;
             // this.comment_id = comment_id;
         },

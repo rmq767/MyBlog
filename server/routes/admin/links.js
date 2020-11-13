@@ -13,7 +13,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data);
+				res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -26,7 +26,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data[0]);
+				res.send({ success: true, data: data[0] });
 			}
 		});
 	});
@@ -59,7 +59,7 @@ module.exports = (app) => {
 						message: err,
 					});
 				} else {
-					res.send(data);
+					res.send({ success: true, data: data });
 				}
 			}
 		);
@@ -93,7 +93,7 @@ module.exports = (app) => {
 						message: "数据库查询错误",
 					});
 				} else {
-					res.send(data);
+					res.send({ success: true, data: data });
 				}
 			}
 		);
@@ -108,7 +108,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data);
+				res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -125,7 +125,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data);
+				res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -139,7 +139,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data);
+				res.send({ success: true, data: data });
 			}
 		});
 	});

@@ -17,7 +17,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send(data);
+				return res.send({ success: true, data: data });
 			}
 		});
 	});
@@ -40,12 +40,9 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
-				for (const key in data) {
-					if (data[key] === name) {
-						return res.send({
-							message: "名称已存在",
-						});
-					}
+				let sameName = data.some((item) => item.name === name);
+				if (sameName) {
+					return res.send({ message: "已有相同昵称" });
 				}
 			}
 		});
@@ -61,7 +58,7 @@ module.exports = (app) => {
 						message: err,
 					});
 				} else {
-					return res.send(data);
+					return res.send({ success: true, data: data });
 				}
 			}
 		);
@@ -90,7 +87,7 @@ module.exports = (app) => {
 						}
 					}
 				}
-				return res.send(data[0]);
+				return res.send({ success: true, data: data[0] });
 			}
 		});
 	});

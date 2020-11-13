@@ -46,7 +46,7 @@ export default {
         },
         async fetch() {
             const res = await api.admin.getAdmin();
-            this.admin = Object.assign({}, this.admin, res.data[0]); //把 this.admin{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.admin = Object.assign({}, this.admin, res.data.data[0]); //把 this.admin{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

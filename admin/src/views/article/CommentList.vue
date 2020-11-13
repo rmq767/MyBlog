@@ -72,8 +72,8 @@ export default {
     methods: {
         async fetch() {
             const res = await api.comment.getCommentList();
-            this.pageInfo.count = res.data.length;
-            this.comments = res.data.slice(0, this.pageInfo.pageSize);
+            this.pageInfo.count = res.data.data.length;
+            this.comments = res.data.data.slice(0, this.pageInfo.pageSize);
         },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
@@ -112,16 +112,16 @@ export default {
                 this.pageInfo.pageSize,
                 this.pageInfo.currentPage
             );
-            this.comments = res.data;
+            this.comments = res.data.data;
         },
 
         async search() {
             const params = Object.assign({}, this.form, this.pageInfo);
             const res = await api.comment.searchComment(params);
-            console.log(res.data);
-            // this.comments = res.data;
-            // this.pageInfo.count = res.data.length;
-            // this.pageInfo.pageSize = res.data.length;
+            console.log(res.data.data);
+            // this.comments = res.data.data;
+            // this.pageInfo.count = res.data.data.length;
+            // this.pageInfo.pageSize = res.data.data.length;
         },
         /**
          * @description 重置表单
@@ -134,7 +134,7 @@ export default {
          */
         async getArticleList() {
             const res = await api.article.getArticleList();
-            this.articleOptions = res.data.map((v) => {
+            this.articleOptions = res.data.data.map((v) => {
                 return {
                     title: v.title,
                     id: v.id,

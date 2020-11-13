@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import api from "../api";
 export default {
     data() {
         return {
@@ -126,10 +127,8 @@ export default {
             this.$router.go(0);
         },
         async fetch() {
-            const res = await this.$http.get(
-                `/admins/${localStorage.getItem("u_id")}`
-            );
-            this.is_super = res.data.is_super;
+            const res = await api.admin.getAdmin();
+            this.is_super = res.data.data.is_super;
             this.username = localStorage.getItem("username");
         },
     },

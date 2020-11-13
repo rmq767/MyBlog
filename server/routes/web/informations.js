@@ -11,7 +11,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send(data[0]);
+				res.send({ success: true, data: data[0] });
 			}
 		});
 	});

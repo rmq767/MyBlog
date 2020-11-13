@@ -56,8 +56,8 @@ export default {
         },
         async fetch() {
             const res = await api.message.messageInfo(this.id);
-            this.message = res.data;
-            this.message = Object.assign({}, this.message, res.data); //把 this.message{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.message = res.data.data;
+            this.message = Object.assign({}, this.message, res.data.data); //把 this.message{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

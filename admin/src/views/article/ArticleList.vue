@@ -97,8 +97,8 @@ export default {
         // async fetch() {
         //     // const res = await this.$http.get("/articles");
         //     const res = await api.article.getArticleList();
-        //     this.pageInfo.count = res.data.length;
-        //     this.articles = res.data.slice(0, this.pageInfo.pageSize);
+        //     this.pageInfo.count = res.data.data.length;
+        //     this.articles = res.data.data.slice(0, this.pageInfo.pageSize);
         // },
         async remove(row) {
             this.$confirm(`是否删除${row.title}`, "提示", {
@@ -137,25 +137,25 @@ export default {
         //         this.pageInfo.pageSize,
         //         this.pageInfo.currentPage
         //     );
-        //     this.articles = res.data;
+        //     this.articles = res.data.data;
         // },
         async search() {
             this.loadingData = true;
             const params = Object.assign({}, this.form, this.pageInfo);
             const res = await api.article.searchArticle(params);
-            this.articles = res.data;
-            this.pageInfo.count = res.data.length;
+            this.articles = res.data.data;
+            this.pageInfo.count = res.data.data.length;
             this.loadingData = false;
         },
         // 获取文章主题
         async getTheme() {
             const res = await api.theme.getThemeList();
-            this.themeOptions = res.data;
+            this.themeOptions = res.data.data;
         },
         // 获取文章类型
         async getType() {
             const res = await api.type.getTypeList();
-            this.typeOptions = res.data;
+            this.typeOptions = res.data.data;
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

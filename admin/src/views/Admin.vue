@@ -106,7 +106,7 @@ export default {
         },
         async fetchArticle() {
             const res = await api.statistics.getReadData();
-            let articlesArr = res.data.splice(0, 5);
+            let articlesArr = res.data.data.splice(0, 5);
             this.read.x_data = articlesArr.map((v) => v.title);
             this.read.s_data = articlesArr.map((v) => v.clicks);
         },
@@ -115,13 +115,14 @@ export default {
          */
         async getPvData() {
             const res = await api.statistics.getPvData();
-            this.pv.x_data = res.data.map((v) => v.date);
-            this.pv.s_data = res.data.map((v) => v.count);
+            this.pv.x_data = res.data.data.map((v) => v.date);
+            this.pv.s_data = res.data.data.map((v) => v.count);
             this.drawLine();
         },
     },
     async mounted() {
         await this.getPvData();
+        this.getCountData();
         // await this.fetchArticle();
     },
 };

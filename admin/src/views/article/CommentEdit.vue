@@ -48,12 +48,12 @@ export default {
         },
         async fetch() {
             const res = await api.comment.commentInfo(this.id);
-            this.comment = res.data;
-            this.comment = Object.assign({}, this.comment, res.data); //把 this.comment{}中，再把res.data添加到{}中，如果有覆盖，没有保存
+            this.comment = res.data.data;
+            this.comment = Object.assign({}, this.comment, res.data.data); //把 this.comment{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
         async fetchArticle() {
             let res = await api.article.getArticleList();
-            this.articles = res.data;
+            this.articles = res.data.data;
         },
     },
     created() {

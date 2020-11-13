@@ -65,10 +65,10 @@ export default {
         },
         async fetch() {
             const res = await api.article.articleInfo(this.id);
-            this.article = res.data;
-            this.article.content_md = res.data.content_md;
-            this.article.theme = res.data.theme.split(",");
-            this.article.type = res.data.type.split(",");
+            this.article = res.data.data;
+            this.article.content_md = res.data.data.content_md;
+            this.article.theme = res.data.data.theme.split(",");
+            this.article.type = res.data.data.type.split(",");
         },
         $imgAdd(pos, $file) {
             // 第一步.将图片上传到服务器.
@@ -82,14 +82,14 @@ export default {
         // 获取文章主题
         async getTheme() {
             const res = await api.theme.getThemeList();
-            res.data.forEach((item) => {
+            res.data.data.forEach((item) => {
                 this.themeOptions.push(item.theme);
             });
         },
         // 获取文章类型
         async getType() {
             const res = await api.type.getTypeList();
-            res.data.forEach((item) => {
+            res.data.data.forEach((item) => {
                 this.typeOptions.push(item.type);
             });
         },

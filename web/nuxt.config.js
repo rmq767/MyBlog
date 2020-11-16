@@ -108,7 +108,7 @@ module.exports = {
   },
   generate: {
     routes() {
-      return axios.get(process.env.API_URL).then(res => {
+      return axios.get(process.env.ARTICLE_ID).then(res => {
         return res.data.data.map(blog => {
           return "/blog/" + blog.id;
         });

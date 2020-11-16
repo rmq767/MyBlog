@@ -1,9 +1,10 @@
 const colors = require("vuetify/es5/util/colors").default;
 // const dotenv = require('@nuxtjs/dotenv')
 require("dotenv").config();
+const axios = require("axios");
 
 module.exports = {
-  //   mode: "spa",
+  mode: "spa",
   /*
    ** Headers of the page
    */
@@ -104,14 +105,14 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  generate: {
+    routes() {
+      return axios.get(process.env.API_URL).then(res => {
+        return res.data.data.map(blog => {
+          return "/blog/" + blog.id;
+        });
+      });
+    }
   }
-  //   generate: {
-  //     routes() {
-  //       return $axios.get(process.env.API_URL).then(res => {
-  //         return res.data.map(blog => {
-  //           return "/blog/" + blog.id;
-  //         });
-  //       });
-  //     }
-  //   }
 };

@@ -3,7 +3,7 @@ const colors = require("vuetify/es5/util/colors").default;
 require("dotenv").config();
 
 module.exports = {
-  mode: "spa",
+  //   mode: "spa",
   /*
    ** Headers of the page
    */
@@ -105,14 +105,13 @@ module.exports = {
      */
     extend(config, ctx) {}
   }
-  // generate: {
-  //   routes() {
-  //     return axios.get(process.env.API_URL)
-  //       .then((res) => {
-  //         return res.data.map((blog) => {
-  //           return '/blog/' + blog.id
-  //         })
-  //       })
+  //   generate: {
+  //     routes() {
+  //       return $axios.get(process.env.API_URL).then(res => {
+  //         return res.data.map(blog => {
+  //           return "/blog/" + blog.id;
+  //         });
+  //       });
+  //     }
   //   }
-  // }
 };

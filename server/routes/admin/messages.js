@@ -137,18 +137,20 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let time;
-		if (startTime && endTime) {
-			time = `and date >= ${startTime} and date <= ${endTime}`;
-		} else {
-			time = "";
-		}
+		let sql;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `
-        SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-        SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${time} AND is_delete = 0;
-        `;
+		if (startTime && endTime) {
+			sql = `
+            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
+            `;
+		} else {
+			sql = `
+            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%'  AND is_delete = 0;
+            `;
+		}
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

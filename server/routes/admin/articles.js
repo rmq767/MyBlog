@@ -129,18 +129,20 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let time;
-		if (startTime && endTime) {
-			time = `and date >= ${startTime} and date <= ${endTime}`;
-		} else {
-			time = "";
-		}
+		let sql;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `
-        SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-        SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0;
-        `;
+		if (startTime && endTime) {
+			sql = `
+            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
+            `;
+		} else {
+			sql = `
+            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
+            `;
+		}
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

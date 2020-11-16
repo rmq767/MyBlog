@@ -1,22 +1,22 @@
 <template>
     <div class="panel">
-        <div class="statistics">
+        <div class="statistics" v-loading='loadingPanel'>
             <div class="panel-item">
                 <p class="title">总阅读量</p>
-                <p class="count">1234</p>
+                <p class="count">{{panelData.readCount}}</p>
             </div>
             <div class="panel-item">
                 <p class="title">总浏览量</p>
-                <p class="count">2222</p>
+                <p class="count">{{panelData.pv}}</p>
             </div>
             <div class="panel-item">
                 <p class="title">总留言量</p>
-                <p class="count">222</p>
+                <p class="count">{{panelData.messageCount}}</p>
             </div>
         </div>
         <div class="echars-block">
-            <div ref="read" :style="{ width: '100%', height: '400px' }"></div>
-            <div ref="pv" :style="{ width: '100%', height: '400px' }"></div>
+            <div ref="read" :style="{ width: '100%', height: '400px' }" v-loading='loadingRead'></div>
+            <div ref="pv" :style="{ width: '100%', height: '400px' }" v-loading='loadingPv'></div>
         </div>
     </div>
 </template>
@@ -34,6 +34,14 @@ export default {
                 x_data: [],
                 s_data: [],
             },
+            panelData: {
+                readCount: 0,
+                pv: 0,
+                messageCount: 0,
+            },
+            loadingPanel: false,
+            loadingRead: false,
+            loadingPv: false,
         };
     },
     methods: {
@@ -101,29 +109,37 @@ export default {
          * @description 获取看板数据
          */
         async getCountData() {
+            this.loadingPanel = true;
             const res = await api.statistics.getCountData();
-            console.log(res);
+            this.panelData.readCount = res.data.data[0][0].readCount;
+            this.panelData.pv = res.data.data[2][0].pv;
+            this.panelData.messageCount = res.data.data[1][0].messageCount;
+            this.loadingPanel = false;
         },
         async fetchArticle() {
+            this.loadingRead = true;
             const res = await api.statistics.getReadData();
-            let articlesArr = res.data.data.splice(0, 5);
-            this.read.x_data = articlesArr.map((v) => v.title);
-            this.read.s_data = articlesArr.map((v) => v.clicks);
+            this.read.x_data = res.data.data.map((v) => v.title);
+            this.read.s_data = res.data.data.map((v) => v.clicks);
+            this.loadingRead = false;
+            this.drawBar();
         },
         /**
          * @description 获取pv的图表数据
          */
         async getPvData() {
+            this.loadingPv = true;
             const res = await api.statistics.getPvData();
             this.pv.x_data = res.data.data.map((v) => v.date);
             this.pv.s_data = res.data.data.map((v) => v.count);
+            this.loadingPv = false;
             this.drawLine();
         },
     },
-    async mounted() {
-        await this.getPvData();
+    mounted() {
+        this.getPvData();
         this.getCountData();
-        // await this.fetchArticle();
+        this.fetchArticle();
     },
 };
 </script>

@@ -21,7 +21,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-table style="width: 100%" :data="comments">
+        <el-table style="width: 100%" :data="comments" v-loading='loading'>
             <el-table-column label="昵称" align="center" :show-overflow-tooltip="true" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
@@ -71,11 +71,11 @@ export default {
         };
     },
     methods: {
-        async fetch() {
-            const res = await api.comment.getCommentList();
-            this.pageInfo.count = res.data.data.length;
-            this.comments = res.data.data.slice(0, this.pageInfo.pageSize);
-        },
+        // async fetch() {
+        //     const res = await api.comment.getCommentList();
+        //     this.pageInfo.count = res.data.data.length;
+        //     this.comments = res.data.data.slice(0, this.pageInfo.pageSize);
+        // },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
                 confirmButtonText: "确定",
@@ -99,30 +99,20 @@ export default {
         },
         async handleSizeChange(val) {
             this.pageInfo.pageSize = val;
-            this.pagination();
+            this.search();
         },
         async handleCurrentChange(val) {
             this.pageInfo.currentPage = val;
-            this.pagination();
-        },
-        /**
-         * @description 分页
-         */
-        async pagination() {
-            const res = await api.comment.pagination(
-                this.pageInfo.pageSize,
-                this.pageInfo.currentPage
-            );
-            this.comments = res.data.data;
+            this.search();
         },
 
         async search() {
+            this.loading = true;
             const params = Object.assign({}, this.form, this.pageInfo);
             const res = await api.comment.searchComment(params);
-            console.log(res.data.data);
-            // this.comments = res.data.data;
-            // this.pageInfo.count = res.data.data.length;
-            // this.pageInfo.pageSize = res.data.data.length;
+            this.comments = res.data.data;
+            this.pageInfo.count = res.data.total[0].total;
+            this.loading = false;
         },
         /**
          * @description 重置表单
@@ -144,7 +134,7 @@ export default {
         },
     },
     created() {
-        this.fetch();
+        this.search();
         this.getArticleList();
     },
 };

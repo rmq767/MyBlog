@@ -32,20 +32,20 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		// 验证名称唯一
-		const namesql = "select name from comments where is_delete = 0";
-		await db.query(namesql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: err,
-				});
-			} else {
-				let sameName = data.some((item) => item.name === name);
-				if (sameName) {
-					return res.send({ message: "已有相同昵称" });
-				}
-			}
-		});
+		// // 验证名称唯一
+		// const namesql = "select name from comments where is_delete = 0";
+		// await db.query(namesql, (err, data) => {
+		// 	if (err) {
+		// 		return res.send({
+		// 			message: err,
+		// 		});
+		// 	} else {
+		// 		let sameName = data.some((item) => item.name === name);
+		// 		if (sameName) {
+		// 			return res.send({ message: "已有相同昵称" });
+		// 		}
+		// 	}
+		// });
 
 		const sql =
 			"insert into comments (name,comment,date,article_id) VALUES (?,?,?,?)";
@@ -70,10 +70,10 @@ module.exports = (app) => {
 		if (limit) {
 			count += limit;
 		}
-		const sql = `SELECT * FROM comments WHERE is_delete = 0 AND article_id =${article_id} ORDER BY id DESC LIMIT ${count};
-    SELECT id comment_id,COUNT(*) comment_count FROM 
-    (SELECT commentreply.comment_id,comments.id FROM comments RIGHT JOIN commentreply ON commentreply.comment_id = comments.id) t 
-    GROUP BY comment_id HAVING COUNT(comment_id)>=1;`;
+		const sql = `
+        SELECT * FROM comments WHERE is_delete = 0 AND article_id =${article_id} ORDER BY id DESC LIMIT ${count};
+        SELECT * FROM commentreply WHERE article_id =${article_id};
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -82,8 +82,8 @@ module.exports = (app) => {
 			} else {
 				for (let m in data[0]) {
 					for (let n in data[1]) {
-						if (data[0][m].id == data[1][n].comment_id) {
-							data[0][m].reply_count = data[1][n].comment_count;
+						if (data[0][m].id === data[1][n].comment_id) {
+							data[0][m].reply = data[1][n];
 						}
 					}
 				}

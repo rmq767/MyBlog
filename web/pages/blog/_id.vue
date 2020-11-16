@@ -74,11 +74,24 @@ export default {
         const nextPre = await $axios.$get(
             `/articles/get/nextpre?id=${params.id}`
         );
-        console.log(nextPre);
+        let pre, next;
+        if (article.data.id > nextPre.data[0].id && nextPre.data.length === 1) {
+            pre = null;
+            next = nextPre.data[0];
+        } else if (
+            article.data.id < nextPre.data[0].id &&
+            nextPre.data.length === 1
+        ) {
+            pre = nextPre.data[0];
+            next = null;
+        } else {
+            pre = nextPre.data[1];
+            next = nextPre.data[0];
+        }
         return {
             article: article.data,
-            pre: nextPre.data[1],
-            next: nextPre.data[0],
+            pre: pre,
+            next: next,
             sameThemeArticles: sameThemeArticles.data,
             sameTypeArticles: sameTypeArticles.data,
         };
@@ -89,7 +102,9 @@ export default {
     directives: { highlight },
     methods: {
         backHome() {
-            window.history.go(-1);
+            this.$router.push({
+                path: "/",
+            });
         },
         /**
          * @description 跳转文章详情

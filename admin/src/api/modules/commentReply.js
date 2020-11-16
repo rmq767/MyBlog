@@ -13,14 +13,14 @@ export default {
 	deleteCommentReply(id) {
 		return http.delete(`/commentreply/${id}`);
 	},
-	/**
-	 * @description 评论回复分页
-	 */
-	pagination(size, page) {
-		return http.get(
-			`/commentreply/get/page?pageSize=${size}&currentPage=${page}`
-		);
-	},
+	// /**
+	//  * @description 评论回复分页
+	//  */
+	// pagination(size, page) {
+	// 	return http.get(
+	// 		`/commentreply/get/page?pageSize=${size}&currentPage=${page}`
+	// 	);
+	// },
 	/**
 	 * @description 评论回复搜索
 	 */
@@ -33,16 +33,16 @@ export default {
 	// addCommentReply(params) {
 	// 	return http.post("/commentreply", params);
 	// },
-	// /**
-	//  * @description 修改评论回复
-	//  */
-	// editCommentReply(id, params) {
-	// 	return http.put(`/commentreply/${id}`, params);
-	// },
-	// /**
-	//  * @description 评论回复详情
-	//  */
-	// commentReplyInfo(id) {
-	// 	return http.get(`/commentreply/${id}`);
-	// },
+	/**
+	 * @description 修改评论回复
+	 */
+	editCommentReply(id, params) {
+		return http.put(`/commentreply/${id}`, params);
+	},
+	/**
+	 * @description 评论回复详情
+	 */
+	commentReplyInfo(id) {
+		return http.get(`/commentreply/${id}`);
+	},
 };

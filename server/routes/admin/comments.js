@@ -43,20 +43,20 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		// 验证名称唯一
-		const namesql = "select name from comments where is_delete = 0";
-		await db.query(namesql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: err,
-				});
-			} else {
-				let sameName = data.some((item) => item.name === name);
-				if (sameName) {
-					return res.send({ message: "已有相同昵称" });
-				}
-			}
-		});
+		// // 验证名称唯一
+		// const namesql = "select name from comments where is_delete = 0";
+		// await db.query(namesql, (err, data) => {
+		// 	if (err) {
+		// 		return res.send({
+		// 			message: err,
+		// 		});
+		// 	} else {
+		// 		let sameName = data.some((item) => item.name === name);
+		// 		if (sameName) {
+		// 			return res.send({ message: "已有相同昵称" });
+		// 		}
+		// 	}
+		// });
 		const sql =
 			"insert into comments (name,comment,date,article_id) VALUES (?,?,?,?)";
 		await db.query(
@@ -116,38 +116,56 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
+		const {
+			pageSize,
+			currentPage,
+			nickname,
+			article_id,
+			comment,
+		} = req.query;
 
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `
-    select comments.id,name,comment,title 
-    from comments,articles 
-    where comments.article_id = articles.id and comments.is_delete = 0 ORDER BY comments.id desc limit ${start},${end}`;
+		let sql;
+		if (article_id) {
+			sql = `
+            SELECT a.*,b.title FROM comments a,articles b WHERE a.name LIKE '%${nickname}%' AND a.comment LIKE '%${comment}%' AND a.article_id=${article_id} AND b.id=${article_id} AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM comments WHERE name LIKE '%${nickname}%' AND comment LIKE '%${comment}%' AND article_id=${article_id} AND is_delete = 0;
+        `;
+		} else {
+			sql = `
+            SELECT a.*,b.title FROM comments a,articles b WHERE a.name LIKE '%${nickname}%' AND a.comment LIKE '%${comment}%' AND a.article_id=b.id AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM comments WHERE name LIKE '%${nickname}%' AND comment LIKE '%${comment}%' AND is_delete = 0;
+        `;
+		}
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
 					message: "数据库查询错误",
 				});
 			} else {
-				return res.send({ success: true, data: data });
+				return res.send({
+					success: true,
+					data: data[0],
+					total: data[1],
+				});
 			}
 		});
 	});
 
-	router.post("/get/search", async (req, res) => {
-		const { nickname, comment, article_id } = req.body;
-		const sql = `select * from comments where name like '%${nickname}%' and comment like '%${comment}%'and article_id = ${article_id} and is_delete = 0 ORDER BY id DESC`;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: "数据库查询错误",
-				});
-			} else {
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
+	// router.post("/get/search", async (req, res) => {
+	// 	const { nickname, comment, article_id } = req.body;
+	// 	const sql = `select * from comments where name like '%${nickname}%' and comment like '%${comment}%'and article_id = ${article_id} and is_delete = 0 ORDER BY id DESC`;
+	// 	await db.query(sql, (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: "数据库查询错误",
+	// 			});
+	// 		} else {
+	// 			return res.send({ success: true, data: data });
+	// 		}
+	// 	});
+	// });
 
 	app.use("/admin/api/comments", router);
 };

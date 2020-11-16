@@ -150,6 +150,7 @@ export default {
                     r_name: this.r_name,
                     c_reply: this.reply.message,
                     comment_id: this.comment_id,
+                    article_id: this.a_id,
                 });
                 localStorage.setItem("tourist", this.name);
                 this.reply.message = "";

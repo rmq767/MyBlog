@@ -35,7 +35,7 @@
                                     </v-chip>
                                 </div>
                                 <div class="type">
-                                    <v-chip color="#4CAF50" label text-color="white" class="ml-1" x-small v-for="(type,i) in typeList" :key="i">
+                                    <v-chip color="#4CAF50" label text-color="white" class="ml-1" x-small v-for="(type,i) in item.type" :key="i">
                                         {{type}}
                                     </v-chip>
                                 </div>
@@ -87,13 +87,13 @@
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
                                     <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme)">
-                                        <span>{{item.theme||""}}</span>
+                                        <span>{{item.theme||'全部'}}</span>
                                     </div>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
                                     <div class="type-item" v-for="(item,index) in types" :key="index" @click="chooseType(item.type)">
-                                        <span>{{item.type}}</span>
+                                        <span>{{item.type||'全部'}}</span>
                                     </div>
                                 </div>
                             </v-card>
@@ -108,12 +108,15 @@
 
 <script>
 import notice from "../../admin/src/api/modules/notice";
+import type from "../../admin/src/api/modules/type";
 // import Pagination from "../components/Pagination.vue";
 export default {
     async asyncData({ $axios }) {
         const notices = await $axios.$get("/notices");
         const themes = await $axios.$get("/themes");
+        themes.data.unshift({ theme: "" });
         const types = await $axios.$get("/types");
+        types.data.unshift({ type: "" });
         const hotArticles = await $axios.$get("/articles/get/hot");
         return {
             notices: notices.data,
@@ -173,6 +176,11 @@ export default {
                 `/articles/get/page?size=${this.searchParams.size}&page=${this.searchParams.page}&titleContent=${this.searchParams.titleContent}&theme=${this.searchParams.theme}&type=${this.searchParams.type}`
             );
             this.articlesData = res.data.data;
+            this.articlesData.forEach((element) => {
+                if (element.type) {
+                    element.type = element.type.split(",");
+                }
+            });
             this.pageInfo.length = Math.ceil(
                 res.data.count[0].article_count / this.pageInfo.size
             );
@@ -251,13 +259,17 @@ export default {
     display: flex;
     flex-wrap: wrap;
     .theme-item {
-        padding: 5px 10px;
+        padding: 0px 5px;
         border-radius: 10%;
         background: #7c4dff;
         border: 1px solid #7c4dff;
         color: #ffffff;
         cursor: pointer;
         margin: 5px 5px;
+        &:first-of-type {
+            color: #7c4dff;
+            background: #ffffff;
+        }
         &:hover {
             color: #7c4dff;
             background: #ffffff;
@@ -267,13 +279,17 @@ export default {
         }
     }
     .type-item {
-        padding: 0px 10px;
+        padding: 0px 5px;
         border-radius: 10%;
         background: rgb(76, 175, 80);
         border: 1px solid rgb(76, 175, 80);
         color: #ffffff;
         cursor: pointer;
         margin: 5px 5px;
+        &:first-of-type {
+            color: rgb(76, 175, 80);
+            background: #ffffff;
+        }
         &:hover {
             color: rgb(76, 175, 80);
             background: #ffffff;

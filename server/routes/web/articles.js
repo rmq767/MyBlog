@@ -50,7 +50,7 @@ module.exports = (app) => {
 	 */
 	router.get("/get/sametheme", async (req, res) => {
 		const { theme } = req.query;
-		const sql = `select id,title from articles where theme=${theme} and is_delete = 0 ORDER BY clicks desc limit 5;
+		const sql = `select id,title from articles where theme='${theme}' and is_delete = 0 ORDER BY clicks desc limit 3;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -68,7 +68,8 @@ module.exports = (app) => {
 	 */
 	router.get("/get/sametype", async (req, res) => {
 		const { type } = req.query;
-		const sql = `select id,title from articles where type like '%${type}%' and is_delete = 0 ORDER BY clicks desc limit 5;
+		const type1 = type.split(",")[0];
+		const sql = `select id,title from articles where type like '%${type1}%' and is_delete = 0 ORDER BY clicks desc limit 3;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -85,9 +86,8 @@ module.exports = (app) => {
 		const sql = `
     UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
     select * from articles where id='${req.params.id}';
-    SELECT id article_id,COUNT(*) comment_count FROM 
-    (SELECT articles.id,comments.article_id FROM articles RIGHT JOIN comments ON comments.article_id = articles.id) t 
-    GROUP BY article_id HAVING COUNT(article_id)>=1;
+    SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
+    SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -97,8 +97,18 @@ module.exports = (app) => {
 			} else {
 				for (let m in data[1]) {
 					for (let n in data[2]) {
-						if (data[1][m].id == data[2][n].article_id) {
-							data[1][m].comment_count = data[2][n].comment_count;
+						for (let y in data[3]) {
+							if (data[1][m].id === data[2][n].article_id) {
+								data[1][m].comment_count =
+									data[2][n].comment_count;
+							} else if (
+								data[1][m].id === data[2][n].article_id &&
+								data[1][m].id === data[3][y].article_id
+							) {
+								data[1][m].comment_count =
+									data[2][n].comment_count +
+									data[3][y].commentreply_count;
+							}
 						}
 					}
 				}
@@ -114,6 +124,7 @@ module.exports = (app) => {
 		const sql = `
         SELECT * FROM articles WHERE title LIKE '%${titleContent}%' AND content_md LIKE '%${titleContent}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
         SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
+        SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
         SELECT COUNT(*) AS article_count FROM articles WHERE title LIKE '%${titleContent}%' AND content_md LIKE '%${titleContent}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
      `;
 		await db.query(sql, (err, data) => {
@@ -124,8 +135,18 @@ module.exports = (app) => {
 			} else {
 				for (let m in data[0]) {
 					for (let n in data[1]) {
-						if (data[0][m].id == data[1][n].article_id) {
-							data[0][m].comment_count = data[1][n].comment_count;
+						for (let y in data[2]) {
+							if (data[0][m].id === data[1][n].article_id) {
+								data[0][m].comment_count =
+									data[1][n].comment_count;
+							} else if (
+								data[0][m].id === data[1][n].article_id &&
+								data[0][m].id === data[2][y].article_id
+							) {
+								data[0][m].comment_count =
+									data[1][n].comment_count +
+									data[2][y].commentreply_count;
+							}
 						}
 					}
 				}
@@ -139,7 +160,7 @@ module.exports = (app) => {
 				return res.send({
 					success: true,
 					data: data[0],
-					count: data[2],
+					count: data[3],
 				});
 			}
 		});

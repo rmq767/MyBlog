@@ -106,18 +106,20 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let time;
-		if (startTime && endTime) {
-			time = `and date >= ${startTime} and date <= ${endTime}`;
-		} else {
-			time = "";
-		}
+		let sql;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		const sql = `
-        SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-        SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0;
-        `;
+		if (startTime && endTime) {
+			sql = `
+            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
+            `;
+		} else {
+			sql = `
+            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND is_delete = 0;
+            `;
+		}
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

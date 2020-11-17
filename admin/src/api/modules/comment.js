@@ -16,17 +16,21 @@ export default {
 	/**
 	 * @description 评论分页
 	 */
-	pagination(size, page) {
+	pagination(params) {
 		return http.get(
-			`/comments/get/page?pageSize=${size}&currentPage=${page}`
+			`/comments/get/page?pageSize=${params.pageSize}&currentPage=${
+				params.currentPage
+			}&nickname=${params.nickname}&comment=${
+				params.comment
+			}&article_id=${params.article_id || ""}`
 		);
 	},
-	/**
-	 * @description 评论搜索
-	 */
-	searchComment(params) {
-		return http.post("/comments/get/search", params);
-	},
+	// /**
+	//  * @description 评论搜索
+	//  */
+	// searchComment(params) {
+	// 	return http.post("/comments/get/search", params);
+	// },
 	/**
 	 * @description 添加评论
 	 */

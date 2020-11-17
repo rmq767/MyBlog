@@ -142,12 +142,19 @@ export default {
          * @description 选择时间
          */
         chooseDate(date) {
-            this.date.startTime = date[0];
-            this.date.endTime = date[1];
+            if (date) {
+                this.date.startTime = date[0];
+                this.date.endTime = date[1];
+            } else {
+                this.date.startTime = "";
+                this.date.endTime = "";
+            }
             this.search();
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.date.startTime = "";
+            this.date.endTime = "";
         },
     },
     created() {

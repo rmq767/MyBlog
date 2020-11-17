@@ -66,10 +66,10 @@ export default {
     async asyncData({ $axios, params }) {
         const article = await $axios.$get(`/articles/${params.id}`);
         const sameThemeArticles = await $axios.$get(
-            `/articles/get/sametheme?theme=${article.theme}`
+            `/articles/get/sametheme?theme=${article.data.theme}`
         );
         const sameTypeArticles = await $axios.$get(
-            `/articles/get/sametype?type=${article.type}`
+            `/articles/get/sametype?type=${article.data.type}`
         );
         const nextPre = await $axios.$get(
             `/articles/get/nextpre?id=${params.id}`

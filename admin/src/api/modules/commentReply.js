@@ -13,20 +13,24 @@ export default {
 	deleteCommentReply(id) {
 		return http.delete(`/commentreply/${id}`);
 	},
-	// /**
-	//  * @description 评论回复分页
-	//  */
-	// pagination(size, page) {
-	// 	return http.get(
-	// 		`/commentreply/get/page?pageSize=${size}&currentPage=${page}`
-	// 	);
-	// },
 	/**
-	 * @description 评论回复搜索
+	 * @description 评论回复分页
 	 */
-	searchCommentReply(params) {
-		return http.post("/commentreply/get/search", params);
+	pagination(params) {
+		return http.get(
+			`/commentreply/get/page?pageSize=${params.pageSize}&currentPage=${
+				params.currentPage
+			}&i_name=${params.i_name}&r_name=${params.r_name}&c_reply=${
+				params.c_reply
+			}&article_id=${params.article_id || ""}`
+		);
 	},
+	// /**
+	//  * @description 评论回复搜索
+	//  */
+	// searchCommentReply(params) {
+	// 	return http.post("/commentreply/get/search", params);
+	// },
 	// /**
 	//  * @description 添加评论回复
 	//  */

@@ -2,14 +2,17 @@
     <div>
         <h3>评论回复列表</h3>
         <div class="header-form">
-            <el-form :model="form" ref="replyForm" label-width="80px" inline style="width:100%">
-                <el-form-item label="昵称：" prop='nickname'>
-                    <el-input v-model="form.nickname"></el-input>
+            <el-form :model="form" ref="replyForm" label-width="100px" inline style="width:100%">
+                <el-form-item label="昵称：" prop='i_name'>
+                    <el-input v-model="form.i_name"></el-input>
                 </el-form-item>
-                <el-form-item label="评论：" prop='comment'>
-                    <el-input v-model="form.comment"></el-input>
+                <el-form-item label="评论：" prop='c_reply'>
+                    <el-input v-model="form.c_reply"></el-input>
                 </el-form-item>
-                <el-form-item label="文章：" prop='article'>
+                <el-form-item label="回复昵称：" prop='r_name'>
+                    <el-input v-model="form.r_name"></el-input>
+                </el-form-item>
+                <el-form-item label="文章：" prop='article_id'>
                     <el-select v-model="form.article_id" placeholder="请选择评论的文章">
                         <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
@@ -90,14 +93,16 @@ export default {
                 count: 0,
             },
             form: {
-                nickname: "",
-                comment: "",
+                i_name: "",
+                c_reply: "",
+                r_name: "",
                 article_id: null,
             },
             replyForm: {},
             articleOptions: [],
             loading: false,
             editReply: false,
+            commentReply_id: 0,
         };
     },
     methods: {
@@ -107,13 +112,19 @@ export default {
         //     this.commentreply = res.data.data.slice(0, this.pageInfo.pageSize);
         // },
         async editCommentReply(row) {
+            this.commentReply_id = row.id;
             const res = await api.commentReply.commentReplyInfo(row.id);
             this.replyForm = res.data.data;
             this.editReply = true;
-            // console.log(row);
         },
         async saveReply() {
-            console.log(this.replyForm);
+            const res = await api.commentReply.editCommentReply(
+                this.commentReply_id,
+                this.replyForm
+            );
+            if (res.data.success) {
+                this.$message.success("修改成功");
+            }
         },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
@@ -156,7 +167,8 @@ export default {
         // },
         async search() {
             this.loading = true;
-            const res = await api.commentReply.searchCommentReply(this.form);
+            const params = Object.assign({}, this.form, this.pageInfo);
+            const res = await api.commentReply.pagination(params);
             this.commentreply = res.data.data;
             this.pageInfo.count = res.data.total[0].total;
             this.loading = false;

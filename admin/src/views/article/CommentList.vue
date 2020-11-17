@@ -9,7 +9,7 @@
                 <el-form-item label="评论：" prop='comment'>
                     <el-input v-model="form.comment"></el-input>
                 </el-form-item>
-                <el-form-item label="文章：" prop='article'>
+                <el-form-item label="文章：" prop='article_id'>
                     <el-select v-model="form.article_id" placeholder="请选择评论的文章">
                         <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
@@ -109,7 +109,7 @@ export default {
         async search() {
             this.loading = true;
             const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.comment.searchComment(params);
+            const res = await api.comment.pagination(params);
             this.comments = res.data.data;
             this.pageInfo.count = res.data.total[0].total;
             this.loading = false;

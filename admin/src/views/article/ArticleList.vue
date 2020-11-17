@@ -195,6 +195,8 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.date.startTime = "";
+            this.date.endTime = "";
         },
     },
     components: {

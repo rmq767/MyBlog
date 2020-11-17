@@ -3,6 +3,7 @@ module.exports = (app) => {
 	const router = express.Router();
 	const db = require("../../database/db.config"); //引入数据库封装模块
 	const validateCommentReply = require("../../plugins/commentReply");
+	const moment = require("moment");
 
 	router.get("/", async (req, res) => {
 		const sql = `select commentreply.id,i_name,r_name,c_reply,commentreply.date
@@ -98,7 +99,7 @@ module.exports = (app) => {
             `;
 		} else {
 			sql = `
-            a.*,b.title FROM commentreply a,articles b WHERE a.i_name LIKE '%${i_name}%' AND a.r_name LIKE '%${r_name}%' AND a.c_reply LIKE '%${c_reply}%' AND a.article_id= b.id AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT a.*,b.title FROM commentreply a,articles b WHERE a.i_name LIKE '%${i_name}%' AND a.r_name LIKE '%${r_name}%' AND a.c_reply LIKE '%${c_reply}%' AND a.article_id= b.id AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
             SELECT COUNT(*) AS total FROM commentreply WHERE i_name LIKE '%${i_name}%' AND r_name LIKE '%${r_name}%' AND c_reply LIKE '%${c_reply}%' AND is_delete = 0;
             `;
 		}

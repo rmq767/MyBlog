@@ -86,7 +86,7 @@
             <v-btn text small>没有咯~</v-btn>
         </div>
         <div class="my-2 text-center" v-else>
-            <v-btn text small @click="fetch(10)">加载更多...</v-btn>
+            <v-btn text small @click="fetch(limit)">加载更多...</v-btn>
         </div>
         <v-snackbar v-model="snackbar" :timeout="timeout">{{
             snackbarText
@@ -117,6 +117,7 @@ export default {
             snackbar: false,
             snackbarText: "",
             timeout: 2000,
+            limit: 0,
         };
     },
     mounted() {
@@ -160,17 +161,15 @@ export default {
                 this.fetchReply(comment_id);
             }
         },
-        async fetch(limit) {
-            let res;
-            res = await this.$axios.get(
-                `/comments/get?article_id=${this.a_id}&limit=${
-                    limit ? limit : ""
-                }`
+        async fetch() {
+            let res = await this.$axios.get(
+                `/comments/get?article_id=${this.a_id}&limit=${this.limit}`
             );
-            const c_count = await this.$axios.get(
-                `/comments?article_id=${this.a_id}`
-            );
-            this.count = c_count.data.length;
+            this.limit += 10;
+            // const c_count = await this.$axios.get(
+            //     `/comments?article_id=${this.a_id}`
+            // );
+            // this.count = c_count.data.length;
 
             this.listData = res.data.data;
         },

@@ -98,7 +98,10 @@ module.exports = (app) => {
 				for (let m in data[1]) {
 					for (let n in data[2]) {
 						for (let y in data[3]) {
-							if (data[1][m].id === data[2][n].article_id) {
+							if (
+								data[1][m].id === data[2][n].article_id &&
+								data[0][m].id != data[3][y].article_id
+							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count;
 							} else if (
@@ -136,7 +139,10 @@ module.exports = (app) => {
 				for (let m in data[0]) {
 					for (let n in data[1]) {
 						for (let y in data[2]) {
-							if (data[0][m].id === data[1][n].article_id) {
+							if (
+								data[0][m].id === data[1][n].article_id &&
+								data[0][m].id != data[2][y].article_id
+							) {
 								data[0][m].comment_count =
 									data[1][n].comment_count;
 							} else if (
@@ -178,6 +184,7 @@ module.exports = (app) => {
         end 
         from articles
         where id !=${id}
+        AND is_delete = 0
         GROUP BY SIGN(id-${id})
         ORDER BY SIGN(id-${id})
         )

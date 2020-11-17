@@ -12,7 +12,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -25,7 +25,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data[0] });
@@ -92,7 +92,7 @@ module.exports = (app) => {
 			(err, data) => {
 				if (err) {
 					return res.send({
-						message: "数据库查询错误",
+						message: err,
 					});
 				} else {
 					return res.send({ success: true, data: data });
@@ -107,7 +107,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -141,7 +141,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({
@@ -159,7 +159,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			return res.send({ success: true, data: data });

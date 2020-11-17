@@ -13,7 +13,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				data.map(
@@ -37,7 +37,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -55,7 +55,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -74,7 +74,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -92,7 +92,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				for (let m in data[1]) {
@@ -133,7 +133,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				for (let m in data[0]) {
@@ -193,7 +193,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -207,7 +207,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			return res.send(data[0]);
@@ -221,7 +221,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			return res.send(data[0]);
@@ -235,7 +235,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			data.map(
@@ -256,7 +256,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			data.map(
@@ -277,7 +277,7 @@ module.exports = (app) => {
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
-	// 				message: "数据库查询错误",
+	// 				message: err,
 	// 			});
 	// 		} else {
 	// 			data.map(

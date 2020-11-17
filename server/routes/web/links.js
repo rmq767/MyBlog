@@ -8,7 +8,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				res.send({ success: true, data: data });

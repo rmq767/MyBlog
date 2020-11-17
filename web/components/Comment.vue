@@ -11,7 +11,7 @@
             </div>
             <h3 class="mt-12">评论区</h3>
             <div>
-                <v-list v-for="item in listData" :key="item.id" dense class="py-0 my-3" two-line>
+                <!-- <v-list v-for="item in listData" :key="item.id" dense class="py-0 my-3" two-line>
                     <template>
                         <v-list-item link>
                             <v-list-item-avatar>
@@ -31,16 +31,16 @@
                                         comment_id = item.id;
                                         r_name = item.name;
                                     " class="reply">回复</span>
-                                <!-- <div class="reply mt-4 overline" @click="fetchReply(item.id)">
+                                <div class="reply mt-4 overline" @click="fetchReply(item.id)">
                                     <v-icon size="medium">mdi-message-processing</v-icon>
                                     <span>{{
                                         item.reply_count ? item.reply_count : 0
                                     }}</span>
-                                </div> -->
+                                </div>
                             </div>
                         </v-list-item>
-                        <div class="px-8" v-if="show_reply == item.id">
-                            <template v-for="comment in commentReply">
+                        <div class="px-8">
+                            <template >
                                 <v-list-item :key="comment.r_id" dense link>
                                     <v-list-item-avatar>
                                         <v-img src="/user.png"></v-img>
@@ -66,7 +66,45 @@
                             </template>
                         </div>
                     </template>
-                </v-list>
+                </v-list> -->
+                <div class="comment-container">
+                    <div class="comment-item" v-for="comment in listData" :key="comment.id">
+                        <div>
+                            <div class="avatar">
+                                <v-img src="/user.png"></v-img>
+                            </div>
+                            <div class="comment-info">
+                                <div>
+                                    <span class="name">{{comment.name}}</span>
+                                    <span class="date">{{comment.date}}</span>
+                                </div>
+                                <p class="comment">{{comment.comment}}</p>
+                            </div>
+                            <div class="reply-btn" @click="replyComment(comment)">
+                                <span>回复</span>
+                            </div>
+                        </div>
+                        <div class="reply-container" v-if="comment.reply.length">
+                            <div class="reply-item" v-for="reply in comment.reply" :key="reply.id">
+                                <div>
+                                    <div class="avatar">
+                                        <v-img src="/user.png"></v-img>
+                                    </div>
+                                    <div class="reply-info">
+                                        <div>
+                                            <span class="name">{{reply.i_name}}<span style="color:#666;fontSize:12px;margin:0px 5px">回复</span>{{reply.r_name}}</span>
+                                            <span class="date">{{reply.date}}</span>
+                                        </div>
+                                        <p class="reply-content">{{reply.c_reply}}</p>
+                                    </div>
+                                    <div class="reply-btn" @click="replyCommentReply(comment.id,reply)">
+                                        <span>回复</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div>
                 <v-bottom-sheet v-model="sheet" inset>
@@ -96,7 +134,6 @@
 
 <script>
 export default {
-    props: ["type", "article_id"],
     data() {
         return {
             form: {
@@ -108,10 +145,10 @@ export default {
             name: "",
             listData: [],
             sheet: false,
-            commentReply: [],
+            // commentReply: [],
             comment_id: "",
             a_id: this.$route.params.id,
-            show_reply: 0,
+            // show_reply: 0,
             r_name: "",
             count: "",
             snackbar: false,
@@ -158,7 +195,6 @@ export default {
                 this.sheet = false;
                 this.fetch();
                 this.comment_id = comment_id;
-                this.fetchReply(comment_id);
             }
         },
         async fetch() {
@@ -170,37 +206,36 @@ export default {
 
             this.listData = res.data.data;
         },
-        async fetchReply(comment_id) {
-            let res;
-            res = await this.$axios.get(
-                `/commentreply?comment_id=${comment_id}`
-            );
-
-            this.commentReply = res.data.data;
-            this.show_reply = comment_id;
-            // this.comment_id = comment_id;
+        /**
+         * @description 回复评论
+         */
+        replyComment(item) {
+            this.sheet = !this.sheet;
+            this.comment_id = item.id;
+            this.r_name = item.name;
+        },
+        /**
+         * @description 回复回复
+         */
+        replyCommentReply(id, item) {
+            this.sheet = !this.sheet;
+            this.comment_id = id;
+            this.r_name = item.i_name;
         },
     },
     created() {
         this.fetch();
     },
     watch: {
-        // type(newValue) {
-        //     this.type = newValue;
-        //     this.fetch();
-        // },
         $route(to, from) {
             this.a_id = to.params.id;
             this.fetch();
         },
-        // show_reply(newValue) {
-        //     console.log(newValue);
-        // },
     },
 };
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 .comment .reply:hover {
     color: #b388ff !important;
     border-bottom: 1px solid #b388ff;
@@ -208,5 +243,125 @@ export default {
 }
 .comment {
     margin-top: 20px;
+}
+.comment-container {
+    margin-top: 10px;
+    .comment-item {
+        margin-bottom: 10px;
+        > div {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 64px;
+            // margin: 10px 0px;
+            background: #ffffff;
+            padding: 10px;
+            .avatar {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .comment-info {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-content: center;
+                margin-right: 3rem;
+                .name {
+                    font-weight: 600;
+                    font-size: 14px;
+                    color: #333;
+                    margin-right: 1rem;
+                }
+                .date {
+                    font-size: 12px;
+                    color: #ccc;
+                }
+                .comment {
+                    font-size: 14px;
+                    color: #666;
+                    margin: 5px 0px;
+                    background: #f1f1f1;
+                    padding: 10px;
+                    word-break: break-all;
+                }
+            }
+            .reply-btn {
+                position: absolute;
+                right: 0.8rem;
+                bottom: 1.5rem;
+                display: inline-block;
+                &:hover {
+                    cursor: pointer;
+                    color: #b388ff;
+                }
+            }
+        }
+        .reply-container {
+            padding-left: 60px;
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            .reply-item {
+                width: 100%;
+                border-left: 1px solid rgb(184, 184, 184);
+                padding-left: 10px;
+                margin-bottom: 10px;
+                > div {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    min-height: 64px;
+                    background: #ffffff;
+                    position: relative;
+                    .avatar {
+                        width: 40px;
+                        height: 40px;
+                        margin-right: 10px;
+                    }
+                    .reply-info {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-content: center;
+                        margin-right: 3rem;
+                        .name {
+                            font-weight: 600;
+                            font-size: 14px;
+                            color: #333;
+                            margin-right: 1rem;
+                        }
+                        .date {
+                            font-size: 12px;
+                            color: #ccc;
+                        }
+                        .reply-content {
+                            font-size: 14px;
+                            color: #666;
+                            margin: 5px 0px;
+                            background: #f1f1f1;
+                            padding: 10px;
+                            word-break: break-all;
+                        }
+                    }
+                    .reply-btn {
+                        position: absolute;
+                        right: 0.3rem;
+                        bottom: 1rem;
+                        display: inline-block;
+                        &:hover {
+                            cursor: pointer;
+                            color: #b388ff;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 </style>

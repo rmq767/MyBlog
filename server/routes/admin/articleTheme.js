@@ -8,7 +8,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				let arr = [];
@@ -26,7 +26,7 @@ module.exports = (app) => {
 		await db.query(sql1, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				data.forEach((item) => {
@@ -67,7 +67,7 @@ module.exports = (app) => {
 		await db.query(sql, [`${theme}`], (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -81,7 +81,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -100,7 +100,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({

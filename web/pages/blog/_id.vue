@@ -7,11 +7,11 @@
             <div class="theme-type">
                 <v-card>
                     <div class="my-4 subtitle-1">同主题文章</div>
-                    <div class="article-theme" v-for="item in sameThemeArticles" :key="item.id" @click="toArticleInfo(item.id)">
+                    <div class="article-theme" v-for="(item,index) in sameThemeArticles" :key="index" @click="toArticleInfo(item.id)">
                         {{item.title}}
                     </div>
                     <div class="my-4 subtitle-1">同分类文章</div>
-                    <div class="article-type" v-for="item in sameTypeArticles" :key="item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
+                    <div class="article-type" v-for="(item,index) in sameTypeArticles" :key="index+item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
                 </v-card>
             </div>
             <div>
@@ -51,7 +51,7 @@
             </div>
             <!-- 留言 -->
             <div class="mt-12">
-                <comment type="comments"></comment>
+                <comment></comment>
             </div>
         </v-container>
     </div>

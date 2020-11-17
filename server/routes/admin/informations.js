@@ -8,7 +8,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				res.send({ success: true, data: data });
@@ -18,7 +18,7 @@ module.exports = (app) => {
 
 	router.put("/:id", async (req, res) => {
 		const id = req.params.id;
-		const sql = `UPDATE informations SET avatar=?,profile=?,qq=?,wechat=?,github=?,csdn=?,desc=? WHERE id = ${id}`;
+		const sql = `UPDATE informations SET avatar=?,profile=?,qq=?,wechat=?,github=?,csdn=?,desc=? WHERE id = '${id}'`;
 		const { avatar, profile, qq, wechat, github, csdn, desc } = req.body;
 		await db.query(
 			sql,
@@ -34,7 +34,7 @@ module.exports = (app) => {
 			(err, data) => {
 				if (err) {
 					res.send({
-						message: "数据库查询错误",
+						message: err,
 					});
 				} else {
 					res.send({ success: true, data: data });

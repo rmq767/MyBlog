@@ -14,7 +14,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -29,7 +29,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -39,12 +39,12 @@ module.exports = (app) => {
 
 	router.get("/pv", async (req, res) => {
 		const sql = `
-        select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) DESC LIMIT 10
+        select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) ASC LIMIT 10
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });

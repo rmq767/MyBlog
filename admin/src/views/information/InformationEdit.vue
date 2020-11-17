@@ -64,9 +64,10 @@ export default {
             //     type: "success",
             //     message: "保存成功"
             //   });
+            const params = Object.assign({}, this.info);
             const res = await api.information.editInformation(
                 this.info.id,
-                this.info
+                params
             );
             if (res.data.success) {
                 this.$message({

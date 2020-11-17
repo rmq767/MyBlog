@@ -14,7 +14,7 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				return res.send({ success: true, data: data });
@@ -78,14 +78,14 @@ module.exports = (app) => {
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
-					message: "数据库查询错误",
+					message: err,
 				});
 			} else {
 				for (let m in data[0]) {
 					let arr = [];
 					for (let n in data[1]) {
 						if (data[0][m].id === data[1][n].comment_id) {
-							arr.unshift(data[1][n]);
+							arr.push(data[1][n]);
 						}
 					}
 					data[0][m].reply = arr;

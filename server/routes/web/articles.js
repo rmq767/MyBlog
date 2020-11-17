@@ -100,7 +100,7 @@ module.exports = (app) => {
 						for (let y in data[3]) {
 							if (
 								data[1][m].id === data[2][n].article_id &&
-								data[0][m].id != data[3][y].article_id
+								data[1][m].id != data[3][y].article_id
 							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count;

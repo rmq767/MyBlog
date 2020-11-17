@@ -3,14 +3,14 @@
         <h3>链接列表</h3>
         <div class="header-form">
             <el-form :model="form" ref="linkForm" label-width="120px" inline style="width:100%">
-                <el-form-item label="分类选择：">
+                <el-form-item label="分类选择：" prop='type'>
                     <el-select v-model="form.type" placeholder="请选择链接分类">
                         <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="题目：">
-                    <el-input v-model="form.search"></el-input>
+                <el-form-item label="名称：" prop='title'>
+                    <el-input v-model="form.title"></el-input>
                 </el-form-item>
                 <el-form-item label=" ">
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
@@ -64,18 +64,18 @@ export default {
                 count: 0,
             },
             form: {
-                search: "",
+                title: "",
                 type: "",
             },
             typeOptions: ["初级", "中级", "高级", "进阶", "其他"],
         };
     },
     methods: {
-        async fetch() {
-            const res = await api.link.getLinkList();
-            this.pageInfo.count = res.data.data.length;
-            this.links = res.data.data.slice(0, this.pageInfo.pageSize);
-        },
+        // async fetch() {
+        //     const res = await api.link.getLinkList();
+        //     this.pageInfo.count = res.data.data.length;
+        //     this.links = res.data.data.slice(0, this.pageInfo.pageSize);
+        // },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
                 confirmButtonText: "确定",
@@ -99,35 +99,41 @@ export default {
         },
         async handleSizeChange(val) {
             this.pageInfo.pageSize = val;
-            this.pagination();
+            this.search();
         },
         async handleCurrentChange(val) {
             this.pageInfo.currentPage = val;
-            this.pagination();
+            this.search();
         },
-        /**
-         * @description 分页
-         */
-        async pagination() {
-            const res = await api.link.pagination(
-                this.pageInfo.pageSize,
-                this.pageInfo.currentPage
-            );
-            this.links = res.data.data;
-        },
+        // /**
+        //  * @description 分页
+        //  */
+        // async pagination() {
+        //     const res = await api.link.pagination(
+        //         this.pageInfo.pageSize,
+        //         this.pageInfo.currentPage
+        //     );
+        //     this.links = res.data.data;
+        // },
         async search() {
             const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.link.searchLink(params);
+            const res = await api.link.pagination(params);
             this.links = res.data.data;
-            // this.pageInfo.count = res.data.data.length;
-            // this.pageInfo.pageSize = res.data.data.length;
+            this.pageInfo.count = res.data.total[0].total;
+        },
+        /**
+         * @description 获取options
+         */
+        async getLinkTypeOptions() {
+            const res = await api.link.getLinkTypeOptions();
+            this.typeOptions = res.data.data.map((v) => v.type);
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
     },
     created() {
-        this.fetch();
+        this.search();
     },
 };
 </script>

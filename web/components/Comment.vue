@@ -166,10 +166,7 @@ export default {
                 `/comments/get?article_id=${this.a_id}&limit=${this.limit}`
             );
             this.limit += 10;
-            // const c_count = await this.$axios.get(
-            //     `/comments?article_id=${this.a_id}`
-            // );
-            // this.count = c_count.data.length;
+            this.count = res.data.total[0].total;
 
             this.listData = res.data.data;
         },

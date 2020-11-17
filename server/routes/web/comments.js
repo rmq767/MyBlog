@@ -71,8 +71,8 @@ module.exports = (app) => {
 			count += limit;
 		}
 		const sql = `
-        SELECT * FROM comments WHERE is_delete = 0 AND article_id =${article_id} ORDER BY id DESC LIMIT ${count};
-        SELECT * FROM commentreply WHERE article_id =${article_id};
+        SELECT * FROM comments WHERE is_delete = 0 AND article_id=${article_id} ORDER BY id DESC LIMIT ${count};
+        SELECT * FROM commentreply WHERE article_id=${article_id} and  is_delete = 0;
         SELECT COUNT(*) AS total FROM comments WHERE article_id=${article_id};
         `;
 		await db.query(sql, (err, data) => {
@@ -81,14 +81,14 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				let arr;
+				let arr = [];
 				for (let m in data[0]) {
 					for (let n in data[1]) {
 						if (data[0][m].id === data[1][n].comment_id) {
 							arr.unshift(data[1][n]);
-							data[0][m].reply = arr;
 						}
 					}
+					data[0][m].reply = arr;
 				}
 				return res.send({
 					success: true,

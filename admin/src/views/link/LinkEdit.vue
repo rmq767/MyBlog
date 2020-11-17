@@ -9,7 +9,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item label="分类">
-                <el-select v-model="link.type" placeholder="请选择">
+                <el-select v-model="link.type" allow-create filterable default-first-option placeholder="请选择">
                     <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
                     </el-option>
                 </el-select>

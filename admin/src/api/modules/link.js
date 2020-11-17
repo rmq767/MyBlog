@@ -16,15 +16,17 @@ export default {
 	/**
 	 * @description 学习链接分页
 	 */
-	pagination(size, page) {
-		return http.get(`/links/get/page?pageSize=${size}&currentPage=${page}`);
+	pagination(params) {
+		return http.get(
+			`/links/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&title=${params.title}&type=${params.type}`
+		);
 	},
-	/**
-	 * @description 学习链接搜索
-	 */
-	searchLink(params) {
-		return http.post("/links/get/search", params);
-	},
+	// /**
+	//  * @description 学习链接搜索
+	//  */
+	// searchLink(params) {
+	// 	return http.post("/links/get/search", params);
+	// },
 	/**
 	 * @description 添加学习链接
 	 */
@@ -42,5 +44,11 @@ export default {
 	 */
 	linkInfo(id) {
 		return http.get(`/links/${id}`);
+	},
+	/**
+	 * @description 获取学习链接分类选项
+	 */
+	getLinkTypeOptions() {
+		return http.get("/links/get/type");
 	},
 };

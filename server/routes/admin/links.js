@@ -18,6 +18,19 @@ module.exports = (app) => {
 		});
 	});
 
+	router.get("/get/type", async (req, res) => {
+		const sql = `SELECT DISTINCT(type) FROM links WHERE is_delete=0;`;
+		await db.query(sql, (err, data) => {
+			if (err) {
+				res.send({
+					message: "数据库查询错误",
+				});
+			} else {
+				res.send({ success: true, data: data });
+			}
+		});
+	});
+
 	router.get("/:id", async (req, res) => {
 		const sql = `select * from links where id='${req.params.id}'`;
 		await db.query(sql, (err, data) => {
@@ -114,13 +127,12 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const { pageSize, currentPage } = req.query;
-
+		const { pageSize, currentPage, title, type } = req.query;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
 		const sql = `
-        SELECT * FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-        SELECT COUNT(*) AS total FROM themes WHERE theme LIKE '%${theme}%' AND is_delete = 0;
+        SELECT * FROM links WHERE title LIKE '%${title}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM links WHERE title LIKE '%${title}%' AND type LIKE '%${type}%' AND is_delete = 0;
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -128,7 +140,7 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				res.send({ success: true, data: data });
+				res.send({ success: true, data: data[0], total: data[1] });
 			}
 		});
 	});

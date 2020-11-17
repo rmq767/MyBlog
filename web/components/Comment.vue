@@ -15,7 +15,7 @@
                     <template>
                         <v-list-item link>
                             <v-list-item-avatar>
-                                <v-img src="/user.jpg"></v-img>
+                                <v-img src="/user.png"></v-img>
                             </v-list-item-avatar>
 
                             <v-list-item-content>
@@ -31,19 +31,19 @@
                                         comment_id = item.id;
                                         r_name = item.name;
                                     " class="reply">回复</span>
-                                <div class="reply mt-4 overline" @click="fetchReply(item.id)">
+                                <!-- <div class="reply mt-4 overline" @click="fetchReply(item.id)">
                                     <v-icon size="medium">mdi-message-processing</v-icon>
                                     <span>{{
                                         item.reply_count ? item.reply_count : 0
                                     }}</span>
-                                </div>
+                                </div> -->
                             </div>
                         </v-list-item>
                         <div class="px-8" v-if="show_reply == item.id">
                             <template v-for="comment in commentReply">
                                 <v-list-item :key="comment.r_id" dense link>
                                     <v-list-item-avatar>
-                                        <v-img src="/user.jpg"></v-img>
+                                        <v-img src="/user.png"></v-img>
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>

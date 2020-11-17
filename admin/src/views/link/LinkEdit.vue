@@ -42,7 +42,7 @@ export default {
                 image: "",
                 type: "其他",
             },
-            typeOptions: ["初级", "中级", "高级", "进阶", "其他"],
+            typeOptions: [],
         };
     },
     methods: {
@@ -66,9 +66,17 @@ export default {
             this.link = res.data.data;
             this.link = Object.assign({}, this.link, res.data.data); //把 this.link{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
+        /**
+         * @description 获取分类的选项
+         */
+        async getOptions() {
+            const res = await api.link.getLinkTypeOptions();
+            this.typeOptions = res.data.data.map((v) => v.type);
+        },
     },
     created() {
         this.id && this.fetch();
+        this.getOptions();
     },
 };
 </script>

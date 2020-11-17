@@ -11,7 +11,7 @@ module.exports = (app) => {
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const sql = `
         select sum(count) as pv from datas;
-        insert into datas (count,date) VALUES (${count},${date})
+        insert into datas (count,date) VALUES (${count},'${date}')
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -23,21 +23,6 @@ module.exports = (app) => {
 			}
 		});
 	});
-
-	// router.get("/addpv", async (req, res) => {
-	// 	const count = 1;
-	// 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
-	// 	const sql = "insert into datas (count,date) VALUES (?,?)";
-	// 	await db.query(sql, [`${count}`, `${date}`], (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			return res.send({success:true,data:data});
-	// 		}
-	// 	});
-	// });
 
 	app.use("/web/api/statistics", router);
 };

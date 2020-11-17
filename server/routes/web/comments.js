@@ -81,8 +81,8 @@ module.exports = (app) => {
 					message: "数据库查询错误",
 				});
 			} else {
-				let arr = [];
 				for (let m in data[0]) {
+					let arr = [];
 					for (let n in data[1]) {
 						if (data[0][m].id === data[1][n].comment_id) {
 							arr.unshift(data[1][n]);

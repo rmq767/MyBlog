@@ -20,6 +20,9 @@
             <el-form-item label="github">
                 <el-input v-model="info.github"></el-input>
             </el-form-item>
+            <el-form-item label="CSDN">
+                <el-input v-model="info.csdn"></el-input>
+            </el-form-item>
             <!-- <el-form-item label="个人描述">
                 <el-input v-model="info.desc" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item> -->
@@ -61,12 +64,21 @@ export default {
             //     type: "success",
             //     message: "保存成功"
             //   });
-            await api.information.editInformation(this.info);
+            const res = await api.information.editInformation(
+                this.info.id,
+                this.info
+            );
+            if (res.data.success) {
+                this.$message({
+                    type: "success",
+                    message: "保存成功",
+                });
+            }
         },
         async fetch() {
             const res = await api.information.getInformation();
             this.info = res.data.data[0];
-            this.info = Object.assign({}, this.info, res.data.data); //把 this.information{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
+            // this.info = Object.assign({}, this.info, res.data.data); //把 this.information{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },
     },
     created() {

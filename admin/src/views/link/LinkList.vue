@@ -67,7 +67,7 @@ export default {
                 title: "",
                 type: "",
             },
-            typeOptions: ["初级", "中级", "高级", "进阶", "其他"],
+            typeOptions: [],
         };
     },
     methods: {
@@ -134,6 +134,7 @@ export default {
     },
     created() {
         this.search();
+        this.getLinkTypeOptions();
     },
 };
 </script>

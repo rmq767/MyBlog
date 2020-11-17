@@ -27,11 +27,12 @@
                 <v-row>
                     <v-col v-for="link in item.links" :key="link.name" cols="12" sm="6" md="4" lg='3' xl='2'>
                         <v-hover v-slot="{ hover }">
-                            <v-card outlined shaped :class="{ 'on-hover': hover }" :elevation="hover ? 12 : 2">
-                                <v-img :src="link.img" :aspect-ratio="1/1" height='200'></v-img>
-                                <v-card-title>{{link.name}}</v-card-title>
+                            <v-card outlined shaped :class="{ 'on-hover': hover }" :elevation="hover ? 12 : 2" class="card-diy">
+                                <v-img :src=" link.image" :aspect-ratio="1/1" height='200'>
+                                </v-img>
+                                <v-card-title>{{link.title}}</v-card-title>
                                 <v-card-text>
-                                    <p>{{link.desc}}</p>
+                                    <p>{{link.description}}</p>
                                 </v-card-text>
                                 <v-card-actions class="white justify-center">
                                     <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" class="white--text" fab icon small :href='link.link'>
@@ -48,6 +49,7 @@
 </template>
 
 <script>
+import link from "../../../admin/src/api/modules/link";
 export default {
     data() {
         return {
@@ -60,137 +62,46 @@ export default {
                     color: "indigo",
                 },
             ],
-            linkList: [
-                {
-                    type: "初级",
-                    links: [
-                        {
-                            name: "HTML",
-                            link: "https://baidu.com/",
-                            desc: "haha",
-                            img: "/html.png",
-                        },
-                        {
-                            name: "CSS",
-                            link: "123",
-                            desc: "haha",
-                            img: "/css.png",
-                        },
-                        {
-                            name: "JavaScipt",
-                            link: "https://baidu.com/",
-                            desc: "haha",
-                            img: "/js.png",
-                        },
-                        {
-                            name: "jQuery",
-                            link: "123",
-                            desc: "haha",
-                            img: "/jQuery.png",
-                        },
-                    ],
-                },
-                {
-                    type: "中级",
-                    links: [
-                        {
-                            name: "ES6",
-                            link: "123",
-                            desc: "haha",
-                            img: "/es6.png",
-                        },
-                        {
-                            name: "Bootstrap",
-                            link: "123",
-                            desc: "haha",
-                            img: "/bootstrap.png",
-                        },
-                        {
-                            name: "Vue",
-                            link: "123",
-                            desc: "haha",
-                            img: "/Vue.png",
-                        },
-                        {
-                            name: "React",
-                            link: "123",
-                            desc: "haha",
-                            img: "/react.png",
-                        },
-                    ],
-                },
-                {
-                    type: "高级",
-                    links: [
-                        {
-                            name: "Node",
-                            link: "123",
-                            desc: "haha",
-                            img: "/Nodejs.png",
-                        },
-                        {
-                            name: "Git",
-                            link: "123",
-                            desc: "haha",
-                            img: "/GIT.png",
-                        },
-                        {
-                            name: "MongoDB",
-                            link: "123",
-                            desc: "haha",
-                            img: "/mongo.png",
-                        },
-                        {
-                            name: "Webpack",
-                            link: "123",
-                            desc: "haha",
-                            img: "/Webpack.png",
-                        },
-                    ],
-                },
-                {
-                    type: "其他",
-                    links: [
-                        {
-                            name: "Flutter",
-                            link: "123",
-                            desc: "haha",
-                            img: "/flutter.png",
-                        },
-                        {
-                            name: "Sass",
-                            link: "123",
-                            desc: "haha",
-                            img: "/sass.png",
-                        },
-                        {
-                            name: "Less",
-                            link: "123",
-                            desc: "haha",
-                            img: "/less.png",
-                        },
-                        {
-                            name: "TypeScript",
-                            link: "123",
-                            desc: "haha",
-                            img: "/typescript.png",
-                        },
-                    ],
-                },
-            ],
+            linkList: [],
         };
     },
     methods: {
-        getImage() {
-            const min = 550;
-            const max = 560;
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+        async getLinks() {
+            const res = await this.$axios.get("/links");
+            let typeArr = [];
+            let data = [];
+            res.data.data.forEach((item) => {
+                typeArr.unshift(item.type);
+            });
+            typeArr = [...new Set(typeArr)];
+            typeArr.forEach((item, index) => {
+                let arr = [];
+                res.data.data.forEach((item1) => {
+                    if (item === item1.type) {
+                        arr.unshift(item1);
+                    }
+                });
+                data[index] = {
+                    type: item,
+                    links: arr,
+                };
+            });
+            this.linkList = data;
         },
+    },
+    mounted() {
+        this.getLinks();
     },
 };
 </script>
 
 <style lang='less' scoped>
+.card-diy {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
 .link-container {
     padding: 0rem 3rem;
     background: linear-gradient(#ccfbff, #ef96c5);

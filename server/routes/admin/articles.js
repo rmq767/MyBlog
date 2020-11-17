@@ -134,12 +134,12 @@ module.exports = (app) => {
 		const end = Number(pageSize);
 		if (startTime && endTime) {
 			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT * FROM articles WHERE title LIKE '%${title}%' OR content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
             SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
             `;
 		} else {
 			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT * FROM articles WHERE title LIKE '%${title}%' OR content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
             SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
             `;
 		}

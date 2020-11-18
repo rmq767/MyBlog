@@ -5,11 +5,11 @@
             <div class="header-form">
                 <el-form :model="themeForm" ref="theme" label-width="80px" inline style="width:100%">
                     <el-form-item label="文章主题" prop="theme">
-                        <el-input v-model="theme" placeholder="输入文章主题"></el-input>
+                        <el-input v-model="themeForm.theme" placeholder="输入文章主题"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-                        <el-button @click="resetForm('theme')">重置</el-button>
+                        <el-button type="primary" @click="searchTheme" class="el-icon-search">搜索</el-button>
+                        <el-button @click="resetForm1('theme')">重置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -21,8 +21,8 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" align="center" width="200">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="edit">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="remove(scope.row)">删除</el-button>
+                        <!-- <el-button size="mini" @click="themeEdit = true">编辑</el-button> -->
+                        <el-button size="mini" type="danger" @click="remove(scope.row,'theme')">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -33,11 +33,11 @@
             <div class="header-form">
                 <el-form :model="typeForm" ref="type" label-width="80px" inline style="width:100%">
                     <el-form-item label="文章分类" prop="type">
-                        <el-input v-model="type" placeholder="输入文章分类"></el-input>
+                        <el-input v-model="typeForm.type" placeholder="输入文章分类"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
-                        <el-button @click="resetForm('type')">重置</el-button>
+                        <el-button type="primary" @click="searchType" class="el-icon-search">搜索</el-button>
+                        <el-button @click="resetForm2('type')">重置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -49,8 +49,8 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" align="center" width="200">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="edit">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="remove(scope.row)">删除</el-button>
+                        <!-- <el-button size="mini" @click="editType">编辑</el-button> -->
+                        <el-button size="mini" type="danger" @click="remove(scope.row,'type')">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -65,8 +65,12 @@ import api from "../../api/index";
 export default {
     data() {
         return {
-            themeForm: {},
-            typeForm: {},
+            themeForm: {
+                theme: "",
+            },
+            typeForm: {
+                type: "",
+            },
             themeData: [],
             typeData: [],
             themePageInfo: {
@@ -85,28 +89,39 @@ export default {
     },
     methods: {
         async searchTheme() {
-            const params = Object({}, this.themeForm, this.themePageInfo);
+            const params = Object.assign(
+                {},
+                this.themeForm,
+                this.themePageInfo
+            );
             const res = await api.theme.pagination(params);
             this.themeData = res.data.data;
+            this.themePageInfo.count = res.data.total[0].total;
         },
         async searchType() {
-            const params = Object({}, this.themeForm, this.typePageInfo);
+            const params = Object.assign({}, this.typeForm, this.typePageInfo);
             const res = await api.type.pagination(params);
             this.typeData = res.data.data;
+            this.typePageInfo.count = res.data.total[0].total;
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        /**
+         * @description 删除
+         */
+        async remove(row, type) {
+            if (type === "theme") {
+                const res = await api.theme.deleteTheme(row.id);
+                if (res.data.success) {
+                    this.searchTheme();
+                    this.$message.success("删除成功");
+                }
+            } else {
+                const res = await api.type.deleteType(row.id);
+                if (res.data.success) {
+                    this.searchType();
+                    this.$message.success("删除成功");
+                }
+            }
         },
-        // // 获取文章主题
-        // async getTheme() {
-        //     const res = await api.theme.getThemeList();
-        //     this.themeOptions = res.data.data;
-        // },
-        // // 获取文章类型
-        // async getType() {
-        //     const res = await api.type.getTypeList();
-        //     this.typeOptions = res.data.data;
-        // },
         handleSizeChange1(val) {
             this.themePageInfo.pageSize = val;
             this.searchTheme();
@@ -122,6 +137,12 @@ export default {
         handleCurrentChange2(val) {
             this.typePageInfo.currentPage = val;
             this.searchType();
+        },
+        resetForm1(formName) {
+            this.$refs[formName].resetFields();
+        },
+        resetForm2(formName) {
+            this.$refs[formName].resetFields();
         },
     },
     mounted() {

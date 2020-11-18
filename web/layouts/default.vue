@@ -101,8 +101,7 @@ export default {
     },
     methods: {
         async count() {
-            const res = await this.$axios.get("/statistics");
-            console.log(res);
+            await this.$axios.get("/statistics");
         },
     },
     mounted() {

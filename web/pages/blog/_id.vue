@@ -134,10 +134,14 @@ export default {
     right: 2%;
     cursor: pointer;
 }
-.blog .content img {
-    /* overflow: hidden; */
-    height: auto;
-    max-width: 90%;
+.blog .content .text-justify {
+    width: 100%;
+    /deep/img {
+        /* overflow: hidden; */
+        height: auto;
+        max-width: 100%;
+        object-fit: contain;
+    }
 }
 .blog .content {
     overflow: hidden;

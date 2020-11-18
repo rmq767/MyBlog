@@ -2,7 +2,7 @@
     <div class="about">
         <div class="my-info">
             <div class="avatar-pc">
-                <img src="https://picsum.photos/200/200?random" alt="">
+                <img :src="info.avatar" alt="">
             </div>
             <div class="info-item-social-contact">
                 <p class="shine profile" v-if="info.my_profile">个人介绍：{{info.my_profile}}</p>
@@ -73,7 +73,6 @@ export default {
                 height: 5rem;
                 width: 5rem;
                 border-radius: 50%;
-                margin-right: 2rem;
             }
         }
     }

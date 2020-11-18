@@ -175,16 +175,16 @@ export default {
         Comment,
     },
     watch: {
-        $route(to, from) {
+        async $route(to, from) {
             document.documentElement.scrollTop = 0;
-            this.getArticle();
+            await this.getArticle();
             this.getNextPre();
             this.getSameThemeArticles();
             this.getSameTypeArticles();
         },
     },
-    mounted() {
-        this.getArticle();
+    async mounted() {
+        await this.getArticle();
         this.getNextPre();
         this.getSameThemeArticles();
         this.getSameTypeArticles();

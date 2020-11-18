@@ -18,7 +18,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-table style="width: 100%" :data="links">
+        <el-table style="width: 100%" :data="links" v-loading='loading'>
             <el-table-column label="分类" :show-overflow-tooltip="true" align="center" width="150">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{scope.row.type}}</span>
@@ -68,6 +68,7 @@ export default {
                 type: "",
             },
             typeOptions: [],
+            loading: false,
         };
     },
     methods: {
@@ -116,10 +117,12 @@ export default {
         //     this.links = res.data.data;
         // },
         async search() {
+            this.loading = true;
             const params = Object.assign({}, this.form, this.pageInfo);
             const res = await api.link.pagination(params);
             this.links = res.data.data;
             this.pageInfo.count = res.data.total[0].total;
+            this.loading = false;
         },
         /**
          * @description 获取options

@@ -13,7 +13,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <el-table style="width: 100%" :data="themeData">
+            <el-table style="width: 100%" :data="themeData" v-loading='loadingTheme'>
                 <el-table-column label="主题" :show-overflow-tooltip="true" align="center">
                     <template slot-scope="scope">
                         <span style="margin-left: 10px">{{ scope.row.theme }}</span>
@@ -41,7 +41,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <el-table style="width: 100%" :data="typeData">
+            <el-table style="width: 100%" :data="typeData" v-loading='loadingType'>
                 <el-table-column label="分类" :show-overflow-tooltip="true" align="center">
                     <template slot-scope="scope">
                         <span style="margin-left: 10px">{{ scope.row.type }}</span>
@@ -85,10 +85,13 @@ export default {
                 pageSize: 10,
                 count: 0,
             },
+            loadingTheme: false,
+            loadingType: false,
         };
     },
     methods: {
         async searchTheme() {
+            this.loadingTheme = true;
             const params = Object.assign(
                 {},
                 this.themeForm,
@@ -97,12 +100,15 @@ export default {
             const res = await api.theme.pagination(params);
             this.themeData = res.data.data;
             this.themePageInfo.count = res.data.total[0].total;
+            this.loadingTheme = false;
         },
         async searchType() {
+            this.loadingType = true;
             const params = Object.assign({}, this.typeForm, this.typePageInfo);
             const res = await api.type.pagination(params);
             this.typeData = res.data.data;
             this.typePageInfo.count = res.data.total[0].total;
+            this.loadingType = false;
         },
         /**
          * @description 删除

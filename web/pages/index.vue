@@ -86,13 +86,13 @@
                             <v-card style="padding: 10px 20px; marginTop: 20px" outlined>
                                 <div class="my-4 subtitle-1">文章主题</div>
                                 <div class="theme-type">
-                                    <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme)">
+                                    <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme,index)" :class="{'theme-active':index===themeActive}">
                                         <span>{{item.theme||'全部'}}</span>
                                     </div>
                                 </div>
                                 <div class="my-4 subtitle-1">文章分类</div>
                                 <div class="theme-type">
-                                    <div class="type-item" v-for="(item,index) in types" :key="index" @click="chooseType(item.type)">
+                                    <div class="type-item" v-for="(item,index) in types" :key="index" @click="chooseType(item.type,index)" :class="{'type-active':index===typeActive}">
                                         <span>{{item.type||'全部'}}</span>
                                     </div>
                                 </div>
@@ -143,6 +143,8 @@ export default {
                 theme: "",
                 type: "",
             },
+            themeActive: 0,
+            typeActive: 0,
         };
     },
     computed: {
@@ -196,15 +198,17 @@ export default {
         /**
          * @description 搜索同主题文章
          */
-        async chooseTheme(theme) {
+        async chooseTheme(theme, index) {
             this.search.theme = theme;
+            this.themeActive = index;
             this.getSearch();
         },
         /**
          * @description 搜索同分类文章
          */
-        async chooseType(type) {
+        async chooseType(type, index) {
             this.search.type = type;
+            this.typeActive = index;
             this.getSearch();
         },
         /**
@@ -266,10 +270,6 @@ export default {
         color: #ffffff;
         cursor: pointer;
         margin: 5px 5px;
-        &:first-of-type {
-            color: #7c4dff;
-            background: #ffffff;
-        }
         &:hover {
             color: #7c4dff;
             background: #ffffff;
@@ -277,6 +277,14 @@ export default {
         > span {
             font-size: 12px;
         }
+    }
+    .theme-active {
+        color: #7c4dff !important;
+        background: #ffffff !important;
+    }
+    .type-active {
+        color: rgb(76, 175, 80) !important;
+        background: #ffffff !important;
     }
     .type-item {
         padding: 0px 5px;
@@ -286,16 +294,16 @@ export default {
         color: #ffffff;
         cursor: pointer;
         margin: 5px 5px;
-        &:first-of-type {
-            color: rgb(76, 175, 80);
-            background: #ffffff;
-        }
         &:hover {
             color: rgb(76, 175, 80);
             background: #ffffff;
         }
         > span {
             font-size: 12px;
+        }
+        .active {
+            color: #7c4dff;
+            background: #ffffff;
         }
     }
 }

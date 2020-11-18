@@ -147,7 +147,7 @@ export default {
             sheet: false,
             // commentReply: [],
             comment_id: "",
-            a_id: this.$route.params.id,
+            a_id: this.$route.query.id,
             // show_reply: 0,
             r_name: "",
             count: "",
@@ -228,7 +228,7 @@ export default {
     },
     watch: {
         $route(to, from) {
-            this.a_id = to.params.id;
+            this.a_id = to.query.id;
             this.fetch();
         },
     },

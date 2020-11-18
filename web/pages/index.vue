@@ -27,7 +27,7 @@
                 <v-col class="col-xs-12 col-md-6 offset-md-1">
                     <v-row dense>
                         <v-col v-for="(item, i) in articlesData" :key="i" cols="12">
-                            <v-card hover link :to="`/blog/${item.id}`" class="my-6 pa-6 card-item">
+                            <v-card hover link :to="{path:'/blog',query:{id:item.id}}" class="my-6 pa-6 card-item">
                                 <div class="theme">
                                     <v-chip class="mb-2" color="#7c4dff" label text-color="white" small>
                                         <v-icon left> mdi-label </v-icon>
@@ -191,8 +191,12 @@ export default {
          * @description 跳转文章详情
          */
         toArticleInfo(id) {
+            console.log(id);
             this.$router.push({
-                path: `/blog/${id}`,
+                path: "/blog",
+                query: {
+                    id: id,
+                },
             });
         },
         /**

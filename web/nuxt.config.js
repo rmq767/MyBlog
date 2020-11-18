@@ -106,13 +106,16 @@ module.exports = {
      */
     extend(config, ctx) {}
   },
-  generate: {
-    routes() {
-      return axios.get(process.env.ARTICLE_ID).then(res => {
-        return res.data.data.map(blog => {
-          return "/blog/" + blog.id;
-        });
-      });
-    }
+  //   generate: {
+  //     routes() {
+  //       return axios.get(process.env.ARTICLE_ID).then(res => {
+  //         return res.data.data.map(blog => {
+  //           return "/blog/" + blog.id;
+  //         });
+  //       });
+  //     }
+  //   }
+  router: {
+    mode: "hash"
   }
 };

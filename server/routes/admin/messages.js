@@ -142,8 +142,8 @@ module.exports = (app) => {
 		const end = Number(pageSize);
 		if (startTime && endTime) {
 			sql = `
-            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
+            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
             `;
 		} else {
 			sql = `

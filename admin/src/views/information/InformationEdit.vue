@@ -9,7 +9,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item label="个人简介">
-                <el-input v-model="info.profile"></el-input>
+                <el-input v-model="info.my_profile"></el-input>
             </el-form-item>
             <el-form-item label="QQ">
                 <el-input v-model="info.qq"></el-input>
@@ -27,7 +27,7 @@
                 <el-input v-model="info.desc" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item> -->
             <el-form-item label="寄语">
-                <el-input v-model="info.desc" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
+                <el-input v-model="info.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit">保存</el-button>

@@ -22,13 +22,27 @@ export default {
 	/**
 	 * @description 分类分页
 	 */
-	pagination(size, page) {
-		return http.get(`/types/get/page?pageSize=${size}&currentPage=${page}`);
+	pagination(params) {
+		return http.get(
+			`/types/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&type=${params.type}`
+		);
 	},
 	/**
-	 * @description 分类搜索
+	 * @description 修改分类
 	 */
-	searchType(params) {
-		return http.post("/types/get/search", params);
+	editType(id, params) {
+		return http.put(`/types/${id}`, params);
 	},
+	/**
+	 * @description 分类详情
+	 */
+	typeInfo(id) {
+		return http.get(`/types/${id}`);
+	},
+	// /**
+	//  * @description 分类搜索
+	//  */
+	// searchType(params) {
+	// 	return http.post("/types/get/search", params);
+	// },
 };

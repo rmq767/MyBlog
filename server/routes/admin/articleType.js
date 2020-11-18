@@ -57,6 +57,8 @@ module.exports = (app) => {
 					}
 				});
 			});
+		} else {
+			return res.send({ message: "已有分类" });
 		}
 	});
 

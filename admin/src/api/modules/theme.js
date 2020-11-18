@@ -22,15 +22,27 @@ export default {
 	/**
 	 * @description 主题分页
 	 */
-	pagination(size, page) {
+	pagination(params) {
 		return http.get(
-			`/themes/get/page?pageSize=${size}&currentPage=${page}`
+			`/themes/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&theme=${params.theme}`
 		);
 	},
 	/**
-	 * @description 主题搜索
+	 * @description 修改主题
 	 */
-	searchTheme(params) {
-		return http.post("/themes/get/search", params);
+	editTheme(id, params) {
+		return http.put(`/themes/${id}`, params);
 	},
+	/**
+	 * @description 主题详情
+	 */
+	themeInfo(id) {
+		return http.get(`/themes/${id}`);
+	},
+	// /**
+	//  * @description 主题搜索
+	//  */
+	// searchTheme(params) {
+	// 	return http.post("/themes/get/search", params);
+	// },
 };

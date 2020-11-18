@@ -111,8 +111,8 @@ module.exports = (app) => {
 		const end = Number(pageSize);
 		if (startTime && endTime) {
 			sql = `
-            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND date>='${startTime}' AND date<='${endTime}' AND is_delete = 0;
+            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
             `;
 		} else {
 			sql = `

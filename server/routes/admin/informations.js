@@ -19,17 +19,25 @@ module.exports = (app) => {
 	router.put("/:id", async (req, res) => {
 		const id = req.params.id;
 		const sql = `UPDATE informations SET avatar=?,my_profile=?,qq=?,wechat=?,github=?,csdn=?,description=? WHERE id = '${id}'`;
-		const { avatar, profile, qq, wechat, github, csdn, desc } = req.body;
+		const {
+			avatar,
+			my_profile,
+			qq,
+			wechat,
+			github,
+			csdn,
+			description,
+		} = req.body;
 		await db.query(
 			sql,
 			[
 				`${avatar}`,
-				`${profile}`,
+				`${my_profile}`,
 				`${qq}`,
 				`${wechat}`,
 				`${github}`,
 				`${csdn}`,
-				`${desc}`,
+				`${description}`,
 			],
 			(err, data) => {
 				if (err) {

@@ -3,16 +3,16 @@
         <div class="my-info">
             <div class="avatar-pc">
                 <img src="https://picsum.photos/200/200?random" alt="">
-                <p class="shine">{{info.profile}}</p>
             </div>
             <div class="info-item-social-contact">
+                <p class="shine profile" v-if="info.my_profile">个人介绍：{{info.my_profile}}</p>
                 <p class="shine" v-if="info.qq">QQ:{{info.qq}}</p>
                 <p class="shine" v-if="info.wechat">WeChat:{{info.wechat}}</p>
                 <p class="shine" v-if="info.github">GitHub:{{info.github}}</p>
                 <p class="shine" v-if="info.csdn">CSDN:{{info.csdn}}</p>
             </div>
             <div class="info-item-description">
-                <p class="shine">{{info.desc}}</p>
+                <p class="shine desc">{{info.description}}</p>
             </div>
         </div>
         <mouseMove></mouseMove>
@@ -52,24 +52,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    .avatar {
-        height: 5rem;
-        width: 5rem;
-        position: absolute;
-        left: 0%;
-        top: 5%;
-        transition-timing-function: linear;
-        cursor: pointer;
-        > img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-    }
     .my-info {
-        display: flex;
-        flex-direction: column;
+        text-align: center;
+        // display: flex;
+        // flex-direction: column;
         background: rgba(0, 0, 0, 0.4);
         padding: 2rem;
         width: 50%;
@@ -82,8 +68,7 @@ export default {
         }
         .avatar-pc {
             display: flex;
-            justify-content: flex-start;
-            align-items: flex-end;
+            justify-content: center;
             > img {
                 height: 5rem;
                 width: 5rem;
@@ -91,21 +76,22 @@ export default {
                 margin-right: 2rem;
             }
         }
-        p {
-            word-break: break-all;
-        }
     }
 }
+.info-item-description > .desc {
+    font-size: 18px !important;
+}
 .about .shine {
+    font-size: 14px;
     background: white;
     cursor: pointer;
     background-image: -webkit-linear-gradient(
         left,
-        #a18cd1,
-        #fbc2eb 25%,
-        #a6c1ee 50%,
-        #a6c0fe 75%,
-        #d57eeb
+        #fffb00,
+        #91ff00 25%,
+        #00ff88 50%,
+        #00eeff 75%,
+        #f8df00
     );
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -124,9 +110,6 @@ export default {
     }
 }
 @media screen and (max-width: 960px) {
-    .avatar-block {
-        display: none !important;
-    }
     .about .my-info {
         width: 100%;
         height: 100%;

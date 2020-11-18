@@ -58,15 +58,23 @@ export default {
         // },
         async saveTheme() {
             const themeArr = this.theme;
-            await api.theme.addTheme({
+            const res = await api.theme.addTheme({
                 theme: themeArr,
             });
+            if (res.data.success) {
+                this.$message.success("添加主题成功");
+                this.theme = [];
+            }
         },
         async saveType() {
             const typeArr = this.type;
-            await api.type.addType({
+            const res = await api.type.addType({
                 type: typeArr,
             });
+            if (res.data.success) {
+                this.$message.success("添加分类成功");
+                this.type = [];
+            }
         },
         handleCloseTheme(tag) {
             this.theme.splice(this.theme.indexOf(tag), 1);

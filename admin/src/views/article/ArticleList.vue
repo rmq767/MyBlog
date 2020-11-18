@@ -11,13 +11,13 @@
                 </el-form-item>
                 <el-form-item label="文章主题" prop="theme">
                     <el-select v-model="form.theme" style="margin-left: 20px" placeholder="请选择主题">
-                        <el-option v-for="item in themeOptions" :key="item" :label="item" :value="item">
+                        <el-option v-for="(item,index) in themeOptions" :key="index" :label="item" :value="item">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文章分类" prop="type">
                     <el-select v-model="form.type" style="margin-left: 20px" placeholder="请选择分类">
-                        <el-option v-for="item in typeOptions" :key="item" :label="item" :value="item">
+                        <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -145,11 +145,11 @@ export default {
                     });
                 });
         },
-        async handleSizeChange(val) {
+        handleSizeChange(val) {
             this.pageInfo.pageSize = val;
             this.search();
         },
-        async handleCurrentChange(val) {
+        handleCurrentChange(val) {
             this.pageInfo.currentPage = val;
             this.search();
         },

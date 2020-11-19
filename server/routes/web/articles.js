@@ -49,9 +49,8 @@ module.exports = (app) => {
 	 * @description 获取同主题文章
 	 */
 	router.get("/get/sametheme", async (req, res) => {
-		const { theme } = req.query;
-		const sql = `select id,title from articles where theme='${theme}' and is_delete = 0 ORDER BY clicks desc limit 3;
-    `;
+		const { theme, id } = req.query;
+		const sql = `select id,title from articles where theme='${theme}' and id != '${id}' and is_delete = 0 ORDER BY clicks desc limit 3;`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -67,9 +66,9 @@ module.exports = (app) => {
 	 * @description 获取同分类文章
 	 */
 	router.get("/get/sametype", async (req, res) => {
-		const { type } = req.query;
+		const { type, id } = req.query;
 		const type1 = type.split(",")[0];
-		const sql = `select id,title from articles where type like '%${type1}%' and is_delete = 0 ORDER BY clicks desc limit 3;
+		const sql = `select id,title from articles where type like '%${type1}%' and id != '${id}' and is_delete = 0 ORDER BY clicks desc limit 3;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {

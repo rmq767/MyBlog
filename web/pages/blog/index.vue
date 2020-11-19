@@ -6,12 +6,16 @@
         <v-container>
             <div class="theme-type">
                 <v-card>
-                    <div class="my-4 subtitle-1">同主题文章</div>
-                    <div class="article-theme" v-for="(item,index) in sameThemeArticles" :key="index" @click="toArticleInfo(item.id)">
-                        {{item.title}}
+                    <div v-if="sameThemeArticles.length">
+                        <div class="my-4 subtitle-1">同主题文章</div>
+                        <div class="article-theme" v-for="(item,index) in sameThemeArticles" :key="index" @click="toArticleInfo(item.id)">
+                            {{item.title}}
+                        </div>
                     </div>
-                    <div class="my-4 subtitle-1">同分类文章</div>
-                    <div class="article-type" v-for="(item,index) in sameTypeArticles" :key="index+item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
+                    <div v-if="sameTypeArticles.length">
+                        <div class="my-4 subtitle-1">同分类文章</div>
+                        <div class="article-type" v-for="(item,index) in sameTypeArticles" :key="index+item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
+                    </div>
                 </v-card>
             </div>
             <div>
@@ -141,13 +145,13 @@ export default {
         },
         async getSameThemeArticles() {
             const sameThemeArticles = await this.$axios.get(
-                `/articles/get/sametheme?theme=${this.article.theme}`
+                `/articles/get/sametheme?theme=${this.article.theme}&id=${this.$route.query.id}`
             );
             this.sameThemeArticles = sameThemeArticles.data.data;
         },
         async getSameTypeArticles() {
             const sameTypeArticles = await this.$axios.get(
-                `/articles/get/sametype?type=${this.article.type}`
+                `/articles/get/sametype?type=${this.article.type}&id=${this.$route.query.id}`
             );
             this.sameTypeArticles = sameTypeArticles.data.data;
         },

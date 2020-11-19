@@ -32,7 +32,7 @@ module.exports = (app) => {
 		}
 		// 验证名称唯一
 		const namesql = "select name from messages where is_delete = 0";
-		await db.query(namesql, (err, data) => {
+		await db.query(namesql, async (err, data) => {
 			if (err) {
 				return res.send({
 					message: err,
@@ -41,32 +41,32 @@ module.exports = (app) => {
 				let sameName = data.some((item) => item.name === name);
 				if (sameName) {
 					return res.send({ message: "已有相同昵称" });
+				} else {
+					const sql =
+						"insert into messages (name,message,background,posTop,posLeft,date) VALUES (?,?,?,?,?,?)";
+					await db.query(
+						sql,
+						[
+							`${name}`,
+							`${message}`,
+							`${background}`,
+							`${top}`,
+							`${left}`,
+							`${date}`,
+						],
+						(err, data) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							} else {
+								return res.send({ success: true, data });
+							}
+						}
+					);
 				}
 			}
 		});
-
-		const sql =
-			"insert into messages (name,message,background,posTop,posLeft,date) VALUES (?,?,?,?,?,?)";
-		await db.query(
-			sql,
-			[
-				`${name}`,
-				`${message}`,
-				`${background}`,
-				`${top}`,
-				`${left}`,
-				`${date}`,
-			],
-			(err, data) => {
-				if (err) {
-					return res.send({
-						message: err,
-					});
-				} else {
-					return res.send({ success: true, data });
-				}
-			}
-		);
 	});
 
 	app.use("/web/api/messages", router);

@@ -20,7 +20,7 @@
             </div>
             <div>
                 <div class="display-1 text-center">{{ article.title }}</div>
-                <div class="mt-12 d-flex justify-space-between">
+                <div class="mt-12 d-flex justify-space-between" style="fontSize:14px">
                     <span>更新时间：<span>
                             {{  article.date.split(" ")[0] }}</span>
                     </span>
@@ -34,7 +34,14 @@
                             }}</span>
                     </span>
                 </div>
-                <v-divider class="mb-8"></v-divider>
+                <v-divider></v-divider>
+                <div class="mb-12 d-flex justify-space-between" style="fontSize:14px">
+                    <span>文章主题：<span style="color:#b388ff">
+                            {{  article.theme }}</span>
+                    </span>
+                    <span>文章分类：<span style="color:#4caf50"> {{ article.type }}</span>
+                    </span>
+                </div>
                 <div class="content">
                     <div class="text-justify" v-html="article.content_html" v-highlight></div>
                 </div>

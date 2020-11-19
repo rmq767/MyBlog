@@ -40,11 +40,11 @@
                                     </v-chip>
                                 </div>
                                 <div class="subtitle-2 text-center">
-                                    <v-icon class="mb-5 mx-4 quote">mdi-format-quote-open</v-icon>
+                                    <v-icon class=" quote">mdi-format-quote-open</v-icon>
                                     <span class="headline">{{
                                         item.title
                                     }}</span>
-                                    <v-icon class="mb-5 mx-4 quote">mdi-format-quote-close</v-icon>
+                                    <v-icon class=" quote">mdi-format-quote-close</v-icon>
                                 </div>
                                 <v-card-text class="text--primary">
                                     <p class="subtitle font-weight-light">
@@ -262,6 +262,7 @@ export default {
 }
 .quote {
     animation: shake 3s ease infinite;
+    margin: 0rem 0.5rem 0.5rem;
 }
 .theme-type {
     display: flex;

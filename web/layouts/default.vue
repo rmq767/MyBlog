@@ -128,10 +128,10 @@ export default {
     height: 100%;
 }
 .v-application code {
-    background-color: transparent;
-    font-size: 100%;
-    font-weight: normal;
-    display: block;
-    color: #a776ff;
+    background-color: transparent !important;
+    font-size: 100% !important;
+    font-weight: normal !important;
+    display: block !important;
+    color: #a776ff !important;
 }
 </style>

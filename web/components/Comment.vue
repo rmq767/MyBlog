@@ -168,33 +168,43 @@ export default {
                 this.snackbar = true;
                 this.snackbarText = "留言或者昵称不能为空";
             } else {
-                await this.$axios.post("/comments", {
+                const res = await this.$axios.post("/comments", {
                     name: this.name,
                     comment: this.form.message,
                     article_id: this.a_id,
                 });
-                localStorage.setItem("tourist", this.name);
-                this.form.message = "";
-                this.fetch();
+                if (res.data.success) {
+                    localStorage.setItem("tourist", this.name);
+                    this.form.message = "";
+                    this.fetch();
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = "留言失败";
+                }
             }
         },
         async submitReply(comment_id) {
             if (!this.reply.message || !this.name) {
                 this.snackbar = true;
-                this.snackbarText = "留言或者昵称不能为空";
+                this.snackbarText = "回复或者昵称不能为空";
             } else {
-                await this.$axios.post(`/commentreply`, {
+                const res = await this.$axios.post(`/commentreply`, {
                     i_name: this.name,
                     r_name: this.r_name,
                     c_reply: this.reply.message,
                     comment_id: this.comment_id,
                     article_id: this.a_id,
                 });
-                localStorage.setItem("tourist", this.name);
-                this.reply.message = "";
-                this.sheet = false;
-                this.fetch();
-                this.comment_id = comment_id;
+                if (res.data.success) {
+                    localStorage.setItem("tourist", this.name);
+                    this.reply.message = "";
+                    this.sheet = false;
+                    this.fetch();
+                    this.comment_id = comment_id;
+                } else {
+                    this.snackbar = true;
+                    this.snackbarText = "回复失败";
+                }
             }
         },
         async fetch() {
@@ -203,7 +213,6 @@ export default {
             );
             this.limit += 10;
             this.count = res.data.total[0].total;
-
             this.listData = res.data.data;
         },
         /**

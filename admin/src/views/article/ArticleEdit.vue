@@ -53,15 +53,25 @@ export default {
             this.article.content_md = this.$refs.md.d_value;
             this.article.content_html = this.$refs.md.d_render;
             if (this.id) {
-                await api.article.editArticle(this.id, this.article);
+                const res = await api.article.editArticle(
+                    this.id,
+                    this.article
+                );
+                if (res.data.success) {
+                    this.$message.success("保存成功");
+                    this.$router.push("/article/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                await api.article.addArticle(this.article);
+                const res = await api.article.addArticle(this.article);
+                if (res.data.success) {
+                    this.$message.success("添加成功");
+                    this.$router.push("/article/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             }
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
-            this.$router.push("/article/list");
         },
         async fetch() {
             const res = await api.article.articleInfo(this.id);

@@ -44,15 +44,31 @@ export default {
     methods: {
         async save() {
             if (this.id) {
-                await api.message.editMessage(this.id, this.message);
+                const res = await api.message.editMessage(
+                    this.id,
+                    this.message
+                );
+                if (res.data.success) {
+                    this.$message({
+                        type: "success",
+                        message: "保存成功",
+                    });
+                    this.$router.push("/message/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                await api.message.addMessage(this.message);
+                const res = await api.message.addMessage(this.message);
+                if (res.data.success) {
+                    this.$message({
+                        type: "success",
+                        message: "添加成功",
+                    });
+                    this.$router.push("/message/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             }
-            this.$router.push("/message/list");
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
         },
         async fetch() {
             const res = await api.message.messageInfo(this.id);

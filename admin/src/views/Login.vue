@@ -4,31 +4,15 @@
             <el-card class="box-card" shadow="hover">
                 <h1 style="margin: 0px; text-align: center">登录</h1>
                 <div class="form">
-                    <el-form
-                        :model="loginForm"
-                        label-position="left"
-                        label-width="70px"
-                        :rules="rules"
-                        @submit.native.prevent="login"
-                    >
+                    <el-form :model="loginForm" label-position="left" label-width="70px" :rules="rules" @submit.native.prevent="login">
                         <el-form-item label="邮箱" prop="email">
                             <el-input v-model="loginForm.email"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
-                            <el-input
-                                type="password"
-                                v-model="loginForm.password"
-                                autocomplete="off"
-                            ></el-input>
+                            <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button
-                                type="primary"
-                                native-type="submit"
-                                style="width: 100%"
-                                round
-                                >登录</el-button
-                            >
+                            <el-button type="primary" native-type="submit" style="width: 100%" round>登录</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -83,14 +67,18 @@ export default {
                 "http://47.115.83.172/login",
                 this.loginForm
             );
-            localStorage.token = res.data.token;
-            localStorage.setItem("username", res.data.username);
-            localStorage.setItem("u_id", res.data.id);
-            this.$router.push("/admin");
-            this.$message({
-                type: "success",
-                message: "登录成功",
-            });
+            if (res.data.success) {
+                localStorage.token = res.data.token;
+                localStorage.setItem("username", res.data.username);
+                localStorage.setItem("u_id", res.data.id);
+                this.$router.push("/admin");
+                this.$message({
+                    type: "success",
+                    message: "登录成功",
+                });
+            } else {
+                this.$message.error(res.data.message);
+            }
         },
     },
 };

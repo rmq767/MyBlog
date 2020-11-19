@@ -36,15 +36,25 @@ export default {
     methods: {
         async save() {
             if (this.id) {
-                await api.comment.editComment(this.id, this.comment);
+                const res = await api.comment.editComment(
+                    this.id,
+                    this.comment
+                );
+                if (res.data.success) {
+                    this.$message.success("保存成功");
+                    this.$router.push("/comment/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                await api.comment.addComment(this.comment);
+                const res = await api.comment.addComment(this.comment);
+                if (res.data.success) {
+                    this.$message.success("添加成功");
+                    this.$router.push("/comment/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             }
-            this.$router.push("/comment/list");
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
         },
         async fetch() {
             const res = await api.comment.commentInfo(this.id);

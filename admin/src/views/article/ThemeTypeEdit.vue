@@ -64,6 +64,8 @@ export default {
             if (res.data.success) {
                 this.$message.success("添加主题成功");
                 this.theme = [];
+            } else {
+                this.$message.error(res.data.message);
             }
         },
         async saveType() {
@@ -74,6 +76,8 @@ export default {
             if (res.data.success) {
                 this.$message.success("添加分类成功");
                 this.type = [];
+            } else {
+                this.$message.error(res.data.message);
             }
         },
         handleCloseTheme(tag) {

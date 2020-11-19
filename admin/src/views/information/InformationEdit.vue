@@ -74,6 +74,8 @@ export default {
                     type: "success",
                     message: "保存成功",
                 });
+            } else {
+                this.$message.error(res.data.message);
             }
         },
         async fetch() {

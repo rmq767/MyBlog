@@ -38,11 +38,15 @@ export default {
     },
     methods: {
         async save() {
-            await api.admin.editAdmin(this.admin.id, this.admin);
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
+            const res = await api.admin.editAdmin(this.admin.id, this.admin);
+            if (res.data.success) {
+                this.$message({
+                    type: "success",
+                    message: "保存成功",
+                });
+            } else {
+                this.$message.error(res.data.message);
+            }
         },
         async fetch() {
             const res = await api.admin.getAdmin();

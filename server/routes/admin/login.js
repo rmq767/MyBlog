@@ -38,6 +38,7 @@ module.exports = (app) => {
 							}
 						);
 						return res.send({
+							success: true,
 							token,
 							username: data[0].username,
 							id: data[0].id,

@@ -48,15 +48,22 @@ export default {
     methods: {
         async save() {
             if (this.id) {
-                await api.link.editLink(this.id, this.link);
+                const res = await api.link.editLink(this.id, this.link);
+                if (res.data.success) {
+                    this.$message.success("保存成功");
+                    this.$router.push("/link/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                await api.link.addLink(this.link);
+                const res = await api.link.addLink(this.link);
+                if (res.data.success) {
+                    this.$message.success("添加成功");
+                    this.$router.push("/link/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             }
-            this.$router.push("/link/list");
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
         },
         showAvatar(val) {
             this.link.image = val.url;

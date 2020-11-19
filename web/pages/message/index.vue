@@ -81,7 +81,7 @@ export default {
                     this.getMessageList();
                 } else {
                     this.snackbar = true;
-                    this.snackbarText = "留言失败";
+                    this.snackbarText = response.data.message;
                 }
             }
         },

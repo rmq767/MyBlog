@@ -29,15 +29,22 @@ export default {
     methods: {
         async save() {
             if (this.id) {
-                await api.notice.editNotice(this.id, this.notice);
+                const res = await api.notice.editNotice(this.id, this.notice);
+                if (res.data.success) {
+                    this.$message.success("保存成功");
+                    this.$router.push("/notice/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                await api.notice.addNotice(this.notice);
+                const res = await api.notice.addNotice(this.notice);
+                if (res.data.success) {
+                    this.$message.success("添加成功");
+                    this.$router.push("/notice/list");
+                } else {
+                    this.$message.error(res.data.message);
+                }
             }
-            this.$router.push("/notice/list");
-            this.$message({
-                type: "success",
-                message: "保存成功",
-            });
         },
         async fetch() {
             const res = await api.notice.noticeInfo(this.id);

@@ -6,13 +6,13 @@
                 <el-input v-model="article.title"></el-input>
             </el-form-item>
             <el-form-item label="文章主题">
-                <el-select v-model="article.theme" filterable placeholder="请选择文章主题">
+                <el-select v-model="article.theme" filterable allow-create default-first-option placeholder="请选择文章主题">
                     <el-option v-for="(item,index) in themeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章分类">
-                <el-select v-model="article.type" multiple collapse-tags filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
+                <el-select v-model="article.type" multiple allow-create filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
                     <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>

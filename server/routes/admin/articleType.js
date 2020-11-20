@@ -29,37 +29,34 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
-				data.forEach((item) => {
-					typeArr.push(item.type);
-				});
-			}
-		});
-
-		const sql2 = "insert into types (type) VALUES (?)";
-		const { type } = req.body;
-		// 获取数据库中没有的值
-		let arr = [];
-		type.forEach((item) => {
-			if (!typeArr.includes(item)) {
-				arr.push(item);
-			}
-		});
-		// 如果有，存数据库
-		if (arr.length) {
-			arr.forEach(async (item) => {
-				await db.query(sql2, [`${item}`], (err, data) => {
-					if (err) {
-						return res.send({
-							message: err,
-						});
-					} else {
-						return res.send({ success: true, data: data });
+				typeArr = data.map((v) => v.type);
+				const sql2 = "insert into types (type) VALUES (?)";
+				const { type } = req.body;
+				// 获取数据库中没有的值
+				let arr = [];
+				type.forEach((item) => {
+					if (!typeArr.includes(item)) {
+						arr.push(item);
 					}
 				});
-			});
-		} else {
-			return res.send({ message: "已有分类" });
-		}
+				// 如果有，存数据库
+				if (arr.length) {
+					arr.forEach(async (item) => {
+						await db.query(sql2, [`${item}`], (err, data) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							} else {
+								return res.send({ success: true, data: data });
+							}
+						});
+					});
+				} else {
+					return res.send({ message: "已有分类" });
+				}
+			}
+		});
 	});
 
 	router.put("/:id", async (req, res) => {

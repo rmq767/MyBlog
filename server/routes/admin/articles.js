@@ -68,6 +68,67 @@ module.exports = (app) => {
 				}
 			}
 		);
+
+		// 查所有主题
+		let themeArr = [];
+		const themeSql = `SELECT theme FROM themes WHERE is_delete=0;`;
+		await db.query(themeSql, async (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				themeArr = data.map((v) => v.theme);
+				if (!themeArr.includes(theme)) {
+					let sql1 = "insert into themes (theme) VALUES (?)";
+					await db.query(sql1, [`${item}`], (err, data) => {
+						if (err) {
+							return res.send({
+								message: err,
+							});
+						} else {
+							return res.send({ success: true, data: data });
+						}
+					});
+				} else {
+					return res.send({ message: "已有主题" });
+				}
+			}
+		});
+		// 查所有分类
+		let typeArr = [];
+		const typeSql = `SELECT type FROM types WHERE is_delete=0;`;
+		await db.query(typeSql, async (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				typeArr = data.map((v) => v.type);
+				let arr = [];
+				type.forEach((item) => {
+					if (!typeArr.includes(item)) {
+						arr.push(item);
+					}
+				});
+				// 如果有，存数据库
+				if (arr.length) {
+					arr.forEach(async (item) => {
+						await db.query(sql2, [`${item}`], (err, data) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							} else {
+								return res.send({ success: true, data: data });
+							}
+						});
+					});
+				} else {
+					return res.send({ message: "已有分类" });
+				}
+			}
+		});
 	});
 	// 编辑修改文章
 	router.put("/:id", async (req, res) => {

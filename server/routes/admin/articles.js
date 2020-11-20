@@ -58,77 +58,86 @@ module.exports = (app) => {
 				`${type}`,
 				`${theme}`,
 			],
-			(err, data) => {
+			async (err, data) => {
 				if (err) {
-					res.send({
+					return res.send({
 						message: err,
 					});
 				} else {
-					res.send({ success: true, data: data });
-				}
-			}
-		);
-
-		// 查所有主题
-		let themeArr = [];
-		const themeSql = `SELECT theme FROM themes WHERE is_delete=0;`;
-		await db.query(themeSql, async (err, data) => {
-			if (err) {
-				res.send({
-					message: err,
-				});
-			} else {
-				themeArr = data.map((v) => v.theme);
-				if (!themeArr.includes(theme)) {
-					let sql1 = "insert into themes (theme) VALUES (?)";
-					await db.query(sql1, [`${item}`], (err, data) => {
+					// 查所有主题
+					let themeArr = [];
+					const themeSql = `SELECT theme FROM themes WHERE is_delete=0;`;
+					await db.query(themeSql, async (err, data) => {
 						if (err) {
 							res.send({
 								message: err,
 							});
 						} else {
-							// res.send({ success: true, data: data });
+							themeArr = data.map((v) => v.theme);
+							if (!themeArr.includes(theme)) {
+								let sql1 =
+									"insert into themes (theme) VALUES (?)";
+								await db.query(
+									sql1,
+									[`${item}`],
+									(err, data) => {
+										if (err) {
+											res.send({
+												message: err,
+											});
+										} else {
+											// res.send({ success: true, data: data });
+										}
+									}
+								);
+							} else {
+								// res.send({ message: "已有主题" });
+							}
 						}
 					});
-				} else {
-					// res.send({ message: "已有主题" });
-				}
-			}
-		});
-		// 查所有分类
-		let typeArr = [];
-		const typeSql = `SELECT type FROM types WHERE is_delete=0;`;
-		await db.query(typeSql, async (err, data) => {
-			if (err) {
-				res.send({
-					message: err,
-				});
-			} else {
-				typeArr = data.map((v) => v.type);
-				let arr = [];
-				type.forEach((item) => {
-					if (!typeArr.includes(item)) {
-						arr.push(item);
-					}
-				});
-				// 如果有，存数据库
-				if (arr.length) {
-					arr.forEach(async (item) => {
-						await db.query(sql2, [`${item}`], (err, data) => {
-							if (err) {
-								res.send({
-									message: err,
+					// 查所有分类
+					let typeArr = [];
+					const typeSql = `SELECT type FROM types WHERE is_delete=0;`;
+					await db.query(typeSql, async (err, data) => {
+						if (err) {
+							res.send({
+								message: err,
+							});
+						} else {
+							typeArr = data.map((v) => v.type);
+							let arr = [];
+							type.forEach((item) => {
+								if (!typeArr.includes(item)) {
+									arr.push(item);
+								}
+							});
+							// 如果有，存数据库
+							if (arr.length) {
+								arr.forEach(async (item) => {
+									await db.query(
+										sql2,
+										[`${item}`],
+										(err, data) => {
+											if (err) {
+												res.send({
+													message: err,
+												});
+											} else {
+												// res.send({ success: true, data: data });
+											}
+										}
+									);
 								});
 							} else {
-								// res.send({ success: true, data: data });
+								// res.send({ message: "已有分类" });
 							}
-						});
+						}
 					});
-				} else {
-					// res.send({ message: "已有分类" });
+
+					return res.send({ success: true, data: data });
 				}
 			}
-		});
+		);
 	});
 	// 编辑修改文章
 	router.put("/:id", async (req, res) => {

@@ -104,14 +104,9 @@ export default {
                         type: "success",
                         message: "删除成功!",
                     });
-                    this.fetch();
+                    this.search();
                 })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除",
-                    });
-                });
+                .catch(() => {});
         },
         async handleSizeChange(val) {
             this.pageInfo.pageSize = val;

@@ -60,11 +60,11 @@ module.exports = (app) => {
 			],
 			(err, data) => {
 				if (err) {
-					return res.send({
+					res.send({
 						message: err,
 					});
 				} else {
-					return res.send({ success: true, data: data });
+					res.send({ success: true, data: data });
 				}
 			}
 		);
@@ -74,7 +74,7 @@ module.exports = (app) => {
 		const themeSql = `SELECT theme FROM themes WHERE is_delete=0;`;
 		await db.query(themeSql, async (err, data) => {
 			if (err) {
-				return res.send({
+				res.send({
 					message: err,
 				});
 			} else {
@@ -83,15 +83,15 @@ module.exports = (app) => {
 					let sql1 = "insert into themes (theme) VALUES (?)";
 					await db.query(sql1, [`${item}`], (err, data) => {
 						if (err) {
-							return res.send({
+							res.send({
 								message: err,
 							});
 						} else {
-							return res.send({ success: true, data: data });
+							// res.send({ success: true, data: data });
 						}
 					});
 				} else {
-					return res.send({ message: "已有主题" });
+					// res.send({ message: "已有主题" });
 				}
 			}
 		});
@@ -100,7 +100,7 @@ module.exports = (app) => {
 		const typeSql = `SELECT type FROM types WHERE is_delete=0;`;
 		await db.query(typeSql, async (err, data) => {
 			if (err) {
-				return res.send({
+				res.send({
 					message: err,
 				});
 			} else {
@@ -116,16 +116,16 @@ module.exports = (app) => {
 					arr.forEach(async (item) => {
 						await db.query(sql2, [`${item}`], (err, data) => {
 							if (err) {
-								return res.send({
+								res.send({
 									message: err,
 								});
 							} else {
-								return res.send({ success: true, data: data });
+								// res.send({ success: true, data: data });
 							}
 						});
 					});
 				} else {
-					return res.send({ message: "已有分类" });
+					// res.send({ message: "已有分类" });
 				}
 			}
 		});

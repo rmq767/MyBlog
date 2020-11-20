@@ -41,7 +41,7 @@ export default {
                 title: "",
                 content_md: "",
                 content_html: "",
-                theme: [],
+                theme: "",
                 type: [],
             },
             typeOptions: [],
@@ -77,7 +77,7 @@ export default {
             const res = await api.article.articleInfo(this.id);
             this.article = res.data.data;
             this.article.content_md = res.data.data.content_md;
-            this.article.theme = res.data.data.theme.split(",");
+            this.article.theme = res.data.data.theme;
             this.article.type = res.data.data.type.split(",");
         },
         $imgAdd(pos, $file) {

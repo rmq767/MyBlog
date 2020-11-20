@@ -57,7 +57,7 @@ module.exports = (app) => {
 				themeArr = data.map((v) => v.theme);
 				if (!themeArr.includes(theme)) {
 					let sql1 = "insert into themes (theme) VALUES (?)";
-					await db.query(sql1, [`${item}`], (err, data) => {
+					await db.query(sql1, [`${theme}`], (err, data) => {
 						if (err) {
 							res.send({
 								message: err,

@@ -37,6 +37,7 @@ module.exports = (app) => {
 	});
 	// 新增文章
 	router.post("/", async (req, res) => {
+		const { title, content_html, content_md, type, theme } = req.body;
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -73,7 +74,7 @@ module.exports = (app) => {
 		// 查所有分类
 		let typeArr = [];
 		const typeSql = `SELECT type FROM types WHERE is_delete=0;`;
-		await db.query(typeSql, async (err, data) => {
+		await db.query(typeSql, (err, data) => {
 			if (err) {
 				res.send({
 					message: err,
@@ -89,6 +90,7 @@ module.exports = (app) => {
 				// 如果有，存数据库
 				if (arr.length) {
 					arr.forEach(async (item) => {
+						let sql2 = "insert into types (type) VALUES (?)";
 						await db.query(sql2, [`${item}`], (err, data) => {
 							if (err) {
 								res.send({
@@ -107,7 +109,6 @@ module.exports = (app) => {
 
 		const sql =
 			"insert into articles (title, content_html,content_md,date,type,theme) VALUES (?,?,?,?,?,?)";
-		const { title, content_html, content_md, type, theme } = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,

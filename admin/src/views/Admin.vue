@@ -55,7 +55,12 @@ export default {
                 title: {
                     text: "文章阅读量",
                 },
-                tooltip: {},
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        snap: true,
+                    },
+                },
                 legend: {
                     data: ["阅读量"],
                 },
@@ -85,7 +90,12 @@ export default {
                 title: {
                     text: "网站访问量",
                 },
-                tooltip: {},
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        snap: true,
+                    },
+                },
                 legend: {
                     data: ["访问量"],
                 },

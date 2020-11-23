@@ -5,7 +5,7 @@ module.exports = function validateComment(data) {
 	let errors = {};
 	data.name = !isEmpty(data.name) ? data.name : "";
 	data.comment = !isEmpty(data.comment) ? data.comment : "";
-	data.article_id = !isEmpty(data.article_id) ? data.article_id : "";
+	// data.article_id = !isEmpty(data.article_id) ? data.article_id : "";
 
 	if (validator.isEmpty(data.name)) {
 		errors.name = "昵称不能为空";
@@ -29,9 +29,9 @@ module.exports = function validateComment(data) {
 	) {
 		errors.comment = "评论的长度不超过240位";
 	}
-	if (validator.isEmpty(String(data.article_id))) {
-		errors.article_id = "评论文章不能为空";
-	}
+	// if (validator.isEmpty(String(data.article_id))) {
+	// 	errors.article_id = "评论文章不能为空";
+	// }
 	return {
 		errors,
 		isValid: isEmpty(errors),

@@ -1,29 +1,29 @@
 <template>
     <div>
         <h3>{{ id ? "编辑" : "新建" }}文章</h3>
-        <el-form label-width="80px">
-            <el-form-item label="文章标题">
+        <el-form label-width="80px" :rules='rules' ref="articleForm" :model="article">
+            <el-form-item label="文章标题" prop='title'>
                 <el-input v-model="article.title"></el-input>
             </el-form-item>
-            <el-form-item label="文章主题">
-                <el-select v-model="article.theme" filterable allow-create default-first-option placeholder="请选择文章主题">
+            <el-form-item label="文章主题" prop='theme'>
+                <el-select v-model.trim="article.theme" filterable allow-create default-first-option placeholder="请选择文章主题">
                     <el-option v-for="(item,index) in themeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="文章分类">
-                <el-select v-model="article.type" multiple allow-create filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
+            <el-form-item label="文章分类" prop='type'>
+                <el-select v-model.trim="article.type" multiple allow-create filterable default-first-option placeholder="请选择文章类别" :multiple-limit='3'>
                     <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item">
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="文章内容">
+            <el-form-item label="文章内容" required>
                 <div class="edit_container">
                     <mavon-editor v-model="article.content_md" :ishljs="true" ref="md" @imgAdd="$imgAdd" />
                 </div>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="save()">立即保存</el-button>
+                <el-button type="primary" @click="save('articleForm')">立即保存</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -46,32 +46,67 @@ export default {
             },
             typeOptions: [],
             themeOptions: [],
+            rules: {
+                title: [
+                    {
+                        required: true,
+                        message: "请输入文章名称",
+                        trigger: "blur",
+                    },
+                    {
+                        min: 1,
+                        max: 100,
+                        message: "长度在 1 到 100 个字符",
+                        trigger: "blur",
+                    },
+                ],
+                theme: [
+                    {
+                        required: true,
+                        message: "请选择主题",
+                        trigger: "change",
+                    },
+                ],
+                type: [
+                    {
+                        required: true,
+                        message: "请选择分类",
+                        trigger: "change",
+                    },
+                ],
+            },
         };
     },
     methods: {
-        async save() {
-            this.article.content_md = this.$refs.md.d_value;
-            this.article.content_html = this.$refs.md.d_render;
-            if (this.id) {
-                const res = await api.article.editArticle(
-                    this.id,
-                    this.article
-                );
-                if (res.data.success) {
-                    this.$message.success("保存成功");
-                    this.$router.push("/article/list");
+        async save(formName) {
+            this.$refs[formName].validate(async (valid) => {
+                if (valid) {
+                    this.article.content_md = this.$refs.md.d_value;
+                    this.article.content_html = this.$refs.md.d_render;
+                    if (this.id) {
+                        const res = await api.article.editArticle(
+                            this.id,
+                            this.article
+                        );
+                        if (res.data.success) {
+                            this.$message.success("保存成功");
+                            this.$router.push("/article/list");
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    } else {
+                        const res = await api.article.addArticle(this.article);
+                        if (res.data.success) {
+                            this.$message.success("添加成功");
+                            this.$router.push("/article/list");
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    }
                 } else {
-                    this.$message.error(res.data.message);
+                    return false;
                 }
-            } else {
-                const res = await api.article.addArticle(this.article);
-                if (res.data.success) {
-                    this.$message.success("添加成功");
-                    this.$router.push("/article/list");
-                } else {
-                    this.$message.error(res.data.message);
-                }
-            }
+            });
         },
         async fetch() {
             const res = await api.article.articleInfo(this.id);

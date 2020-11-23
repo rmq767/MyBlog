@@ -10,7 +10,7 @@
                     <el-input v-model="form.comment"></el-input>
                 </el-form-item>
                 <el-form-item label="文章：" prop='article_id'>
-                    <el-select v-model="form.article_id" placeholder="请选择评论的文章">
+                    <el-select v-model="form.article_id" filterable placeholder="请选择评论的文章">
                         <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
                     </el-select>

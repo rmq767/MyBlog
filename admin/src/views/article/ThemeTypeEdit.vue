@@ -7,7 +7,7 @@
                 <el-tag :key="tag" v-for="tag in theme" closable :disable-transitions="false" @close="handleCloseTheme(tag)" style="marginRight:10px">
                     {{tag}}
                 </el-tag>
-                <el-input class="input-new-tag" v-if="inputVisible1" v-model="article.theme" ref="theme" size="small" @keyup.enter.native="handleThemeConfirm" @blur="handleThemeConfirm">
+                <el-input class="input-new-tag" v-if="inputVisible1" v-model.trim="article.theme" ref="theme" size="small" @keyup.enter.native="handleThemeConfirm" @blur="handleThemeConfirm">
                 </el-input>
                 <el-button v-else class="button-new-tag" size="small" @click="showTheme">+ 新增文章主题</el-button>
             </div>
@@ -19,7 +19,7 @@
                 <el-tag :key="tag" v-for="tag in type" closable :disable-transitions="false" @close="handleCloseType(tag)" style="marginRight:10px">
                     {{tag}}
                 </el-tag>
-                <el-input class="input-new-tag" v-if="inputVisible2" v-model="article.type" ref="type" size="small" @keyup.enter.native="handleTypeConfirm" @blur="handleTypeConfirm">
+                <el-input class="input-new-tag" v-if="inputVisible2" v-model.trim="article.type" ref="type" size="small" @keyup.enter.native="handleTypeConfirm" @blur="handleTypeConfirm">
                 </el-input>
                 <el-button v-else class="button-new-tag" size="small " @click="showType">+ 新增文章分类</el-button>
             </div>
@@ -57,27 +57,35 @@ export default {
         //     }
         // },
         async saveTheme() {
-            const themeArr = this.theme;
-            const res = await api.theme.addTheme({
-                theme: themeArr,
-            });
-            if (res.data.success) {
-                this.$message.success("添加主题成功");
-                this.theme = [];
+            if (this.theme.length) {
+                const themeArr = this.theme;
+                const res = await api.theme.addTheme({
+                    theme: themeArr,
+                });
+                if (res.data.success) {
+                    this.$message.success("添加主题成功");
+                    this.theme = [];
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                this.$message.error(res.data.message);
+                this.$message.error("请输入主题");
             }
         },
         async saveType() {
-            const typeArr = this.type;
-            const res = await api.type.addType({
-                type: typeArr,
-            });
-            if (res.data.success) {
-                this.$message.success("添加分类成功");
-                this.type = [];
+            if (this.type.length) {
+                const typeArr = this.type;
+                const res = await api.type.addType({
+                    type: typeArr,
+                });
+                if (res.data.success) {
+                    this.$message.success("添加分类成功");
+                    this.type = [];
+                } else {
+                    this.$message.error(res.data.message);
+                }
             } else {
-                this.$message.error(res.data.message);
+                this.$message.error("请输入分类");
             }
         },
         handleCloseTheme(tag) {

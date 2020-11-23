@@ -27,8 +27,8 @@ export default {
         var validatePass = (rule, value, callback) => {
             if (value === "") {
                 callback(new Error("请输入密码"));
-            } else if (value.length < 8) {
-                callback(new Error("密码不能小于8位"));
+            } else if (value.length < 8 && value.length > 16) {
+                callback(new Error("密码8位到16位"));
             } else {
                 callback();
             }

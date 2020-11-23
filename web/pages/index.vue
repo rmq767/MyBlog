@@ -182,6 +182,7 @@ export default {
                 if (element.type) {
                     element.type = element.type.split(",");
                 }
+                element.content_html = element.content_html.substring(0, 700);
             });
             this.pageInfo.length = Math.ceil(
                 res.data.count[0].article_count / this.pageInfo.size
@@ -258,6 +259,7 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
+    word-break: break-all;
     overflow: hidden;
 }
 .quote {

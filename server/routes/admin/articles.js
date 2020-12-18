@@ -141,8 +141,15 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=?,type=?,theme=? WHERE id = '${id}'`;
-		const { title, content_html, content_md, type, theme } = req.body;
+		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=?,type=?,theme=?,isTop=? WHERE id = '${id}'`;
+		const {
+			title,
+			content_html,
+			content_md,
+			type,
+			theme,
+			isTop,
+		} = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
@@ -153,6 +160,7 @@ module.exports = (app) => {
 				`${date}`,
 				`${type}`,
 				`${theme}`,
+				`${isTop}`,
 			],
 			(err, data) => {
 				if (err) {
@@ -211,10 +219,10 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
-				data[0].map(
-					(v) =>
-						(v.content_md = v.content_md.substring(0, 200)) + "..."
-				);
+				data[0].map((v) => {
+					v.content_md = v.content_md.substring(0, 200);
+					v.content_html = v.content_html.substring(0, 200);
+				});
 				return res.send({
 					success: true,
 					data: data[0],

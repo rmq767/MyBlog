@@ -155,12 +155,12 @@ module.exports = (app) => {
 						}
 					}
 				}
-				data[0].map(
-					(v) =>
-						(v.content_html = v.content_html
-							.replace(/<[^<>]+>/g, "")
-							.substring(0, 700)) + "..."
-				);
+				data[0].map((v) => {
+					v.content_html = v.content_html
+						.replace(/<[^<>]+>/g, "")
+						.substring(0, 700);
+					v.content_md = v.content_md.substring(0, 200);
+				});
 				return res.send({
 					success: true,
 					data: data[0],

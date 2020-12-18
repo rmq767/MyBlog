@@ -17,6 +17,10 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="文章分类" prop='isTop'>
+                <el-switch v-model="article.isTop" :active-value="1" :inactive-value="0">
+                </el-switch>
+            </el-form-item>
             <el-form-item label="文章内容" required>
                 <div class="edit_container">
                     <mavon-editor v-model="article.content_md" :ishljs="true" ref="md" @imgAdd="$imgAdd" />
@@ -43,6 +47,7 @@ export default {
                 content_html: "",
                 theme: "",
                 type: [],
+                isTop: 0,
             },
             typeOptions: [],
             themeOptions: [],
@@ -71,6 +76,13 @@ export default {
                     {
                         required: true,
                         message: "请选择分类",
+                        trigger: "change",
+                    },
+                ],
+                isTop: [
+                    {
+                        required: true,
+                        message: "请选择是否置顶",
                         trigger: "change",
                     },
                 ],

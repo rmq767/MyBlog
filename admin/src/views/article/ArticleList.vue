@@ -61,6 +61,12 @@
                     <span>{{ scope.row.type }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="置顶" align="center">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.isTop" disabled :active-value="1" :inactive-value="0">
+                    </el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="180">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="$router.push(`/article/edit/${scope.row.id}`)">编辑</el-button>

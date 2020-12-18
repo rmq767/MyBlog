@@ -9,7 +9,7 @@ module.exports = (app) => {
 	// 获取全部文章
 	router.get("/", async (req, res) => {
 		const sql =
-			"select * from articles where is_delete = 0 ORDER BY id desc";
+			"select * from articles where is_delete = 0 ORDER BY isTop DESC,date DESC";
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -196,12 +196,12 @@ module.exports = (app) => {
 		const end = Number(pageSize);
 		if (startTime && endTime) {
 			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND (date>='${startTime}' AND date<DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND (date>='${startTime}' AND date<DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY isTop DESC,date DESC LIMIT ${start},${end};
             SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND (date>='${startTime}' AND date<DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
             `;
 		} else {
 			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY isTop DESC,date DESC LIMIT ${start},${end};
             SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
             `;
 		}
@@ -211,6 +211,10 @@ module.exports = (app) => {
 					message: err,
 				});
 			} else {
+				data[0].map(
+					(v) =>
+						(v.content_md = v.content_md.substring(0, 200)) + "..."
+				);
 				return res.send({
 					success: true,
 					data: data[0],

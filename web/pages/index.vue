@@ -182,7 +182,7 @@ export default {
                 if (element.type) {
                     element.type = element.type.split(",");
                 }
-                element.content_html = element.content_html.substring(0, 700);
+                // element.content_html = element.content_html.substring(0, 700);
             });
             this.pageInfo.length = Math.ceil(
                 res.data.count[0].article_count / this.pageInfo.size

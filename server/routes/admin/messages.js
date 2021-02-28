@@ -18,6 +18,20 @@ module.exports = (app) => {
 		});
 	});
 
+	router.put("/status", async (req, res) => {
+		const { is_check, id } = req.body;
+		const sql = `UPDATE messages SET is_check = ${is_check} WHERE id = ${id} AND is_delete = 0;`;
+		await db.query(sql, (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				return res.send({ success: true });
+			}
+		});
+	});
+
 	router.get("/:id", async (req, res) => {
 		const sql = `select * from messages where id='${req.params.id}'`;
 		await db.query(sql, (err, data) => {
@@ -32,7 +46,14 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
-		const { name, message, background, posTop, posLeft } = req.body;
+		const {
+			name,
+			message,
+			background,
+			posTop,
+			posLeft,
+			is_check,
+		} = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateMessage(req.body);
 		// 判断是否验证通过
@@ -54,7 +75,7 @@ module.exports = (app) => {
 					return res.send({ message: "已有相同昵称" });
 				} else {
 					const sql =
-						"insert into messages (name,message,background,posTop,posLeft,date) VALUES (?,?,?,?,?,?)";
+						"insert into messages (name,message,background,posTop,posLeft,is_check, date) VALUES (?,?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
@@ -63,6 +84,7 @@ module.exports = (app) => {
 							`${background}`,
 							`${posTop}`,
 							`${posLeft}`,
+							`${is_check}`,
 							`${date}`,
 						],
 						(err, data) => {
@@ -134,21 +156,33 @@ module.exports = (app) => {
 			currentPage,
 			nickname,
 			message,
+			is_check,
 			startTime,
 			endTime,
 		} = req.query;
 		let sql;
+		let isCheck = "";
+		switch (Number(is_check)) {
+			case 1:
+				isCheck = "AND is_check=1";
+				break;
+			case 0:
+				isCheck = "AND is_check=0";
+				break;
+			default:
+				break;
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
 		if (startTime && endTime) {
 			sql = `
-            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
+            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) ${isCheck} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%'  AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) ${isCheck} AND is_delete = 0;
             `;
 		} else {
 			sql = `
-            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%'  AND is_delete = 0;
+            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${isCheck} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${isCheck} AND is_delete = 0;
             `;
 		}
 		await db.query(sql, (err, data) => {

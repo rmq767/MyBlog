@@ -23,7 +23,7 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
-		const { name, comment, article_id } = req.body;
+		const { name, comment, article_id, email } = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateComment(req.body);
 		// 判断是否验证通过
@@ -32,47 +32,52 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		// // 验证名称唯一
-		// const namesql = "select name from comments where is_delete = 0";
-		// await db.query(namesql, (err, data) => {
-		// 	if (err) {
-		// 		return res.send({
-		// 			message: err,
-		// 		});
-		// 	} else {
-		// 		let sameName = data.some((item) => item.name === name);
-		// 		if (sameName) {
-		// 			return res.send({ message: "已有相同昵称" });
-		// 		}
-		// 	}
-		// });
-
-		const sql =
-			"insert into comments (name,comment,date,article_id) VALUES (?,?,?,?)";
-		await db.query(
-			sql,
-			[`${name}`, `${comment}`, `${date}`, `${article_id}`],
-			(err, data) => {
-				if (err) {
-					return res.send({
-						message: err,
-					});
+		// 验证名称唯一
+		const namesql = `select name from comments where email='${email}' and is_delete = 0`;
+		await db.query(namesql, async (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				console.log(data);
+				if (data.length && data[0].name === name) {
+					const sql =
+						"insert into comments (name,comment,date,article_id,email) VALUES (?,?,?,?,?)";
+					await db.query(
+						sql,
+						[
+							`${name}`,
+							`${comment}`,
+							`${date}`,
+							`${article_id}`,
+							`${email}`,
+						],
+						(err, data1) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							} else {
+								return res.send({ success: true, data: data1 });
+							}
+						}
+					);
 				} else {
-					return res.send({ success: true, data: data });
+					return res.send({
+						success: false,
+						message: "昵称不正确",
+					});
 				}
 			}
-		);
+		});
 	});
 
 	router.get("/get", async (req, res) => {
 		const { article_id, limit } = req.query;
-		let count = 10;
-		if (limit) {
-			count += limit;
-		}
 		const sql = `
-        SELECT * FROM comments WHERE is_delete = 0 AND article_id=${article_id} ORDER BY id DESC LIMIT ${count};
-        SELECT * FROM commentreply WHERE article_id=${article_id} and  is_delete = 0;
+        SELECT * FROM comments WHERE is_delete = 0 AND article_id=${article_id} ORDER BY id DESC LIMIT 0,${limit};
+        SELECT * FROM commentreply WHERE article_id=${article_id} and is_delete = 0;
         SELECT COUNT(*) AS total FROM comments WHERE article_id=${article_id};
         `;
 		await db.query(sql, (err, data) => {

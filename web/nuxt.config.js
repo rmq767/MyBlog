@@ -1,7 +1,7 @@
 const colors = require("vuetify/es5/util/colors").default;
-// const dotenv = require('@nuxtjs/dotenv')
+const dotenv = require("@nuxtjs/dotenv");
 require("dotenv").config();
-const axios = require("axios");
+// const axios = require("axios");
 
 module.exports = {
   mode: "spa",

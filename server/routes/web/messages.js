@@ -8,7 +8,7 @@ module.exports = (app) => {
 	const validateMessage = require("../../plugins/message");
 
 	router.get("/", async (req, res) => {
-		const sql = `select * from messages where is_delete = 0 ORDER BY id desc limit 20`;
+		const sql = `select * from messages where is_check = 1 AND is_delete = 0 ORDER BY id desc limit 20`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

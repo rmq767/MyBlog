@@ -17,6 +17,9 @@
             <el-form-item label="评论" prop='message'>
                 <el-input v-model="message.message" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item>
+            <el-form-item label="是否通过审核" prop='is_check' required>
+                <el-switch v-model="message.is_check" :active-value='1' :inactive-value='0'></el-switch>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="save('messageForm')">保存</el-button>
             </el-form-item>
@@ -38,6 +41,7 @@ export default {
                 background: "",
                 posLeft: 1,
                 posTop: 1,
+                is_check: 1,
             },
             rules: {
                 name: [

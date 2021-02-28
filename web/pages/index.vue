@@ -75,7 +75,7 @@
                     <div style="position: relative; width: 100%">
                         <div ref="aboutme" class="about_me">
                             <v-card style="padding: 10px 20px">
-                                <div class="my-4 subtitle-1">热门文章</div>
+                                <div class="my-2 subtitle-1">热门文章</div>
                                 <div v-for="(item,index) in hotArticles" :key="index" class="article-name" @click="toArticleInfo(item.id)">
                                     <p>{{item.title}}</p>
                                     <span>
@@ -84,13 +84,13 @@
                                 </div>
                             </v-card>
                             <v-card style="padding: 10px 20px; marginTop: 20px" outlined>
-                                <div class="my-4 subtitle-1">文章主题</div>
+                                <div class="my-2 subtitle-1">文章主题</div>
                                 <div class="theme-type">
                                     <div class="theme-item" v-for="(item,index) in themes" :key="index" @click="chooseTheme(item.theme,index)" :class="{'theme-active':index===themeActive}">
                                         <span>{{item.theme||'全部'}}</span>
                                     </div>
                                 </div>
-                                <div class="my-4 subtitle-1">文章分类</div>
+                                <div class="my-2 subtitle-1">文章分类</div>
                                 <div class="theme-type">
                                     <div class="type-item" v-for="(item,index) in types" :key="index" @click="chooseType(item.type,index)" :class="{'type-active':index===typeActive}">
                                         <span>{{item.type||'全部'}}</span>
@@ -276,7 +276,7 @@ export default {
         border: 1px solid #7c4dff;
         color: #ffffff;
         cursor: pointer;
-        margin: 5px 5px;
+        margin: 2px 2px;
         &:hover {
             color: #7c4dff;
             background: #ffffff;
@@ -300,7 +300,7 @@ export default {
         border: 1px solid rgb(76, 175, 80);
         color: #ffffff;
         cursor: pointer;
-        margin: 5px 5px;
+        margin: 2px 2px;
         &:hover {
             color: rgb(76, 175, 80);
             background: #ffffff;
@@ -392,11 +392,14 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.7rem;
+        margin-bottom: 0.3rem;
         > p {
-            word-break: break-all;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             color: #666;
-            font-size: 14px;
+            font-size: 12px;
             margin: 0;
             cursor: pointer;
             &:hover {

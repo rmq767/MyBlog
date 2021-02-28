@@ -9,6 +9,12 @@
                 <el-form-item label="评论：" prop='message'>
                     <el-input v-model="form.message"></el-input>
                 </el-form-item>
+                <el-form-item label="审核状态:" prop='is_check'>
+                    <el-select v-model="form.is_check">
+                        <el-option v-for="item in is_check" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="时间筛选" prop="date">
                     <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
                 </el-form-item>
@@ -34,6 +40,12 @@
             <el-table-column label="评论" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.message }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="审核状态">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.is_check" :active-value="1" :inactive-value="0" @change="changeCheckStatus(scope.row)">
+                    </el-switch>
                 </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="180">
@@ -64,6 +76,7 @@ export default {
             form: {
                 nickname: "",
                 message: "",
+                is_check: null,
                 date: [],
             },
             date: {
@@ -71,6 +84,20 @@ export default {
                 endTime: "",
             },
             loading: false,
+            is_check: [
+                {
+                    value: null,
+                    label: "全部",
+                },
+                {
+                    value: 1,
+                    label: "审核通过",
+                },
+                {
+                    value: 0,
+                    label: "审核不通过",
+                },
+            ],
         };
     },
     computed: {
@@ -80,6 +107,7 @@ export default {
                 currentPage: this.pageInfo.currentPage,
                 nickname: this.form.nickname,
                 message: this.form.message,
+                is_check: this.form.is_check,
                 startTime: this.date.startTime,
                 endTime: this.date.endTime,
             };
@@ -145,6 +173,24 @@ export default {
                 this.date.endTime = "";
             }
             this.search();
+        },
+        /**
+         * @description 改变状态
+         */
+        async changeCheckStatus(params) {
+            try {
+                const response = await api.message.messageStatus({
+                    id: params.id,
+                    is_check: params.is_check,
+                });
+                if (response.data.success) {
+                    // this.$message.success("审核通过");
+                } else {
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.$message.error(error);
+            }
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

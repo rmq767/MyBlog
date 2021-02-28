@@ -4,69 +4,14 @@
             <h3>留言区</h3>
             <div>
                 <v-form>
-                    <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240" required></v-textarea>
-                    <v-text-field v-model="name" :counter="20" label="昵称" required></v-text-field>
+                    <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240"></v-textarea>
+                    <v-text-field v-model="email" :counter="26" label="邮箱" type='email'></v-text-field>
+                    <v-text-field v-model="name" :counter="20" label="昵称"></v-text-field>
                     <v-btn class="mr-4" @click="submit" large>提交</v-btn>
                 </v-form>
             </div>
             <h3 class="mt-12">评论区</h3>
             <div>
-                <!-- <v-list v-for="item in listData" :key="item.id" dense class="py-0 my-3" two-line>
-                    <template>
-                        <v-list-item link>
-                            <v-list-item-avatar>
-                                <v-img src="/user.png"></v-img>
-                            </v-list-item-avatar>
-
-                            <v-list-item-content>
-                                <v-list-item-title v-html="
-                                        item.name +
-                                        `<span class='overline ml-5'>${item.date} </span>`
-                                    " class="font-weight-black"></v-list-item-title>
-                                <v-list-item-subtitle v-html="item.comment"></v-list-item-subtitle>
-                            </v-list-item-content>
-                            <div class="handleReply">
-                                <span @click="
-                                        sheet = !sheet;
-                                        comment_id = item.id;
-                                        r_name = item.name;
-                                    " class="reply">回复</span>
-                                <div class="reply mt-4 overline" @click="fetchReply(item.id)">
-                                    <v-icon size="medium">mdi-message-processing</v-icon>
-                                    <span>{{
-                                        item.reply_count ? item.reply_count : 0
-                                    }}</span>
-                                </div>
-                            </div>
-                        </v-list-item>
-                        <div class="px-8">
-                            <template >
-                                <v-list-item :key="comment.r_id" dense link>
-                                    <v-list-item-avatar>
-                                        <v-img src="/user.png"></v-img>
-                                    </v-list-item-avatar>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title v-html="
-                                                comment.i_name +
-                                                `<span class='caption mx-2'>回复</span> ` +
-                                                comment.r_name +
-                                                `<span class='overline ml-5'>${comment.date}</span>`
-                                            " class="font-weight-black"></v-list-item-title>
-                                        <v-list-item-subtitle v-html="comment.c_reply"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                    <div class="handleReply">
-                                        <span @click="
-                                                sheet = !sheet;
-                                                comment_id = item.id;
-                                                r_name = comment.i_name;
-                                            " class="reply">回复</span>
-                                    </div>
-                                </v-list-item>
-                            </template>
-                        </div>
-                    </template>
-                </v-list> -->
                 <div class="comment-container">
                     <div class="comment-item" v-for="comment in listData" :key="comment.id">
                         <div>
@@ -108,11 +53,12 @@
             </div>
             <div>
                 <v-bottom-sheet v-model="sheet" inset>
-                    <v-sheet class="text-center" height="18rem">
+                    <v-sheet class="text-center" height="24rem">
                         <div class="px-2 mt-2">
                             <v-form>
-                                <v-textarea v-model="reply.message" label="请输入留言（240字以内）" :counter="240" required></v-textarea>
-                                <v-text-field v-model="name" :counter="20" label="昵称" required></v-text-field>
+                                <v-textarea v-model="reply.message" label="请输入留言（240字以内）" :max-length='240' :counter="240"></v-textarea>
+                                <v-text-field v-model="email" :counter="26" label="邮箱" :max-length='26'></v-text-field>
+                                <v-text-field v-model="name" :counter="20" label="昵称" :max-length='20'></v-text-field>
                                 <v-btn class="mr-4" @click="submitReply(comment_id)" large>提交</v-btn>
                             </v-form>
                         </div>
@@ -124,7 +70,7 @@
             <v-btn text small>没有咯~</v-btn>
         </div>
         <div class="my-2 text-center" v-else>
-            <v-btn text small @click="fetch(limit)">加载更多...</v-btn>
+            <v-btn text small @click="fetchAdd()">加载更多...</v-btn>
         </div>
         <v-snackbar v-model="snackbar" :timeout="timeout">{{
             snackbarText
@@ -133,6 +79,7 @@
 </template>
 
 <script>
+const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export default {
     data() {
         return {
@@ -143,6 +90,7 @@ export default {
                 message: "",
             },
             name: "",
+            email: "",
             listData: [],
             sheet: false,
             // commentReply: [],
@@ -150,47 +98,70 @@ export default {
             a_id: this.$route.query.id,
             // show_reply: 0,
             r_name: "",
+            i_email: "",
+            r_email: "",
             count: "",
             snackbar: false,
             snackbarText: "",
             timeout: 2000,
-            limit: 0,
+            limit: 10,
         };
     },
     mounted() {
         if (localStorage.getItem("tourist")) {
-            this.name = localStorage.getItem("tourist");
+            let tourist = localStorage.getItem("tourist");
+            console.log(tourist);
+            this.name = tourist.name;
+            this.email = tourist.email;
         }
     },
     methods: {
         async submit() {
-            if (!this.form.message || !this.name) {
+            if (!this.form.message) {
                 this.snackbar = true;
-                this.snackbarText = "留言或者昵称不能为空";
+                this.snackbarText = "留言不能为空";
+            } else if (pattern.test(this.email) && !this.email) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱不正确";
+            } else if (!this.name) {
+                this.snackbar = true;
+                this.snackbarText = "昵称不能为空";
             } else {
                 const res = await this.$axios.post("/comments", {
                     name: this.name,
+                    email: this.email,
                     comment: this.form.message,
                     article_id: this.a_id,
                 });
                 if (res.data.success) {
-                    localStorage.setItem("tourist", this.name);
+                    localStorage.setItem(
+                        "tourist",
+                        JSON.stringify({ name: this.name, email: this.email })
+                    );
                     this.form.message = "";
                     this.fetch();
                 } else {
                     this.snackbar = true;
-                    this.snackbarText = "留言失败";
+                    this.snackbarText = res.data.message || "留言失败";
                 }
             }
         },
         async submitReply(comment_id) {
-            if (!this.reply.message || !this.name) {
+            if (!this.reply.message) {
                 this.snackbar = true;
-                this.snackbarText = "回复或者昵称不能为空";
+                this.snackbarText = "回复不能为空";
+            } else if (pattern.test(this.email) && !this.email) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱不正确";
+            } else if (!this.name) {
+                this.snackbar = true;
+                this.snackbarText = "昵称不能为空";
             } else {
                 const res = await this.$axios.post(`/commentreply`, {
                     i_name: this.name,
                     r_name: this.r_name,
+                    i_email: this.email,
+                    r_email: this.r_email,
                     c_reply: this.reply.message,
                     comment_id: this.comment_id,
                     article_id: this.a_id,
@@ -203,7 +174,7 @@ export default {
                     this.comment_id = comment_id;
                 } else {
                     this.snackbar = true;
-                    this.snackbarText = "回复失败";
+                    this.snackbarText = res.data.message || "回复失败";
                 }
             }
         },
@@ -211,9 +182,12 @@ export default {
             let res = await this.$axios.get(
                 `/comments/get?article_id=${this.a_id}&limit=${this.limit}`
             );
-            this.limit += 10;
             this.count = res.data.total[0].total;
             this.listData = res.data.data;
+        },
+        fetchAdd() {
+            this.limit += 10;
+            this.fetch();
         },
         /**
          * @description 回复评论
@@ -222,6 +196,7 @@ export default {
             this.sheet = !this.sheet;
             this.comment_id = item.id;
             this.r_name = item.name;
+            this.r_email = item.email;
         },
         /**
          * @description 回复回复
@@ -230,6 +205,7 @@ export default {
             this.sheet = !this.sheet;
             this.comment_id = id;
             this.r_name = item.i_name;
+            this.r_email = item.i_email;
         },
     },
     created() {

@@ -18,7 +18,7 @@ export default {
 	 */
 	searchMessage(params) {
 		return http.get(
-			`/messages/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&nickname=${params.nickname}&message=${params.message}&startTime=${params.startTime}&endTime=${params.endTime}`
+			`/messages/get/page?pageSize=${params.pageSize}&currentPage=${params.currentPage}&nickname=${params.nickname}&message=${params.message}&is_check=${params.is_check}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
 	// /**
@@ -44,5 +44,11 @@ export default {
 	 */
 	messageInfo(id) {
 		return http.get(`/messages/${id}`);
+	},
+	/**
+	 * @description 改变留言状态
+	 */
+	messageStatus(params) {
+		return http.put(`messages/status`, params);
 	},
 };

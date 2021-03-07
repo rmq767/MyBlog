@@ -32,16 +32,16 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		// 验证名称唯一
-		const namesql = `select name from comments where email='${email}' and is_delete = 0`;
-		await db.query(namesql, async (err, data) => {
+		// 查询游客表是否重复游客
+		const isRepeatSql = `select * from visitor where email='${email}' and is_delete=0;`;
+		await db.query(isRepeatSql, async (err, data) => {
 			if (err) {
 				return res.send({
 					message: err,
 				});
 			} else {
-				console.log(data);
-				if (data.length && data[0].name === name) {
+				if (data[0] && data[0].name === name) {
+					// 相同游客，插入评论
 					const sql =
 						"insert into comments (name,comment,date,article_id,email) VALUES (?,?,?,?,?)";
 					await db.query(
@@ -63,14 +63,84 @@ module.exports = (app) => {
 							}
 						}
 					);
-				} else {
+				} else if (data[0] && data[0].name != name) {
+					// 相同游客、名字不同，返回错误
 					return res.send({
-						success: false,
-						message: "昵称不正确",
+						message: "昵称有误，请输入正确昵称",
 					});
+				} else {
+					// 无游客，插入游客
+					const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+					await db.query(
+						visitorInfoSql,
+						[`${email}`, `${name}`, `${date}`],
+						async (err, data2) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							}
+						}
+					);
 				}
 			}
 		});
+
+		// 插入游客表
+		// const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+		// await db.query(
+		// 	visitorInfoSql,
+		// 	[`${email}`, `${name}`, `${date}`],
+		// 	async (err, data) => {
+		// 		if (err) {
+		// 			return res.send({
+		// 				message: err,
+		// 			});
+		// 		} else {
+		// 			console.log(data);
+		// 		}
+		// 	}
+		// );
+
+		// // 验证名称唯一
+		// const namesql = `select name from comments where email='${email}' and is_delete = 0`;
+		// await db.query(namesql, async (err, data) => {
+		// 	if (err) {
+		// 		return res.send({
+		// 			message: err,
+		// 		});
+		// 	} else {
+		// 		console.log(data);
+		// 		if (data.length && data[0].name === name) {
+		// 			const sql =
+		// 				"insert into comments (name,comment,date,article_id,email) VALUES (?,?,?,?,?)";
+		// 			await db.query(
+		// 				sql,
+		// 				[
+		// 					`${name}`,
+		// 					`${comment}`,
+		// 					`${date}`,
+		// 					`${article_id}`,
+		// 					`${email}`,
+		// 				],
+		// 				(err, data1) => {
+		// 					if (err) {
+		// 						return res.send({
+		// 							message: err,
+		// 						});
+		// 					} else {
+		// 						return res.send({ success: true, data: data1 });
+		// 					}
+		// 				}
+		// 			);
+		// 		} else {
+		// 			return res.send({
+		// 				success: false,
+		// 				message: "昵称不正确",
+		// 			});
+		// 		}
+		// 	}
+		// });
 	});
 
 	router.get("/get", async (req, res) => {

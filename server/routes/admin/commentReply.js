@@ -42,8 +42,17 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE commentreply SET i_name=?,r_name=?,c_reply=?,date=?,comment_id=?,article_id=? WHERE id = '${id}'`;
-		const { i_name, r_name, c_reply, article_id } = req.body;
+		const sql = `UPDATE commentreply SET i_name=?,r_name=?,c_reply=?,date=?,comment_id=?,article_id=?,i_email=?,r_email=?,is_check=? WHERE id = '${id}'`;
+		const {
+			i_name,
+			i_email,
+			r_name,
+			r_email,
+			c_reply,
+			comment_id,
+			article_id,
+			is_check,
+		} = req.body;
 		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
@@ -52,7 +61,11 @@ module.exports = (app) => {
 				`${r_name}`,
 				`${c_reply}`,
 				`${date}`,
+				`${comment_id}`,
 				`${article_id}`,
+				`${i_email}`,
+				`${r_email}`,
+				`${is_check}`,
 			],
 			(err, data) => {
 				if (err) {
@@ -85,24 +98,50 @@ module.exports = (app) => {
 			pageSize,
 			currentPage,
 			i_name,
+			i_email,
 			r_name,
+			r_email,
 			c_reply,
 			article_id,
+			startTime,
+			endTime,
+			is_check,
 		} = req.query;
+		// 审核条件
+		let isCheck = "";
+		switch (Number(is_check)) {
+			case 1:
+				isCheck = "AND is_check=1";
+				break;
+			case 0:
+				isCheck = "AND is_check=0";
+				break;
+			default:
+				break;
+		}
+		// 文章条件
+		let articleId1 = "";
+		let articleId2 = "";
+		if (article_id) {
+			articleId1 = `AND a.article_id=${article_id} AND b.id=${article_id}`;
+			articleId2 = `AND article_id=${article_id}`;
+		} else {
+			articleId1 = "AND a.article_id=b.id";
+			articleId2 = "";
+		}
+		// 时间条件
+		let time1 = "";
+		let time2 = "";
+		if (startTime && endTime) {
+			time1 = `AND (a.date>='${startTime}' AND a.date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time2 = `AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		let sql;
-		if (article_id) {
-			sql = `
-            SELECT a.*,b.title FROM commentreply a,articles b WHERE a.i_name LIKE '%${i_name}%' AND a.r_name LIKE '%${r_name}%' AND a.c_reply LIKE '%${c_reply}%' AND a.article_id=${article_id} AND b.id=${article_id} AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM commentreply WHERE i_name LIKE '%${i_name}%' AND r_name LIKE '%${r_name}%' AND c_reply LIKE '%${c_reply}%' AND article_id=${article_id} AND is_delete = 0;
-            `;
-		} else {
-			sql = `
-            SELECT a.*,b.title FROM commentreply a,articles b WHERE a.i_name LIKE '%${i_name}%' AND a.r_name LIKE '%${r_name}%' AND a.c_reply LIKE '%${c_reply}%' AND a.article_id= b.id AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM commentreply WHERE i_name LIKE '%${i_name}%' AND r_name LIKE '%${r_name}%' AND c_reply LIKE '%${c_reply}%' AND is_delete = 0;
-            `;
-		}
+		let sql = `
+        SELECT a.*,b.title FROM commentreply a,articles b WHERE a.i_name LIKE '%${i_name}%' AND a.r_name LIKE '%${r_name}%' AND a.i_email LIKE '%${i_email}%' AND a.r_email LIKE '%${r_email}%' AND a.c_reply LIKE '%${c_reply}%' ${articleId1} ${time1} ${isCheck} AND a.is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM commentreply WHERE i_name LIKE '%${i_name}%' AND r_name LIKE '%${r_name}%' AND i_email LIKE '%${i_email}%' AND r_email LIKE '%${r_email}%' AND c_reply LIKE '%${c_reply}%' ${articleId2} ${time2} ${isCheck} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -118,19 +157,19 @@ module.exports = (app) => {
 		});
 	});
 
-	// router.post("/get/search", async (req, res) => {
-	// 	const { search } = req.body;
-	// 	const sql = `select * from commentreply where (binary i_name like '%${search}%' or r_name like '%${search}%') and is_delete = 0`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			return res.send({ success: true, data: data });
-	// 		}
-	// 	});
-	// });
+	router.put("/put/status", async (req, res) => {
+		const { is_check, id } = req.body;
+		const sql = `UPDATE commentreply SET is_check = ${is_check} WHERE id = ${id} AND is_delete = 0;`;
+		await db.query(sql, (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				return res.send({ success: true });
+			}
+		});
+	});
 
 	app.use("/admin/api/commentreply", router);
 };

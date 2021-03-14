@@ -110,7 +110,7 @@ export default {
     mounted() {
         if (localStorage.getItem("tourist")) {
             let tourist = localStorage.getItem("tourist");
-            console.log(tourist);
+            tourist = JSON.parse(tourist);
             this.name = tourist.name;
             this.email = tourist.email;
         }
@@ -167,7 +167,10 @@ export default {
                     article_id: this.a_id,
                 });
                 if (res.data.success) {
-                    localStorage.setItem("tourist", this.name);
+                    localStorage.setItem(
+                        "tourist",
+                        JSON.stringify({ name: this.name, email: this.email })
+                    );
                     this.reply.message = "";
                     this.sheet = false;
                     this.fetch();

@@ -20,23 +20,15 @@ export default {
 		return http.get(
 			`/commentreply/get/page?pageSize=${params.pageSize}&currentPage=${
 				params.currentPage
-			}&i_name=${params.i_name}&r_name=${params.r_name}&c_reply=${
+			}&i_name=${params.i_name}&r_name=${params.r_name}&i_email=${
+				params.i_email
+			}&r_email=${params.r_email}&c_reply=${
 				params.c_reply
-			}&article_id=${params.article_id || ""}`
+			}&article_id=${params.article_id || ""}&is_check=${
+				params.is_check
+			}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
-	// /**
-	//  * @description 评论回复搜索
-	//  */
-	// searchCommentReply(params) {
-	// 	return http.post("/commentreply/get/search", params);
-	// },
-	// /**
-	//  * @description 添加评论回复
-	//  */
-	// addCommentReply(params) {
-	// 	return http.post("/commentreply", params);
-	// },
 	/**
 	 * @description 修改评论回复
 	 */
@@ -48,5 +40,10 @@ export default {
 	 */
 	commentReplyInfo(id) {
 		return http.get(`/commentreply/${id}`);
+	},
+	/**
+	 * @description 审核状态
+	 */ commentReplyStatus(params) {
+		return http.put(`/commentreply/put/status`, params);
 	},
 };

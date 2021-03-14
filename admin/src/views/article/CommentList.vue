@@ -15,6 +15,15 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="审核状态:" prop='is_check'>
+                    <el-select v-model="form.is_check">
+                        <el-option v-for="item in is_check" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间筛选" prop="date">
+                    <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
+                </el-form-item>
                 <el-form-item label=' '>
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
                     <el-button @click="resetForm('commentForm')">重置</el-button>
@@ -37,6 +46,12 @@
                     <span style="margin-left: 10px">{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="审核状态" width="100">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.is_check" :active-value="1" :inactive-value="0" @change="changeCheckStatus(scope.row)">
+                    </el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="180">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="$router.push(`/comment/edit/${scope.row.id}`)">编辑</el-button>
@@ -51,7 +66,11 @@
 
 <script>
 import api from "../../api/index";
+import datePicker from "../../components/datePicker";
 export default {
+    components: {
+        datePicker,
+    },
     data() {
         return {
             comments: [],
@@ -65,17 +84,47 @@ export default {
                 nickname: "",
                 comment: "",
                 article_id: null,
+                date: [],
+                is_check: null,
             },
             articleOptions: [],
             loading: false,
+            is_check: [
+                {
+                    value: null,
+                    label: "全部",
+                },
+                {
+                    value: 1,
+                    label: "审核通过",
+                },
+                {
+                    value: 0,
+                    label: "审核不通过",
+                },
+            ],
+            date: {
+                startTime: "",
+                endTime: "",
+            },
         };
     },
+    computed: {
+        searchData() {
+            const params = {
+                pageSize: this.pageInfo.pageSize,
+                currentPage: this.pageInfo.currentPage,
+                nickname: this.form.nickname,
+                article_id: this.form.article_id,
+                comment: this.form.comment,
+                is_check: this.form.is_check,
+                startTime: this.date.startTime,
+                endTime: this.date.endTime,
+            };
+            return params;
+        },
+    },
     methods: {
-        // async fetch() {
-        //     const res = await api.comment.getCommentList();
-        //     this.pageInfo.count = res.data.data.length;
-        //     this.comments = res.data.data.slice(0, this.pageInfo.pageSize);
-        // },
         async remove(row) {
             this.$confirm(`确定删除评论?`, "提示", {
                 confirmButtonText: "确定",
@@ -103,8 +152,7 @@ export default {
 
         async search() {
             this.loading = true;
-            const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.comment.pagination(params);
+            const res = await api.comment.pagination(this.searchData);
             this.comments = res.data.data;
             this.pageInfo.count = res.data.total[0].total;
             this.loading = false;
@@ -126,6 +174,37 @@ export default {
                     id: v.id,
                 };
             });
+        },
+        /**
+         * @description 改变状态
+         */
+        async changeCheckStatus(params) {
+            try {
+                const response = await api.comment.commentStatus({
+                    id: params.id,
+                    is_check: params.is_check,
+                });
+                if (response.data.success) {
+                    // this.$message.success("审核通过");
+                } else {
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.$message.error(error);
+            }
+        },
+        /**
+         * @description 选择时间
+         */
+        chooseDate(date) {
+            if (date) {
+                this.date.startTime = date[0];
+                this.date.endTime = date[1];
+            } else {
+                this.date.startTime = "";
+                this.date.endTime = "";
+            }
+            this.search();
         },
     },
     created() {

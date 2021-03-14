@@ -11,8 +11,14 @@
             <el-form-item label="昵称" prop='name'>
                 <el-input v-model.trim="comment.name"></el-input>
             </el-form-item>
+            <el-form-item label="邮箱" prop='email'>
+                <el-input v-model.trim="comment.email"></el-input>
+            </el-form-item>
             <el-form-item label="评论" prop='comment'>
                 <el-input v-model.trim="comment.comment" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
+            </el-form-item>
+            <el-form-item label="是否通过审核" prop='is_check' required>
+                <el-switch v-model="comment.is_check" :active-value='1' :inactive-value='0'></el-switch>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="save('commentForm')">保存</el-button>
@@ -29,7 +35,13 @@ export default {
     },
     data() {
         return {
-            comment: {},
+            comment: {
+                article_id: null,
+                name: "",
+                email: "",
+                comment: "",
+                is_check: 1,
+            },
             articles: [],
             rules: {
                 article_id: [
@@ -50,6 +62,18 @@ export default {
                         max: 20,
                         message: "长度在 1 到 20 个字符",
                         trigger: "blur",
+                    },
+                ],
+                email: [
+                    {
+                        required: true,
+                        message: "请输入邮箱",
+                        trigger: "blur",
+                    },
+                    {
+                        type: "email",
+                        message: "请输入正确的邮箱地址",
+                        trigger: ["blur", "change"],
                     },
                 ],
                 comment: [

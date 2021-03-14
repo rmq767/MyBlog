@@ -192,7 +192,6 @@ export default {
          * @description 跳转文章详情
          */
         toArticleInfo(id) {
-            console.log(id);
             this.$router.push({
                 path: "/blog",
                 query: {

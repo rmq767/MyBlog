@@ -6,17 +6,32 @@
                 <el-form-item label="昵称：" prop='i_name'>
                     <el-input v-model="form.i_name"></el-input>
                 </el-form-item>
+                <el-form-item label="邮箱：" prop='i_email'>
+                    <el-input v-model="form.i_email"></el-input>
+                </el-form-item>
                 <el-form-item label="评论：" prop='c_reply'>
                     <el-input v-model="form.c_reply"></el-input>
                 </el-form-item>
                 <el-form-item label="回复昵称：" prop='r_name'>
                     <el-input v-model="form.r_name"></el-input>
                 </el-form-item>
+                <el-form-item label="回复邮箱：" prop='r_email'>
+                    <el-input v-model="form.r_email"></el-input>
+                </el-form-item>
                 <el-form-item label="文章：" prop='article_id'>
                     <el-select v-model="form.article_id" filterable placeholder="请选择评论的文章">
                         <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="审核状态:" prop='is_check'>
+                    <el-select v-model="form.is_check">
+                        <el-option v-for="item in is_check" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间筛选" prop="date">
+                    <datePicker @chooseDate='chooseDate' :date='form.date'></datePicker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search" class="el-icon-search">搜索</el-button>
@@ -45,6 +60,12 @@
                     <span style="margin-left: 10px">{{ scope.row.title }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="审核状态" width="100">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.is_check" :active-value="1" :inactive-value="0" @change="changeCheckStatus(scope.row)">
+                    </el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="180">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="editCommentReply(scope.row)">编辑</el-button>
@@ -57,17 +78,26 @@
                 <el-form-item label="昵称">
                     <el-input v-model="replyForm.i_name"></el-input>
                 </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="replyForm.i_email"></el-input>
+                </el-form-item>
                 <el-form-item label="回复昵称">
                     <el-input v-model="replyForm.r_name"></el-input>
+                </el-form-item>
+                <el-form-item label="回复邮箱">
+                    <el-input v-model="replyForm.r_email"></el-input>
                 </el-form-item>
                 <el-form-item label="回复的评论">
                     <el-input v-model="replyForm.c_reply"></el-input>
                 </el-form-item>
-                <el-form-item label="回复的评论">
+                <el-form-item label="回复的文章">
                     <el-select v-model="replyForm.article_id" placeholder="请选择评论的文章">
                         <el-option v-for="item in articleOptions" :key="item.id" :label="item.title" :value="item.id">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="是否通过审核" prop='is_check' required>
+                    <el-switch v-model="replyForm.is_check" :active-value='1' :inactive-value='0'></el-switch>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -82,7 +112,11 @@
 
 <script>
 import api from "../../api/index";
+import datePicker from "../../components/datePicker";
 export default {
+    components: {
+        datePicker,
+    },
     data() {
         return {
             commentreply: [],
@@ -94,23 +128,58 @@ export default {
             },
             form: {
                 i_name: "",
+                i_email: "",
                 c_reply: "",
                 r_name: "",
+                r_email: "",
+                is_check: null,
                 article_id: null,
+                date: [],
             },
             replyForm: {},
             articleOptions: [],
             loading: false,
             editReply: false,
             commentReply_id: 0,
+            is_check: [
+                {
+                    value: null,
+                    label: "全部",
+                },
+                {
+                    value: 1,
+                    label: "审核通过",
+                },
+                {
+                    value: 0,
+                    label: "审核不通过",
+                },
+            ],
+            date: {
+                startTime: "",
+                endTime: "",
+            },
         };
     },
+    computed: {
+        searchData() {
+            const params = {
+                pageSize: this.pageInfo.pageSize,
+                currentPage: this.pageInfo.currentPage,
+                i_name: this.form.i_name,
+                i_email: this.form.i_email,
+                r_name: this.form.r_name,
+                r_email: this.form.r_email,
+                c_reply: this.form.c_reply,
+                article_id: this.form.article_id,
+                is_check: this.form.is_check,
+                startTime: this.date.startTime,
+                endTime: this.date.endTime,
+            };
+            return params;
+        },
+    },
     methods: {
-        // async fetch() {
-        //     const res = await api.commentReply.getCommentReplyList();
-        //     this.pageInfo.count = res.data.data.length;
-        //     this.commentreply = res.data.data.slice(0, this.pageInfo.pageSize);
-        // },
         async editCommentReply(row) {
             this.commentReply_id = row.id;
             const res = await api.commentReply.commentReplyInfo(row.id);
@@ -124,6 +193,8 @@ export default {
             );
             if (res.data.success) {
                 this.$message.success("修改成功");
+                this.editReply = false;
+                this.search();
             }
         },
         async remove(row) {
@@ -150,23 +221,27 @@ export default {
             this.pageInfo.currentPage = val;
             this.search();
         },
-        // /**
-        //  * @description 分页
-        //  */
-        // async pagination() {
-        //     const res = await api.commentReply.pagination(
-        //         this.pageInfo.pageSize,
-        //         this.pageInfo.currentPage
-        //     );
-        //     this.commentreply = res.data.data;
-        // },
+        /**
+         * @description 分页
+         */
         async search() {
             this.loading = true;
-            const params = Object.assign({}, this.form, this.pageInfo);
-            const res = await api.commentReply.pagination(params);
-            this.commentreply = res.data.data;
-            this.pageInfo.count = res.data.total[0].total;
-            this.loading = false;
+            try {
+                const response = await api.commentReply.pagination(
+                    this.searchData
+                );
+                if (response.data.success) {
+                    this.commentreply = response.data.data;
+                    this.pageInfo.count = response.data.total[0].total;
+                    this.loading = false;
+                } else {
+                    this.loading = false;
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.loading = false;
+                this.$message.error(error);
+            }
         },
         /**
          * @description 获取文章
@@ -179,6 +254,37 @@ export default {
                     id: v.id,
                 };
             });
+        },
+        /**
+         * @description 改变状态
+         */
+        async changeCheckStatus(params) {
+            try {
+                const response = await api.commentReply.commentReplyStatus({
+                    id: params.id,
+                    is_check: params.is_check,
+                });
+                if (response.data.success) {
+                    // this.$message.success("审核通过");
+                } else {
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.$message.error(error);
+            }
+        },
+        /**
+         * @description 选择时间
+         */
+        chooseDate(date) {
+            if (date) {
+                this.date.startTime = date[0];
+                this.date.endTime = date[1];
+            } else {
+                this.date.startTime = "";
+                this.date.endTime = "";
+            }
+            this.search();
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

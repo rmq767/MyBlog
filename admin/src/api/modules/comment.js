@@ -22,7 +22,9 @@ export default {
 				params.currentPage
 			}&nickname=${params.nickname}&comment=${
 				params.comment
-			}&article_id=${params.article_id || ""}`
+			}&article_id=${params.article_id || ""}&is_check=${
+				params.is_check
+			}&startTime=${params.startTime}&endTime=${params.endTime}`
 		);
 	},
 	// /**
@@ -48,5 +50,11 @@ export default {
 	 */
 	commentInfo(id) {
 		return http.get(`/comments/${id}`);
+	},
+	/**
+	 * @description 审核状态
+	 */
+	commentStatus(params) {
+		return http.put(`/comments/put/status`, params);
 	},
 };

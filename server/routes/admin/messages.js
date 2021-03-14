@@ -160,7 +160,6 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let sql;
 		let isCheck = "";
 		switch (Number(is_check)) {
 			case 1:
@@ -172,19 +171,18 @@ module.exports = (app) => {
 			default:
 				break;
 		}
+		// 时间条件
+		let time = "";
+		if (startTime && endTime) {
+			time = `AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
-		if (startTime && endTime) {
-			sql = `
-            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) ${isCheck} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%'  AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) ${isCheck} AND is_delete = 0;
-            `;
-		} else {
-			sql = `
-            SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${isCheck} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${isCheck} AND is_delete = 0;
-            `;
-		}
+
+		let sql = `
+        SELECT * FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%' ${time} ${isCheck} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM messages WHERE name LIKE '%${nickname}%' AND message LIKE '%${message}%'  ${time} ${isCheck} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -199,20 +197,5 @@ module.exports = (app) => {
 			}
 		});
 	});
-
-	// router.post("/get/search", async (req, res) => {
-	// 	const { nickname, message } = req.body;
-	// 	const sql = `select * from messages where name like '%${nickname}%' and message like '%${message}%' and is_delete = 0 ORDER BY id DESC`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			return res.send({ success: true, data: data });
-	// 		}
-	// 	});
-	// });
-
 	app.use("/admin/api/messages", router);
 };

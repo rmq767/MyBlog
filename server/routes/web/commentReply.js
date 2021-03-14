@@ -39,15 +39,17 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		// 验证名称唯一
-		const namesql = `select b.i_name from comments a,commentreply b where (a.name = b.i_name AND b.i_name = '${i_name}') AND (b.i_email='${i_email}' AND b.i_email = a.email) AND b.is_delete = 0`;
-		await db.query(namesql, async (err, data) => {
+
+		// 查询游客表是否重复游客
+		const isRepeatSql = `select * from visitor where email='${i_email}' and is_delete=0;`;
+		await db.query(isRepeatSql, async (err, data) => {
 			if (err) {
 				return res.send({
 					message: err,
 				});
 			} else {
-				if (data.length && data[0].i_name === i_name) {
+				if (data[0] && data[0].name === i_name) {
+					// 相同游客，插入评论
 					const sql =
 						"insert into commentreply (i_name,r_name,c_reply,date,comment_id,article_id,i_email,r_email) VALUES (?,?,?,?,?,?,?,?)";
 					await db.query(
@@ -62,24 +64,80 @@ module.exports = (app) => {
 							`${i_email}`,
 							`${r_email}`,
 						],
-						(err, data) => {
+						(err, data1) => {
 							if (err) {
 								return res.send({
 									message: err,
 								});
 							} else {
-								return res.send({ success: true, data: data });
+								return res.send({ success: true, data: data1 });
 							}
 						}
 					);
-				} else {
+				} else if (data[0] && data[0].name != i_name) {
+					// 相同游客、名字不同，返回错误
 					return res.send({
-						success: false,
-						message: "昵称不正确",
+						message: "昵称有误，请输入正确昵称",
 					});
+				} else {
+					// 无游客，插入游客
+					const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+					await db.query(
+						visitorInfoSql,
+						[`${i_email}`, `${i_name}`, `${date}`],
+						async (err, data2) => {
+							if (err) {
+								return res.send({
+									message: err,
+								});
+							}
+						}
+					);
 				}
 			}
 		});
+
+		// 验证名称唯一
+		// const namesql = `select b.i_name from comments a,commentreply b where (a.name = b.i_name AND b.i_name = '${i_name}') AND (b.i_email='${i_email}' AND b.i_email = a.email) AND b.is_delete = 0`;
+		// await db.query(namesql, async (err, data) => {
+		// 	if (err) {
+		// 		return res.send({
+		// 			message: err,
+		// 		});
+		// 	} else {
+		// 		if (data.length && data[0].i_name === i_name) {
+		// 			const sql =
+		// 				"insert into commentreply (i_name,r_name,c_reply,date,comment_id,article_id,i_email,r_email) VALUES (?,?,?,?,?,?,?,?)";
+		// 			await db.query(
+		// 				sql,
+		// 				[
+		// 					`${i_name}`,
+		// 					`${r_name}`,
+		// 					`${c_reply}`,
+		// 					`${date}`,
+		// 					`${comment_id}`,
+		// 					`${article_id}`,
+		// 					`${i_email}`,
+		// 					`${r_email}`,
+		// 				],
+		// 				(err, data) => {
+		// 					if (err) {
+		// 						return res.send({
+		// 							message: err,
+		// 						});
+		// 					} else {
+		// 						return res.send({ success: true, data: data });
+		// 					}
+		// 				}
+		// 			);
+		// 		} else {
+		// 			return res.send({
+		// 				success: false,
+		// 				message: "昵称不正确",
+		// 			});
+		// 		}
+		// 	}
+		// });
 	});
 
 	app.use("/web/api/commentreply", router);

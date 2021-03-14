@@ -9,7 +9,14 @@ module.exports = (app) => {
 		const sql = `
         SELECT SUM(clicks) AS readCount FROM articles WHERE is_delete = 0;
         SELECT COUNT(*) AS messageCount FROM messages WHERE is_delete = 0;
+        SELECT COUNT(*) AS messageCountCheck FROM messages WHERE is_delete = 0 AND is_check = 1;
         SELECT SUM(count) AS pv FROM datas;
+        SELECT COUNT(*) AS commentsCount FROM comments WHERE is_delete = 0;
+        SELECT COUNT(*) AS commentsCountCheck FROM comments WHERE is_delete = 0 AND is_check = 1;
+        SELECT COUNT(*) AS commentreplyCount FROM commentreply WHERE is_delete = 0;
+        SELECT COUNT(*) AS commentreplyCountCheck FROM commentreply WHERE is_delete = 0 AND is_check = 1;
+        SELECT COUNT(*) AS visitorCount FROM visitor WHERE is_delete = 0;
+        SELECT COUNT(*) AS articleCount FROM articles WHERE is_delete = 0;
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -39,7 +46,7 @@ module.exports = (app) => {
 
 	router.get("/pv", async (req, res) => {
 		const sql = `
-        select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) ASC LIMIT 10
+        SELECT * FROM (select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) DESC LIMIT 10) t ORDER BY date;
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {

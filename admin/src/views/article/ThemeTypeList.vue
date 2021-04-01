@@ -146,9 +146,11 @@ export default {
         },
         resetForm1(formName) {
             this.$refs[formName].resetFields();
+            this.searchTheme();
         },
         resetForm2(formName) {
             this.$refs[formName].resetFields();
+            this.searchType();
         },
     },
     mounted() {

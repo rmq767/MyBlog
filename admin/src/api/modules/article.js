@@ -39,4 +39,10 @@ export default {
 	articleInfo(id) {
 		return http.get(`/articles/${id}`);
 	},
+	/**
+	 * @description 文章置顶
+	 */
+	articleTop(id, params) {
+		return http.put(`/articles/get/top/${id}`, params);
+	},
 };

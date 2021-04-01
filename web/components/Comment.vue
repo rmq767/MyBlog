@@ -1,13 +1,13 @@
 <template>
     <div class="comment">
         <v-container style="backgroundcolor: rgba(245, 245, 245, 0.7); width: 100%">
-            <h3>留言区</h3>
+            <h3>发表评论</h3>
             <div>
                 <v-form>
                     <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240"></v-textarea>
                     <v-text-field v-model="email" :counter="26" label="邮箱" type='email'></v-text-field>
                     <v-text-field v-model="name" :counter="20" label="昵称"></v-text-field>
-                    <v-btn class="mr-4" @click="submit" large>提交</v-btn>
+                    <v-btn class="mr-4" @click="submit" large>发表</v-btn>
                 </v-form>
             </div>
             <h3 class="mt-12">评论区</h3>

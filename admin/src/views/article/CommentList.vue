@@ -162,6 +162,7 @@ export default {
          */
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.search();
         },
         /**
          * @description 获取文章

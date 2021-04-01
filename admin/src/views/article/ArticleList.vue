@@ -63,7 +63,7 @@
             </el-table-column>
             <el-table-column label="置顶" align="center">
                 <template slot-scope="scope">
-                    <el-switch v-model="scope.row.isTop" disabled :active-value="1" :inactive-value="0">
+                    <el-switch v-model="scope.row.isTop" :active-value="1" :inactive-value="0" @change="changeTop(scope.row)">
                     </el-switch>
                 </template>
             </el-table-column>
@@ -124,12 +124,6 @@ export default {
         },
     },
     methods: {
-        // async fetch() {
-        //     // const res = await this.$http.get("/articles");
-        //     const res = await api.article.getArticleList();
-        //     this.pageInfo.count = res.data.data.length;
-        //     this.articles = res.data.data.slice(0, this.pageInfo.pageSize);
-        // },
         async remove(row) {
             this.$confirm(`是否删除${row.title}`, "提示", {
                 confirmButtonText: "确定",
@@ -154,22 +148,24 @@ export default {
             this.pageInfo.currentPage = val;
             this.search();
         },
-        // /**
-        //  * @description 分页
-        //  */
-        // async pagination() {
-        //     const res = await api.article.pagination(
-        //         this.pageInfo.pageSize,
-        //         this.pageInfo.currentPage
-        //     );
-        //     this.articles = res.data.data;
-        // },
         async search() {
             this.loadingData = true;
-            const res = await api.article.searchArticle(this.searchData);
-            this.articles = res.data.data;
-            this.pageInfo.count = res.data.total[0].total;
-            this.loadingData = false;
+            try {
+                const response = await api.article.searchArticle(
+                    this.searchData
+                );
+                if (response.data.success) {
+                    this.articles = response.data.data;
+                    this.pageInfo.count = response.data.total[0].total;
+                    this.loadingData = false;
+                } else {
+                    this.$message.error(response.data.msg);
+                    this.loadingData = false;
+                }
+            } catch (error) {
+                this.$message.error(error);
+                this.loadingData = false;
+            }
         },
         // 获取文章主题
         async getTheme() {
@@ -194,10 +190,29 @@ export default {
             }
             this.search();
         },
+        /**
+         * @description 文章置顶
+         */
+        async changeTop(row) {
+            try {
+                const response = await api.article.articleTop(row.id, {
+                    isTop: row.isTop,
+                });
+                if (response.data.success) {
+                    this.search();
+                    this.$message.success("置顶成功");
+                } else {
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.$message.error(error);
+            }
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
             this.date.startTime = "";
             this.date.endTime = "";
+            this.search();
         },
     },
     components: {

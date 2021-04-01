@@ -90,6 +90,16 @@ export default {
                 },
                 xAxis: {
                     data: this.read.x_data,
+                    axisLabel: {
+                        interval: 0, //强制显示文字
+                        rotate: -30,
+                        formatter: function (value) {
+                            if (value.length >= 8) {
+                                return value.slice(0, 8) + "...";
+                            }
+                            return value;
+                        },
+                    },
                 },
                 yAxis: {},
                 series: [
@@ -125,6 +135,9 @@ export default {
                 },
                 xAxis: {
                     data: this.pv.x_data,
+                    axisLabel: {
+                        interval: 0,
+                    },
                 },
                 yAxis: {},
                 series: [
@@ -257,5 +270,9 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
+    > div {
+        margin-bottom: 50px;
+    }
 }
 </style>

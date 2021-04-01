@@ -150,6 +150,7 @@ export default {
             this.$refs[formName].resetFields();
             this.date.startTime = "";
             this.date.endTime = "";
+            this.search();
         },
     },
     created() {

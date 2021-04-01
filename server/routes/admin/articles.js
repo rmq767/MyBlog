@@ -231,35 +231,6 @@ module.exports = (app) => {
 			}
 		});
 	});
-	// 文章搜索
-	// router.post("/get/search", async (req, res) => {
-	// 	const { title, content, theme, type, currentPage, pageSize } = req.body;
-	// 	const start = (Number(currentPage) - 1) * Number(pageSize);
-	// 	const end = Number(pageSize);
-	// 	const sql1 = `select count(*) as total from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0`;
-	// 	const sql2 = `select * from articles where title like "%${title}%" and content_md like "%${content}%" and theme like "%${theme}%" and type like "%${type}%" and is_delete = 0 ORDER BY id DESC limit ${start},${end}`;
-	// 	let total;
-	// 	await db.query(sql1, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			total = data.total;
-	// 		}
-	// 	});
-
-	// 	await db.query(sql2, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			data["total"] = total;
-	// 			return res.send({ success: true, data: data });
-	// 		}
-	// 	});
-	// });
 	// 获取文章主题
 	router.get("/get/theme", async (req, res) => {
 		const sql =
@@ -301,6 +272,22 @@ module.exports = (app) => {
 				response = response.toString();
 				response = response.split(",");
 				return res.send(response);
+			}
+		});
+	});
+
+	router.put(`/get/top/:id`, async (req, res) => {
+		const id = req.params.id;
+		console.log(id);
+		const sql = `UPDATE articles SET isTop=? WHERE id = '${id}'`;
+		const { isTop } = req.body;
+		await db.query(sql, [`${isTop}`], (err, data) => {
+			if (err) {
+				return res.send({
+					message: err,
+				});
+			} else {
+				return res.send({ success: true });
 			}
 		});
 	});

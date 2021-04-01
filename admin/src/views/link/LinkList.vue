@@ -128,6 +128,7 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.search();
         },
     },
     created() {

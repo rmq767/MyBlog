@@ -17,7 +17,7 @@
                             <el-menu-item index="/article/list">文章列表</el-menu-item>
                             <el-menu-item index="/themetype/new">新增主题分类</el-menu-item>
                             <el-menu-item index="/themetype/list">主题分类列表</el-menu-item>
-                            <el-menu-item index="/comment/new">新增评论</el-menu-item>
+                            <!-- <el-menu-item index="/comment/new">新增评论</el-menu-item> -->
                             <el-menu-item index="/comment/list">评论列表</el-menu-item>
                             <el-menu-item index="/commentreply/list">评论回复列表</el-menu-item>
                         </el-menu-item-group>
@@ -78,7 +78,7 @@
 
             <el-container>
                 <el-header style="text-align: right; font-size: 12px;">
-                    <el-dropdown @command="handleCommand">
+                    <el-dropdown @command="handleCommand" trigger="click">
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
                             <!-- <el-dropdown-item command='info'>我的信息</el-dropdown-item> -->

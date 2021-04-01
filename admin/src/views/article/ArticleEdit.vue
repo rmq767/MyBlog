@@ -17,7 +17,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="文章分类" prop='isTop'>
+            <el-form-item label="文章置顶" prop='isTop'>
                 <el-switch v-model="article.isTop" :active-value="1" :inactive-value="0">
                 </el-switch>
             </el-form-item>

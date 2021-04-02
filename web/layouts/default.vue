@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-model="drawer" bottom disable-route-watcher app color="deep-purple accent-1">
+        <v-navigation-drawer v-model="drawer" disable-route-watcher app color="deep-purple accent-1" temporary>
             <v-img :aspect-ratio="16 / 9" src="https://picsum.photos/800/800?random">
                 <v-row align="end" class="lightbox white--text pa-2 fill-height">
                     <v-col>
@@ -35,7 +35,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="deep-purple accent-1" hide-on-scroll dark height="52rem" src="https://picsum.photos/1280/800?random">
+        <v-app-bar app color="deep-purple accent-1" dark height="52rem" src="https://picsum.photos/1280/800?random">
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
                 <span class="hidden-sm-and-down">小阮的个人博客</span>

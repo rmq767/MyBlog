@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import api from "../api";
 export default {
     data() {
         var validatePass = (rule, value, callback) => {
@@ -63,21 +64,22 @@ export default {
     },
     methods: {
         async login() {
-            const res = await this.$http.post(
-                "http://47.115.83.172/login",
-                this.loginForm
-            );
-            if (res.data.success) {
-                localStorage.token = res.data.token;
-                localStorage.setItem("username", res.data.username);
-                localStorage.setItem("u_id", res.data.id);
-                this.$router.push("/admin");
-                this.$message({
-                    type: "success",
-                    message: "登录成功",
-                });
-            } else {
-                this.$message.error(res.data.message);
+            try {
+                const response = await api.login.login(this.loginForm);
+                if (response.data.success) {
+                    localStorage.token = response.data.token;
+                    localStorage.setItem("username", response.data.username);
+                    localStorage.setItem("u_id", response.data.id);
+                    this.$router.push("/admin");
+                    this.$message({
+                        type: "success",
+                        message: "登录成功",
+                    });
+                } else {
+                    this.$message.error(response.data.msg);
+                }
+            } catch (error) {
+                this.$message.error(error);
             }
         },
     },

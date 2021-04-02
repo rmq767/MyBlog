@@ -9,6 +9,7 @@ import link from "./modules/link";
 import message from "./modules/message";
 import notice from "./modules/notice";
 import statistics from "./modules/statistics";
+import login from "./modules/login";
 
 export default {
 	article,
@@ -22,4 +23,5 @@ export default {
 	message,
 	notice,
 	statistics,
+	login,
 };

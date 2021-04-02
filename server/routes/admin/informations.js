@@ -18,7 +18,7 @@ module.exports = (app) => {
 
 	router.put("/:id", async (req, res) => {
 		const id = req.params.id;
-		const sql = `UPDATE informations SET avatar=?,my_profile=?,qq=?,wechat=?,github=?,csdn=?,description=? WHERE id = '${id}'`;
+		const sql = `UPDATE informations SET avatar=?,my_profile=?,qq=?,wechat=?,github=?,csdn=?,description=?,qqQrCode=?,wechatQrCode=? WHERE id = '${id}'`;
 		const {
 			avatar,
 			my_profile,
@@ -27,6 +27,8 @@ module.exports = (app) => {
 			github,
 			csdn,
 			description,
+			qqQrCode,
+			wechatQrCode,
 		} = req.body;
 		await db.query(
 			sql,
@@ -38,6 +40,8 @@ module.exports = (app) => {
 				`${github}`,
 				`${csdn}`,
 				`${description}`,
+				`${qqQrCode}`,
+				`${wechatQrCode}`,
 			],
 			(err, data) => {
 				if (err) {

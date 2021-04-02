@@ -23,11 +23,20 @@
             <el-form-item label="CSDN">
                 <el-input v-model="info.csdn"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="个人描述">
-                <el-input v-model="info.desc" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
-            </el-form-item> -->
             <el-form-item label="寄语">
                 <el-input v-model="info.description" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
+            </el-form-item>
+            <el-form-item label="QQ二维码">
+                <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="showQQ" :headers="mixGetAuthHeaders()" :before-upload="beforeAvatarUpload">
+                    <img v-if="info.qqQrCode" :src="info.qqQrCode" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="微信二维码">
+                <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="showWechat" :headers="mixGetAuthHeaders()" :before-upload="beforeAvatarUpload">
+                    <img v-if="info.wechatQrCode" :src="info.wechatQrCode" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit">保存</el-button>
@@ -46,6 +55,8 @@ export default {
         return {
             info: {
                 avatar: "",
+                qqQrCode: "",
+                wechatQrCode: "",
             },
         };
     },
@@ -53,17 +64,13 @@ export default {
         showAvatar(val) {
             this.info.avatar = val.url;
         },
+        showQQ(val) {
+            this.info.qqQrCode = val.url;
+        },
+        showWechat(val) {
+            this.info.wechatQrCode = val.url;
+        },
         async save() {
-            //   if (this.id) {
-            //     await this.$http.put(`/informations/${this.id}`, this.information);
-            //   } else {
-            //     await this.$http.post("/informations", this.information);
-            //   }
-            //   this.$router.push("/information/list");
-            //   this.$message({
-            //     type: "success",
-            //     message: "保存成功"
-            //   });
             const params = Object.assign({}, this.info);
             const res = await api.information.editInformation(
                 this.info.id,

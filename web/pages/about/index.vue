@@ -25,10 +25,10 @@ export default {
     data() {
         return {};
     },
-    async asyncData({ $axios }) {
-        const info = await $axios.$get("/informations");
+    asyncData() {
+        const info = localStorage.getItem("myInfo");
         return {
-            info: info.data,
+            info: JSON.parse(info),
         };
     },
     methods: {
@@ -42,7 +42,8 @@ export default {
 
 <style lang='less'  scoped>
 .about {
-    background: url("https://picsum.photos/1920/940?random");
+    // background: url("https://picsum.photos/1920/940?random");
+    background: linear-gradient(45deg, #74ebd5 10%, #acb6e5 70%);
     background-size: cover;
     animation: none;
     background-attachment: fixed;

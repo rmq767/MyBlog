@@ -15,8 +15,8 @@ export default {
             // let x = e.clientX;
             // let y = e.clientY;
             /*获取相关参数*/
-            oSpan.style.left = e.clientX + `px`;
-            oSpan.style.top = e.clientY - 50 + `px`;
+            oSpan.style.left = e.pageX + `px`;
+            oSpan.style.top = e.pageY - 50 + `px`;
             /*设定随机数存储在size中*/
             let size = Math.random() * 20;
             /*给节点赋值参数数值*/

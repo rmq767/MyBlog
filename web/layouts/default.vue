@@ -18,17 +18,26 @@
                         </v-list-item-action>
                         <v-list-item-title>GitHub</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-for="(item, i) in items" :key="i">
+                    <v-list-item>
                         <v-list-item-action>
-                            <v-icon>{{ item.icon }}</v-icon>
+                            <v-icon>mdi-qqchat</v-icon>
                         </v-list-item-action>
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
-                                <v-list-item-title v-on="on">{{
-                  item.title
-                }}</v-list-item-title>
+                                <v-list-item-title v-on="on">QQ</v-list-item-title>
                             </template>
-                            <v-img :src="item.image" width="5rem" height="auto"></v-img>
+                            <v-img :src="info.qqQrCode" width="5rem" height="auto"></v-img>
+                        </v-tooltip>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-action>
+                            <v-icon>mdi-wechat</v-icon>
+                        </v-list-item-action>
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-list-item-title v-on="on">微信</v-list-item-title>
+                            </template>
+                            <v-img :src="info.wechatQrCode" width="5rem" height="auto"></v-img>
                         </v-tooltip>
                     </v-list-item>
                 </template>
@@ -80,19 +89,8 @@ export default {
     },
     data: () => ({
         drawer: "",
-        items: [
-            {
-                icon: "mdi-qqchat",
-                title: "QQ",
-                image: "/qq.jpg",
-            },
-            {
-                icon: "mdi-wechat",
-                title: "微信",
-                image: "/wechat.png",
-            },
-        ],
         searchData: "",
+        info: {},
     }),
     watch: {
         searchData(newValue, oldValue) {
@@ -103,9 +101,15 @@ export default {
         async count() {
             await this.$axios.get("/statistics");
         },
+        async getInfo() {
+            const response = await this.$axios.get("/informations");
+            this.info = response.data.data;
+            localStorage.setItem("myInfo", JSON.stringify(this.info));
+        },
     },
     mounted() {
         this.count();
+        this.getInfo();
         console.log(
             "%c%s",
             "color: red; background: yellow; font-size: 12px;",

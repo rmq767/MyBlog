@@ -104,8 +104,8 @@ export default {
 .message {
     min-height: 100vh;
     position: relative;
-    background: -webkit-linear-gradient(45deg, #c973ff 10%, #aebaf8 70%);
-    background: linear-gradient(45deg, #c973ff 10%, #aebaf8 70%);
+    // background: -webkit-linear-gradient(45deg, #c973ff 10%, #aebaf8 70%);
+    background: linear-gradient(45deg, #56ccf2 10%, #2f80ed 70%);
     padding-top: 20px;
     overflow: hidden;
     .input-block {
@@ -130,7 +130,7 @@ export default {
 }
 @media screen and (min-width: 1200px) {
     .message {
-        background: url("https://picsum.photos/1920/940?random=1");
+        // background: url("https://picsum.photos/1920/940?random=1");
         background-size: cover;
         animation: none;
         background-attachment: fixed;

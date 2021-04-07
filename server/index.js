@@ -39,6 +39,7 @@ require("./routes/admin/admins")(app);
 require("./routes/admin/login")(app);
 require("./routes/admin/commentReply")(app);
 require("./routes/admin/statistics")(app);
+require("./routes/admin/projects")(app);
 
 require("./routes/web/articles")(app);
 require("./routes/web/articleTheme")(app);
@@ -50,6 +51,7 @@ require("./routes/web/informations")(app);
 require("./routes/web/links")(app);
 require("./routes/web/commentReply")(app);
 require("./routes/web/statistics")(app);
+require("./routes/web/projects")(app);
 
 app.set("secret", "jfdsijf^&T(&UGFU0y80ydsf08;.]s.f");
 

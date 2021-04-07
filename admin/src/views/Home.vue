@@ -52,6 +52,16 @@
                             <el-menu-item index="/link/list">链接列表</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
+                    <el-submenu index="projects">
+                        <template slot="title">
+                            <i class="el-icon-link"></i>
+                            <span slot="title">个人项目</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="/project/new">添加项目</el-menu-item>
+                            <el-menu-item index="/project/list">项目列表</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
                     <el-submenu index="information">
                         <template slot="title">
                             <i class="el-icon-edit-outline"></i>

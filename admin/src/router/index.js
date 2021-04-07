@@ -14,6 +14,8 @@ import NoticeList from "../views/notice/NoticeList.vue";
 import NoticeEdit from "../views/notice/NoticeEdit.vue";
 import LinkList from "../views/link/LinkList.vue";
 import LinkEdit from "../views/link/LinkEdit.vue";
+import ProjectEdit from "../views/project/ProjectEdit.vue";
+import ProjectList from "../views/project/ProjectList.vue";
 import InformationEdit from "../views/information/InformationEdit.vue";
 import AdminEdit from "../views/information/AdminEdit.vue";
 import Login from "../views/Login.vue";
@@ -111,6 +113,19 @@ const routes = [
 			{
 				path: "/link/edit/:id",
 				component: LinkEdit,
+				props: true,
+			},
+			{
+				path: "/project/new",
+				component: ProjectEdit,
+			},
+			{
+				path: "/project/list",
+				component: ProjectList,
+			},
+			{
+				path: "/project/edit/:id",
+				component: ProjectEdit,
 				props: true,
 			},
 			{

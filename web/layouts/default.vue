@@ -74,6 +74,10 @@
                 <span>学习链接</span>
                 <v-icon>mdi-share-variant</v-icon>
             </v-btn>
+            <v-btn append link to="/project">
+                <span>个人项目</span>
+                <v-icon>mdi-tools</v-icon>
+            </v-btn>
             <v-btn append link to="/about">
                 <span>关于我</span>
                 <v-icon>mdi-face</v-icon>

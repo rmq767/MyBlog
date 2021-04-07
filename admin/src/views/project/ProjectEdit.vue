@@ -95,7 +95,7 @@ export default {
             });
         },
         async fetch() {
-            const res = await api.project.linkInfo(this.id);
+            const res = await api.project.ProjectInfo(this.id);
             this.project = res.data.data;
             this.project = Object.assign({}, this.project, res.data.data); //把 this.project{}中，再把res.data.data添加到{}中，如果有覆盖，没有保存
         },

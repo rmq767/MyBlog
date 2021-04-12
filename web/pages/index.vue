@@ -63,7 +63,7 @@
                                         <v-icon class="mr-2">mdi-eye</v-icon>{{ item.clicks }}
                                     </span>
                                     <span>
-                                        <v-icon class="mr-2">mdi-clock</v-icon>{{ item.date.split(" ")[0] }}
+                                        <v-icon class="mr-2">mdi-clock</v-icon>{{ item.createTime.split(" ")[0] }}
                                     </span>
                                 </div>
                             </v-card>
@@ -107,9 +107,6 @@
 </template>
 
 <script>
-import notice from "../../admin/src/api/modules/notice";
-import type from "../../admin/src/api/modules/type";
-// import Pagination from "../components/Pagination.vue";
 export default {
     async asyncData({ $axios }) {
         const notices = await $axios.$get("/notices");
@@ -195,7 +192,7 @@ export default {
             this.$router.push({
                 path: "/blog",
                 query: {
-                    id: id,
+                    id,
                 },
             });
         },

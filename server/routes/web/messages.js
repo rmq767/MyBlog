@@ -22,7 +22,7 @@ module.exports = (app) => {
 
 	router.post("/", async (req, res) => {
 		const { name, message, background, top, left } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateMessage(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -43,7 +43,7 @@ module.exports = (app) => {
 					return res.send({ message: "已有相同昵称" });
 				} else {
 					const sql =
-						"insert into messages (name,message,background,posTop,posLeft,date) VALUES (?,?,?,?,?,?)";
+						"insert into messages (name,message,background,posTop,posLeft,createTime) VALUES (?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
@@ -52,7 +52,7 @@ module.exports = (app) => {
 							`${background}`,
 							`${top}`,
 							`${left}`,
-							`${date}`,
+							`${createTime}`,
 						],
 						(err, data) => {
 							if (err) {

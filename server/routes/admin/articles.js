@@ -9,7 +9,7 @@ module.exports = (app) => {
 	// 获取全部文章
 	router.get("/", async (req, res) => {
 		const sql =
-			"select * from articles where is_delete = 0 ORDER BY isTop DESC,date DESC";
+			"select * from articles where is_delete = 0 ORDER BY isTop DESC,createTime DESC";
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -108,15 +108,15 @@ module.exports = (app) => {
 		});
 
 		const sql =
-			"insert into articles (title, content_html,content_md,date,type,theme) VALUES (?,?,?,?,?,?)";
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+			"insert into articles (title, content_html,content_md,createTime,type,theme) VALUES (?,?,?,?,?,?)";
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
 				`${title}`,
 				`${content_html}`,
 				`${content_md}`,
-				`${date}`,
+				`${createTime}`,
 				`${type}`,
 				`${theme}`,
 			],
@@ -141,7 +141,7 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,date=?,type=?,theme=?,isTop=? WHERE id = '${id}'`;
+		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,type=?,theme=?,isTop=? WHERE id = '${id}'`;
 		const {
 			title,
 			content_html,
@@ -150,14 +150,12 @@ module.exports = (app) => {
 			theme,
 			isTop,
 		} = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
 				`${title}`,
 				`${content_html}`,
 				`${content_md}`,
-				`${date}`,
 				`${type}`,
 				`${theme}`,
 				`${isTop}`,
@@ -199,20 +197,17 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let sql;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
+		// 时间条件
+		let time = "";
 		if (startTime && endTime) {
-			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND (date>='${startTime}' AND date<DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY isTop DESC,date DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND (date>='${startTime}' AND date<DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
-            `;
-		} else {
-			sql = `
-            SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0 ORDER BY isTop DESC,date DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0;
-            `;
+			time = `AND (createTime>='${startTime}' AND createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
 		}
+		let sql = `
+        SELECT * FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0 ORDER BY isTop DESC,createTime DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM articles WHERE title LIKE '%${title}%' AND content_md LIKE '%${content}%' AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' ${time} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

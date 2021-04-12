@@ -12,7 +12,7 @@
                                     <div v-for="item in notices" :key="item.id">
                                         <p class="caption">
                                             <v-icon color="#B388FF" size="small" class="star">mdi-star</v-icon>
-                                            {{ item.date.split(" ")[0] }}
+                                            {{ item.createTime.split(" ")[0] }}
                                         </p>
                                         <div class="text--primary mb-4 body-2">
                                             {{ item.notice }}

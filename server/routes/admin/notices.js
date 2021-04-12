@@ -39,12 +39,13 @@ module.exports = (app) => {
 				message: errors,
 			});
 		}
-		const sql = "insert into notices ( title,notice,date) VALUES (?,?,?)";
+		const sql =
+			"insert into notices ( title,notice,createTime) VALUES (?,?,?)";
 		const { title, notice } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${notice}`, `${date}`],
+			[`${title}`, `${notice}`, `${createTime}`],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -66,21 +67,17 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE notices SET title=?,notice=?,date=? WHERE id = '${id}'`;
+		const sql = `UPDATE notices SET title=?,notice=? WHERE id = '${id}'`;
 		const { title, notice } = req.body;
-		await db.query(
-			sql,
-			[`${title}`, `${notice}`, `${date}`],
-			(err, data) => {
-				if (err) {
-					res.send({
-						message: err,
-					});
-				} else {
-					res.send({ success: true, data: data });
-				}
+		await db.query(sql, [`${title}`, `${notice}`], (err, data) => {
+			if (err) {
+				res.send({
+					message: err,
+				});
+			} else {
+				res.send({ success: true, data: data });
 			}
-		);
+		});
 	});
 
 	router.delete("/:id", async (req, res) => {
@@ -106,20 +103,17 @@ module.exports = (app) => {
 			startTime,
 			endTime,
 		} = req.query;
-		let sql;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
+		// 时间条件
+		let time = "";
 		if (startTime && endTime) {
-			sql = `
-            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY)) AND is_delete = 0;
-            `;
-		} else {
-			sql = `
-            SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
-            SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' AND is_delete = 0;
-            `;
+			time = `AND (createTime>='${startTime}' AND createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
 		}
+		let sql = `
+        SELECT * FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0 ORDER BY id DESC LIMIT ${start},${end};
+        SELECT COUNT(*) AS total FROM notices WHERE title LIKE '%${title}%' AND notice LIKE '%${notice}%' ${time} AND is_delete = 0;
+        `;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

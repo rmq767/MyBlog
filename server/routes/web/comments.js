@@ -24,7 +24,7 @@ module.exports = (app) => {
 
 	router.post("/", async (req, res) => {
 		const { name, comment, article_id, email } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateComment(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -43,13 +43,13 @@ module.exports = (app) => {
 				if (data[0] && data[0].name === name) {
 					// 相同游客，插入评论
 					const sql =
-						"insert into comments (name,comment,date,article_id,email) VALUES (?,?,?,?,?)";
+						"insert into comments (name,comment,createTime,article_id,email) VALUES (?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
 							`${name}`,
 							`${comment}`,
-							`${date}`,
+							`${createTime}`,
 							`${article_id}`,
 							`${email}`,
 						],
@@ -70,10 +70,10 @@ module.exports = (app) => {
 					});
 				} else {
 					// 无游客，插入游客
-					const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+					const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
 					await db.query(
 						visitorInfoSql,
-						[`${email}`, `${name}`, `${date}`],
+						[`${email}`, `${name}`, `${createTime}`],
 						async (err, data2) => {
 							if (err) {
 								return res.send({

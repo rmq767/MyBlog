@@ -35,7 +35,7 @@ module.exports = (app) => {
 
 	router.post("/", async (req, res) => {
 		const { name, email, comment, article_id, is_check } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateComment(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -55,13 +55,13 @@ module.exports = (app) => {
 				if (data[0] && data[0].name === name) {
 					// 相同游客，插入评论
 					const sql =
-						"insert into comments (name,comment,date,article_id,email,is_check) VALUES (?,?,?,?,?,?)";
+						"insert into comments (name,comment,createTime,article_id,email,is_check) VALUES (?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
 							`${name}`,
 							`${comment}`,
-							`${date}`,
+							`${createTime}`,
 							`${article_id}`,
 							`${email}`,
 							`${is_check}`,
@@ -83,10 +83,11 @@ module.exports = (app) => {
 					});
 				} else {
 					// 无游客，插入游客
-					const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+					const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
+					console.log(visitorInfoSql);
 					await db.query(
 						visitorInfoSql,
-						[`${email}`, `${name}`, `${date}`],
+						[`${email}`, `${name}`, `${createTime}`],
 						async (err, data2) => {
 							if (err) {
 								return res.send({
@@ -109,15 +110,13 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE comments SET name=?,comment=?,date=?,article_id=?,email=?,is_check=? WHERE id = '${id}'`;
+		const sql = `UPDATE comments SET name=?,comment=?,article_id=?,email=?,is_check=? WHERE id = '${id}'`;
 		const { name, comment, article_id, email, is_check } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
 				`${name}`,
 				`${comment}`,
-				`${date}`,
 				`${article_id}`,
 				`${email}`,
 				`${is_check}`,
@@ -185,8 +184,8 @@ module.exports = (app) => {
 		let time1 = "";
 		let time2 = "";
 		if (startTime && endTime) {
-			time1 = `AND (a.date>='${startTime}' AND a.date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
-			time2 = `AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time1 = `AND (a.createTime>='${startTime}' AND a.createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time2 = `AND (createTime>='${startTime}' AND createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
 		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);

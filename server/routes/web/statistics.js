@@ -8,10 +8,10 @@ module.exports = (app) => {
 
 	router.get("/", async (req, res) => {
 		const count = 1;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const sql = `
         select sum(count) as pv from datas;
-        insert into datas (count,date) VALUES (${count},'${date}')
+        insert into datas (count,createTime) VALUES (${count},'${createTime}')
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {

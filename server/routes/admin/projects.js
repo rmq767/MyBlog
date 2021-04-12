@@ -32,12 +32,12 @@ module.exports = (app) => {
 
 	router.post("/", async (req, res) => {
 		const sql =
-			"insert into projects (title,description,link,date) VALUES (?,?,?,?)";
+			"insert into projects (title,description,link,createTime) VALUES (?,?,?,?)";
 		const { title, description, link } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${date}`],
+			[`${title}`, `${description}`, `${link}`, `${createTime}`],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -52,12 +52,11 @@ module.exports = (app) => {
 
 	router.put("/:id", async (req, res) => {
 		const id = req.params.id;
-		const sql = `UPDATE projects SET title=?,description=?,link=?,date=? WHERE id = '${id}'`;
+		const sql = `UPDATE projects SET title=?,description=?,link=? WHERE id = '${id}'`;
 		const { title, description, link } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${date}`],
+			[`${title}`, `${description}`, `${link}`],
 			(err, data) => {
 				if (err) {
 					res.send({

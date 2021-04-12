@@ -140,6 +140,8 @@ export default {
                     );
                     this.form.message = "";
                     this.fetch();
+                    this.snackbar = true;
+                    this.snackbarText = "留言成功，等待审核";
                 } else {
                     this.snackbar = true;
                     this.snackbarText = res.data.message || "留言失败";
@@ -175,6 +177,8 @@ export default {
                     this.sheet = false;
                     this.fetch();
                     this.comment_id = comment_id;
+                    this.snackbar = true;
+                    this.snackbarText = "回复成功，等待审核";
                 } else {
                     this.snackbar = true;
                     this.snackbarText = res.data.message || "回复失败";

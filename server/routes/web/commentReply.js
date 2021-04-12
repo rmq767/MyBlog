@@ -31,7 +31,7 @@ module.exports = (app) => {
 			i_email,
 			r_email,
 		} = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateCommentReply(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -51,14 +51,14 @@ module.exports = (app) => {
 				if (data[0] && data[0].name === i_name) {
 					// 相同游客，插入评论
 					const sql =
-						"insert into commentreply (i_name,r_name,c_reply,date,comment_id,article_id,i_email,r_email) VALUES (?,?,?,?,?,?,?,?)";
+						"insert into commentreply (i_name,r_name,c_reply,createTime,comment_id,article_id,i_email,r_email) VALUES (?,?,?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
 							`${i_name}`,
 							`${r_name}`,
 							`${c_reply}`,
-							`${date}`,
+							`${createTime}`,
 							`${comment_id}`,
 							`${article_id}`,
 							`${i_email}`,
@@ -81,10 +81,10 @@ module.exports = (app) => {
 					});
 				} else {
 					// 无游客，插入游客
-					const visitorInfoSql = `insert into visitor (email,name,date) VALUES (?,?,?)`;
+					const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
 					await db.query(
 						visitorInfoSql,
-						[`${i_email}`, `${i_name}`, `${date}`],
+						[`${i_email}`, `${i_name}`, `${createTime}`],
 						async (err, data2) => {
 							if (err) {
 								return res.send({
@@ -96,48 +96,6 @@ module.exports = (app) => {
 				}
 			}
 		});
-
-		// 验证名称唯一
-		// const namesql = `select b.i_name from comments a,commentreply b where (a.name = b.i_name AND b.i_name = '${i_name}') AND (b.i_email='${i_email}' AND b.i_email = a.email) AND b.is_delete = 0`;
-		// await db.query(namesql, async (err, data) => {
-		// 	if (err) {
-		// 		return res.send({
-		// 			message: err,
-		// 		});
-		// 	} else {
-		// 		if (data.length && data[0].i_name === i_name) {
-		// 			const sql =
-		// 				"insert into commentreply (i_name,r_name,c_reply,date,comment_id,article_id,i_email,r_email) VALUES (?,?,?,?,?,?,?,?)";
-		// 			await db.query(
-		// 				sql,
-		// 				[
-		// 					`${i_name}`,
-		// 					`${r_name}`,
-		// 					`${c_reply}`,
-		// 					`${date}`,
-		// 					`${comment_id}`,
-		// 					`${article_id}`,
-		// 					`${i_email}`,
-		// 					`${r_email}`,
-		// 				],
-		// 				(err, data) => {
-		// 					if (err) {
-		// 						return res.send({
-		// 							message: err,
-		// 						});
-		// 					} else {
-		// 						return res.send({ success: true, data: data });
-		// 					}
-		// 				}
-		// 			);
-		// 		} else {
-		// 			return res.send({
-		// 				success: false,
-		// 				message: "昵称不正确",
-		// 			});
-		// 		}
-		// 	}
-		// });
 	});
 
 	app.use("/web/api/commentreply", router);

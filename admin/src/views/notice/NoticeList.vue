@@ -19,11 +19,9 @@
             </el-form>
         </div>
         <el-table style="width: 100%" :data="notices" v-loading='loading'>
-            <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="150">
+            <el-table-column label="日期" :show-overflow-tooltip="true" align="center" width="120">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{
-            scope.row.date.split(" ")[0]
-          }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="公告题目" align="center" :show-overflow-tooltip="true">

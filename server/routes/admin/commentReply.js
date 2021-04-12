@@ -6,7 +6,7 @@ module.exports = (app) => {
 	const moment = require("moment");
 
 	router.get("/", async (req, res) => {
-		const sql = `select commentreply.id,i_name,r_name,c_reply,commentreply.date
+		const sql = `select commentreply.id,i_name,r_name,c_reply,commentreply.createTime
     from commentreply,comments 
     where commentreply.comment_id = comments.id and commentreply.is_delete = 0 ORDER BY commentreply.id desc`;
 		await db.query(sql, (err, data) => {
@@ -42,7 +42,7 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE commentreply SET i_name=?,r_name=?,c_reply=?,date=?,comment_id=?,article_id=?,i_email=?,r_email=?,is_check=? WHERE id = '${id}'`;
+		const sql = `UPDATE commentreply SET i_name=?,r_name=?,c_reply=?,comment_id=?,article_id=?,i_email=?,r_email=?,is_check=? WHERE id = '${id}'`;
 		const {
 			i_name,
 			i_email,
@@ -53,14 +53,12 @@ module.exports = (app) => {
 			article_id,
 			is_check,
 		} = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
 				`${i_name}`,
 				`${r_name}`,
 				`${c_reply}`,
-				`${date}`,
 				`${comment_id}`,
 				`${article_id}`,
 				`${i_email}`,
@@ -133,8 +131,8 @@ module.exports = (app) => {
 		let time1 = "";
 		let time2 = "";
 		if (startTime && endTime) {
-			time1 = `AND (a.date>='${startTime}' AND a.date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
-			time2 = `AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time1 = `AND (a.createTime>='${startTime}' AND a.createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time2 = `AND (createTime>='${startTime}' AND createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
 		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);

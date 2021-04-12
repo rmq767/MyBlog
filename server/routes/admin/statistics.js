@@ -46,7 +46,7 @@ module.exports = (app) => {
 
 	router.get("/pv", async (req, res) => {
 		const sql = `
-        SELECT * FROM (select count(*) as count,substr(t.date,1,10) as date  from datas t group by substr(t.date,1,10) ORDER BY substr(t.date,1,10) DESC LIMIT 10) t ORDER BY date;
+        SELECT * FROM (select count(*) as count,substr(t.createTime,1,10) as createTime  from datas t group by substr(t.createTime,1,10) ORDER BY substr(t.createTime,1,10) DESC LIMIT 10) t ORDER BY createTime;
         `;
 		await db.query(sql, (err, data) => {
 			if (err) {

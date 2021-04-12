@@ -14,15 +14,15 @@
                     </div>
                     <div v-if="sameTypeArticles.length">
                         <div class="my-4 subtitle-1">同分类文章</div>
-                        <div class="article-type" v-for="(item,index) in sameTypeArticles" :key="index+item.id" @click="toArticleInfo(item.id)">{{item.title}}</div>
+                        <div class="article-type" v-for="(item,index) in sameTypeArticles" :key="index" @click="toArticleInfo(item.id)">{{item.title}}</div>
                     </div>
                 </v-card>
             </div>
             <div>
                 <div class="display-1 text-center">{{ article.title }}</div>
                 <div class="mt-12 d-flex justify-space-between" style="fontSize:14px">
-                    <span>更新时间：<span>
-                            {{  article.date.split(" ")[0] }}</span>
+                    <span>创建时间：<span>
+                            {{  article.createTime.split(" ")[0] }}</span>
                     </span>
                     <span>阅读量：<span> {{ article.clicks }}</span>
                     </span>
@@ -45,7 +45,7 @@
                 <div class="content">
                     <div class="text-justify" v-html="article.content_html" v-highlight></div>
                 </div>
-                <div style="height: 10rem; position: relative">
+                <!-- <div style="height: 10rem; position: relative">
                     <div v-if="pre" style="position: absolute; top: 10%; left: 3%">
                         <v-btn fab :to="{path:'/blog',query:{id:pre.id}}" small>
                             <v-icon>mdi-skip-previous</v-icon>
@@ -58,7 +58,7 @@
                             <v-icon>mdi-skip-next</v-icon>
                         </v-btn>
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- 留言 -->
             <div class="mt-12">
@@ -72,48 +72,12 @@
 import Comment from "../../components/Comment";
 import "highlight.js/styles/darcula.css";
 import highlight from "../../plugins/highlight";
-// import Pagination from "../../components/Pagination.vue";
 export default {
-    // async asyncData({ $axios, query }) {
-    //     const article = await $axios.$get(`/articles/${query.id}`);
-    //     const sameThemeArticles = await $axios.$get(
-    //         `/articles/get/sametheme?theme=${article.data.theme}`
-    //     );
-    //     const sameTypeArticles = await $axios.$get(
-    //         `/articles/get/sametype?type=${article.data.type}`
-    //     );
-    //     const nextPre = await $axios.$get(
-    //         `/articles/get/nextpre?id=${query.id}`
-    //     );
-    //     let pre, next;
-    //     if (article.data.id > nextPre.data[0].id && nextPre.data.length === 1) {
-    //         pre = null;
-    //         next = nextPre.data[0];
-    //     } else if (
-    //         article.data.id < nextPre.data[0].id &&
-    //         nextPre.data.length === 1
-    //     ) {
-    //         pre = nextPre.data[0];
-    //         next = null;
-    //     } else {
-    //         pre = nextPre.data[1];
-    //         next = nextPre.data[0];
-    //     }
-    //     return {
-    //         article: article.data,
-    //         pre: pre,
-    //         next: next,
-    //         sameThemeArticles: sameThemeArticles.data,
-    //         sameTypeArticles: sameTypeArticles.data,
-    //     };
-    // },
     data() {
         return {
             article: {
-                date: "",
+                createTime: "",
             },
-            pre: {},
-            next: {},
             sameThemeArticles: [],
             sameTypeArticles: [],
         };
@@ -125,30 +89,6 @@ export default {
                 `/articles/${this.$route.query.id}`
             );
             this.article = article.data.data;
-        },
-        async getNextPre() {
-            const nextPre = await this.$axios.get(
-                `/articles/get/nextpre?id=${this.$route.query.id}`
-            );
-            let pre, next;
-            if (
-                this.article.id > nextPre.data.data[0].id &&
-                nextPre.data.data.length === 1
-            ) {
-                pre = null;
-                next = nextPre.data.data[0];
-            } else if (
-                this.article.id < nextPre.data.data[0].id &&
-                nextPre.data.data.length === 1
-            ) {
-                pre = nextPre.data.data[0];
-                next = null;
-            } else {
-                pre = nextPre.data.data[1];
-                next = nextPre.data.data[0];
-            }
-            this.pre = pre;
-            this.next = next;
         },
         async getSameThemeArticles() {
             const sameThemeArticles = await this.$axios.get(
@@ -189,14 +129,12 @@ export default {
         async $route(to, from) {
             document.documentElement.scrollTop = 0;
             await this.getArticle();
-            this.getNextPre();
             this.getSameThemeArticles();
             this.getSameTypeArticles();
         },
     },
     async mounted() {
         await this.getArticle();
-        this.getNextPre();
         this.getSameThemeArticles();
         this.getSameTypeArticles();
     },

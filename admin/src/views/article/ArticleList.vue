@@ -35,7 +35,7 @@
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span>{{
-                        scope.row.date.split(" ")[0]
+                        scope.row.createTime.split(" ")[0]
                     }}</span>
                 </template>
             </el-table-column>

@@ -9,7 +9,7 @@ module.exports = (app) => {
 	 * @description 获取文章
 	 */
 	router.get("/", async (req, res) => {
-		const sql = `select * from articles where is_delete = 0 ORDER BY isTop DESC,date DESC;`;
+		const sql = `select * from articles where is_delete = 0 ORDER BY isTop DESC,createTime DESC;`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({
@@ -124,7 +124,7 @@ module.exports = (app) => {
 		const start = (Number(page) - 1) * Number(size);
 		const end = Number(size);
 		const sql = `
-        SELECT * FROM articles WHERE ((title LIKE '%${titleContent}%' OR content_md LIKE '%${titleContent}%') AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0) ORDER BY isTop DESC,date DESC LIMIT ${start},${end};
+        SELECT * FROM articles WHERE ((title LIKE '%${titleContent}%' OR content_md LIKE '%${titleContent}%') AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0) ORDER BY isTop DESC,createTime DESC LIMIT ${start},${end};
         SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
         SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
         SELECT COUNT(*) AS article_count FROM articles WHERE ((title LIKE '%${titleContent}%' OR content_md LIKE '%${titleContent}%') AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0);
@@ -170,122 +170,22 @@ module.exports = (app) => {
 		});
 	});
 
-	router.get("/get/nextpre", async (req, res) => {
-		const { id } = req.query;
-		const sql = `
-        select * from articles where id in
-        (select
-        case 
-        when SIGN(id-${id})>0 THEN MIN(id)
-        when SIGN(id-${id})<0 THEN MAX(id)
-        ELSE id
-        end 
-        from articles
-        where id !=${id}
-        AND is_delete = 0
-        GROUP BY SIGN(id-${id})
-        ORDER BY SIGN(id-${id})
-        )
-        ORDER BY id
-        `;
-		await db.query(sql, (err, data) => {
-			if (err) {
-				return res.send({
-					message: err,
-				});
-			} else {
-				return res.send({ success: true, data: data });
-			}
-		});
-	});
-
-	// router.get("/get/pre", async (req, res) => {
-	// 	const { id } = req.query;
-	// 	const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id>${id} ORDER BY id LIMIT 1 ;`;
+	// router.get("/get/nextpre", async (req, res) => {
+	// 	const { preId, nextId } = req.query;
+	// 	const sql = `
+	//     select id,title from articles where is_delete = 0 AND id='${preId}';
+	//     select id,title from articles where is_delete = 0 AND id='${nextId}';
+	//     `;
 	// 	await db.query(sql, (err, data) => {
 	// 		if (err) {
 	// 			return res.send({
 	// 				message: err,
 	// 			});
 	// 		} else {
-	// 			return res.send(data[0]);
-	// 		}
-	// 	});
-	// });
-
-	// router.get("/get/next", async (req, res) => {
-	// 	const { id } = req.query;
-	// 	const sql = `SELECT id,title FROM articles WHERE  is_delete = 0 AND id<${id} ORDER BY id DESC LIMIT 1 ;`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
 	// 			return res.send({
-	// 				message: err,
+	// 				success: true,
+	// 				data: { pre: data[0], next: data[1] },
 	// 			});
-	// 		} else {
-	// 			return res.send(data[0]);
-	// 		}
-	// 	});
-	// });
-
-	// router.post("/get/search", async (req, res) => {
-	// 	const { search } = req.body;
-	// 	const sql = `select * from articles where (binary title like '%${search}%' or content_html like '%${search}%') and is_delete = 0 ORDER BY id DESC`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			data.map(
-	// 				(v) =>
-	// 					(v.content_html = v.content_html.replace(
-	// 						/<[^<>]+>/g,
-	// 						""
-	// 					))
-	// 			);
-	// 			return res.send({success:true,data});
-	// 		}
-	// 	});
-	// });
-
-	// router.get("/search/theme", async (req, res) => {
-	// 	const { theme } = req.query;
-	// 	const sql = `SELECT * FROM articles WHERE theme LIKE '%${theme}%'`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			data.map(
-	// 				(v) =>
-	// 					(v.content_html = v.content_html.replace(
-	// 						/<[^<>]+>/g,
-	// 						""
-	// 					))
-	// 			);
-	// 			return res.send({success:true,data});
-	// 		}
-	// 	});
-	// });
-
-	// router.get("/search/type", async (req, res) => {
-	// 	const { type } = req.query;
-	// 	const sql = `SELECT * FROM articles WHERE type LIKE '%${type}%'`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			data.map(
-	// 				(v) =>
-	// 					(v.content_html = v.content_html.replace(
-	// 						/<[^<>]+>/g,
-	// 						""
-	// 					))
-	// 			);
-	// 			return res.send({success:true,data});
 	// 		}
 	// 	});
 	// });

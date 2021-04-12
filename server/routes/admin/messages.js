@@ -54,8 +54,8 @@ module.exports = (app) => {
 			posLeft,
 			is_check,
 		} = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		const { errors, isValid } = validateMessage(req.body);
+		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		// 判断是否验证通过
 		if (!isValid) {
 			return res.status(500).send({
@@ -75,7 +75,7 @@ module.exports = (app) => {
 					return res.send({ message: "已有相同昵称" });
 				} else {
 					const sql =
-						"insert into messages (name,message,background,posTop,posLeft,is_check, date) VALUES (?,?,?,?,?,?,?)";
+						"insert into messages (name,message,background,posTop,posLeft,is_check,createTime) VALUES (?,?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
@@ -85,7 +85,7 @@ module.exports = (app) => {
 							`${posTop}`,
 							`${posLeft}`,
 							`${is_check}`,
-							`${date}`,
+							`${createTime}`,
 						],
 						(err, data) => {
 							if (err) {
@@ -111,9 +111,8 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE messages SET name=?,message=?,background=?,posTop=?,posLeft=?,date=? WHERE id = '${id}'`;
+		const sql = `UPDATE messages SET name=?,message=?,background=?,posTop=?,posLeft=? WHERE id = '${id}'`;
 		const { name, message, background, posTop, posLeft } = req.body;
-		const date = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
 			[
@@ -122,7 +121,6 @@ module.exports = (app) => {
 				`${background}`,
 				`${posTop}`,
 				`${posLeft}`,
-				`${date}`,
 			],
 			(err, data) => {
 				if (err) {
@@ -174,7 +172,7 @@ module.exports = (app) => {
 		// 时间条件
 		let time = "";
 		if (startTime && endTime) {
-			time = `AND (date>='${startTime}' AND date < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
+			time = `AND (createTime>='${startTime}' AND createTime < DATE_ADD('${endTime}',INTERVAL 1 DAY))`;
 		}
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);

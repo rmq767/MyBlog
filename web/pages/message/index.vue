@@ -76,7 +76,7 @@ export default {
                 });
                 if (response.data.success) {
                     this.snackbar = true;
-                    this.snackbarText = "留言成功";
+                    this.snackbarText = "留言成功，等待审核";
                     this.message.msg = "";
                     this.getMessageList();
                 } else {

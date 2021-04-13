@@ -43,8 +43,8 @@ export default {
                     },
                     {
                         min: 1,
-                        max: 50,
-                        message: "长度在 1 到 50 个字符",
+                        max: 20,
+                        message: "长度在 1 到 20 个字符",
                         trigger: "blur",
                     },
                 ],

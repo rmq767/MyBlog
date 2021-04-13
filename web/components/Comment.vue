@@ -4,9 +4,9 @@
             <h3>发表评论</h3>
             <div>
                 <v-form>
-                    <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240"></v-textarea>
-                    <v-text-field v-model="email" :counter="26" label="邮箱" type='email'></v-text-field>
-                    <v-text-field v-model="name" :counter="20" label="昵称"></v-text-field>
+                    <v-textarea v-model="form.message" label="请输入留言（240字以内）" :counter="240" :max-length='240'></v-textarea>
+                    <v-text-field v-model="email" :counter="64" label="邮箱" type='email' :max-length='64'></v-text-field>
+                    <v-text-field v-model="name" :counter="20" label="昵称" :max-length='20'></v-text-field>
                     <v-btn class="mr-4" @click="submit" large>发表</v-btn>
                 </v-form>
             </div>
@@ -57,7 +57,7 @@
                         <div class="px-2 mt-2">
                             <v-form>
                                 <v-textarea v-model="reply.message" label="请输入留言（240字以内）" :max-length='240' :counter="240"></v-textarea>
-                                <v-text-field v-model="email" :counter="26" label="邮箱" :max-length='26'></v-text-field>
+                                <v-text-field v-model="email" :counter="64" label="邮箱" :max-length='64'></v-text-field>
                                 <v-text-field v-model="name" :counter="20" label="昵称" :max-length='20'></v-text-field>
                                 <v-btn class="mr-4" @click="submitReply(comment_id)" large>提交</v-btn>
                             </v-form>

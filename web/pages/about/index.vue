@@ -5,7 +5,7 @@
                 <img :src="info.avatar" alt="">
             </div>
             <div class="info-item-social-contact">
-                <p class="shine profile" v-if="info.my_profile">个人介绍：{{info.my_profile}}</p>
+                <p class="shine profile" v-if="info.profile">个人介绍：{{info.profile}}</p>
                 <p class="shine" v-if="info.qq">QQ:{{info.qq}}</p>
                 <p class="shine" v-if="info.wechat">WeChat:{{info.wechat}}</p>
                 <p class="shine" v-if="info.github">GitHub:{{info.github}}</p>

@@ -14,8 +14,8 @@
                                     <p>{{link.description}}</p>
                                 </v-card-text>
                                 <v-card-actions class="white justify-center">
-                                    <v-btn v-for="(social, i) in socials" :key="i" :color="social.color" class="white--text" fab icon small :href='link.link'>
-                                        <v-icon>{{ social.icon }}</v-icon>
+                                    <v-btn class="white--text" fab icon small :href='link.link'>
+                                        <v-icon color="#ef96c5">mdi-share</v-icon>
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>

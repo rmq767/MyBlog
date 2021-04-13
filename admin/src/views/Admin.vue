@@ -188,7 +188,6 @@ export default {
         async getPvData() {
             this.loadingPv = true;
             const res = await api.statistics.getPvData();
-            console.log(res);
             this.pv.x_data = res.data.data.map((v) => v.createTime);
             this.pv.s_data = res.data.data.map((v) => v.count);
             this.loadingPv = false;

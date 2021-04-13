@@ -84,7 +84,6 @@ module.exports = (app) => {
 				} else {
 					// 无游客，插入游客
 					const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
-					console.log(visitorInfoSql);
 					await db.query(
 						visitorInfoSql,
 						[`${email}`, `${name}`, `${createTime}`],

@@ -125,8 +125,8 @@ module.exports = (app) => {
 		const end = Number(size);
 		const sql = `
         SELECT * FROM articles WHERE ((title LIKE '%${titleContent}%' OR content_md LIKE '%${titleContent}%') AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0) ORDER BY isTop DESC,createTime DESC LIMIT ${start},${end};
-        SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
-        SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
+        SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
+        SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
         SELECT COUNT(*) AS article_count FROM articles WHERE ((title LIKE '%${titleContent}%' OR content_md LIKE '%${titleContent}%') AND theme LIKE '%${theme}%' AND type LIKE '%${type}%' AND is_delete = 0);
      `;
 		await db.query(sql, (err, data) => {
@@ -140,13 +140,13 @@ module.exports = (app) => {
 						for (let y in data[2]) {
 							if (
 								data[0][m].id === data[1][n].article_id &&
-								data[0][m].id != data[2][y].article_id
+								data[1][n].article_id != data[2][y].article_id
 							) {
 								data[0][m].comment_count =
 									data[1][n].comment_count;
 							} else if (
 								data[0][m].id === data[1][n].article_id &&
-								data[0][m].id === data[2][y].article_id
+								data[1][n].article_id === data[2][y].article_id
 							) {
 								data[0][m].comment_count =
 									data[1][n].comment_count +

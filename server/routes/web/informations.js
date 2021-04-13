@@ -4,7 +4,7 @@ module.exports = (app) => {
 	const db = require("../../database/db.config"); //引入数据库封装模块
 
 	router.get("/", async (req, res) => {
-		const sql = `select * from informations where is_delete = 0 ORDER BY id desc`;
+		const sql = `select * from informations ORDER BY id desc`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				res.send({

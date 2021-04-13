@@ -273,7 +273,6 @@ module.exports = (app) => {
 
 	router.put(`/get/top/:id`, async (req, res) => {
 		const id = req.params.id;
-		console.log(id);
 		const sql = `UPDATE articles SET isTop=? WHERE id = '${id}'`;
 		const { isTop } = req.body;
 		await db.query(sql, [`${isTop}`], (err, data) => {

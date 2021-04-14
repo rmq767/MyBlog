@@ -7,12 +7,6 @@ export default {
 	getAdmin() {
 		return http.get("/admins");
 	},
-	// /**
-	//  * @description 删除管理员
-	//  */
-	// deleteAdmin(id) {
-	// 	return http.delete(`/admins/${id}`);
-	// },
 	/**
 	 * @description 修改管理员信息
 	 */

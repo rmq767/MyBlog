@@ -75,6 +75,12 @@ export default {
                         message: "请输入正确的邮箱地址",
                         trigger: ["blur", "change"],
                     },
+                    {
+                        min: 1,
+                        max: 64,
+                        message: "长度在 1 到 64 个字符",
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {

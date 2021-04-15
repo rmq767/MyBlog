@@ -2,6 +2,7 @@ module.exports = (app) => {
 	const express = require("express");
 	const router = express.Router();
 	const db = require("../../database/db.config"); //引入数据库封装模块
+	const validateTheme = require("../../plugins/theme");
 
 	router.get("/", async (req, res) => {
 		const sql = `select * from themes where is_delete = 0 ORDER BY id desc`;
@@ -21,6 +22,13 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
+		const { errors, isValid } = validateTheme(req.body);
+		// 判断是否验证通过
+		if (!isValid) {
+			return res.status(500).send({
+				message: errors,
+			});
+		}
 		let themeArr = [];
 		const sql1 = `select * from themes where is_delete = 0 ORDER BY id desc`;
 		await db.query(sql1, (err, data) => {

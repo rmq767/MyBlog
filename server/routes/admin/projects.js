@@ -3,6 +3,7 @@ module.exports = (app) => {
 	const router = express.Router();
 	const db = require("../../database/db.config"); //引入数据库封装模块
 	const moment = require("moment");
+	const validateProject = require("../../plugins/project");
 
 	router.get("/", async (req, res) => {
 		const sql = `select * from projects where is_delete = 0 ORDER BY id desc`;
@@ -31,6 +32,13 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
+		const { errors, isValid } = validateProject(req.body);
+		// 判断是否验证通过
+		if (!isValid) {
+			return res.status(500).send({
+				message: errors,
+			});
+		}
 		const sql =
 			"insert into projects (title,description,link,createTime) VALUES (?,?,?,?)";
 		const { title, description, link } = req.body;

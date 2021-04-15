@@ -2,6 +2,7 @@ module.exports = (app) => {
 	const express = require("express");
 	const router = express.Router();
 	const db = require("../../database/db.config"); //引入数据库封装模块
+	const validateType = require("../../plugins/type");
 
 	router.get("/", async (req, res) => {
 		const sql = `select * from types where is_delete = 0 ORDER BY id desc`;
@@ -21,6 +22,13 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
+		const { errors, isValid } = validateType(req.body);
+		// 判断是否验证通过
+		if (!isValid) {
+			return res.status(500).send({
+				message: errors,
+			});
+		}
 		let typeArr = [];
 		const sql1 = `select * from types where is_delete = 0 ORDER BY id desc`;
 		await db.query(sql1, (err, data) => {

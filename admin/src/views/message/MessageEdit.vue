@@ -47,7 +47,7 @@ export default {
                 name: [
                     {
                         required: true,
-                        message: "请输入文章名称",
+                        message: "请输入昵称",
                         trigger: "blur",
                     },
                     {

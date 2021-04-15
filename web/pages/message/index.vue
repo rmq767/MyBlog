@@ -4,7 +4,7 @@
             <div class="name-block" @click="changeName">
                 <span>{{name}}:</span>
             </div>
-            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage"></v-text-field>
+            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage" :max-length='240'></v-text-field>
         </div>
         <div class="message-block">
             <message :messageList="messageList"></message>

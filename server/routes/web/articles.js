@@ -85,8 +85,8 @@ module.exports = (app) => {
 		const sql = `
     UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
     select * from articles where id='${req.params.id}';
-    SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
-    SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id GROUP BY e.id HAVING COUNT(article_id)>=1;
+    SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
+    SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -99,13 +99,13 @@ module.exports = (app) => {
 						for (let y in data[3]) {
 							if (
 								data[1][m].id === data[2][n].article_id &&
-								data[1][m].id != data[3][y].article_id
+								data[2][n].article_id != data[3][y].article_id
 							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count;
 							} else if (
 								data[1][m].id === data[2][n].article_id &&
-								data[1][m].id === data[3][y].article_id
+								data[2][n].article_id === data[3][y].article_id
 							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count +

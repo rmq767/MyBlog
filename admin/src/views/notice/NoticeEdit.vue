@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>{{ id ? "编辑" : "新建" }}留言</h3>
+        <h3>{{ id ? "编辑" : "新建" }}公告</h3>
         <el-form label-width="120px" style="width:45rem;" ref="noticeForm" :rules='rules' :model='notice'>
             <el-form-item label="公告题目" prop='title'>
                 <el-input v-model="notice.title"></el-input>

@@ -109,12 +109,12 @@
 <script>
 export default {
     async asyncData({ $axios }) {
-        const notices = await $axios.$get("/notices");
-        const themes = await $axios.$get("/themes");
+        const notices = await $axios.$get("/notices"); //公告
+        const themes = await $axios.$get("/themes"); //主题
         themes.data.unshift({ theme: "" });
-        const types = await $axios.$get("/types");
+        const types = await $axios.$get("/types"); //分类
         types.data.unshift({ type: "" });
-        const hotArticles = await $axios.$get("/articles/get/hot");
+        const hotArticles = await $axios.$get("/articles/get/hot"); //热门文章
         return {
             notices: notices.data,
             themes: themes.data,
@@ -170,6 +170,9 @@ export default {
                 aboutme.style.top = "0px";
             }
         },
+        /**
+         * @description 分页获取文章
+         */
         async getSearch() {
             const res = await this.$axios.get(
                 `/articles/get/page?size=${this.searchParams.size}&page=${this.searchParams.page}&titleContent=${this.searchParams.titleContent}&theme=${this.searchParams.theme}&type=${this.searchParams.type}`

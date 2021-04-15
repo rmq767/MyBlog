@@ -34,7 +34,7 @@ export default {
         "仲孙",
         "子言"
       ],
-      secendNickName: [
+      secondNickName: [
         "暖暖",
         "长卿",
         "微",

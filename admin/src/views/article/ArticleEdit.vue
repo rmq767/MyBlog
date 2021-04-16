@@ -21,7 +21,7 @@
                 <el-switch v-model="article.isTop" :active-value="1" :inactive-value="0">
                 </el-switch>
             </el-form-item>
-            <el-form-item label="文章内容" required>
+            <el-form-item label="文章内容" prop="content_md">
                 <div class="edit_container">
                     <mavon-editor v-model="article.content_md" :ishljs="true" ref="md" @imgAdd="$imgAdd" />
                 </div>
@@ -71,6 +71,12 @@ export default {
                         message: "请选择主题",
                         trigger: "change",
                     },
+                    {
+                        min: 1,
+                        max: 100,
+                        message: "长度在 1 到 100 个字符",
+                        trigger: "blur",
+                    },
                 ],
                 type: [
                     {
@@ -84,6 +90,13 @@ export default {
                         required: true,
                         message: "请选择是否置顶",
                         trigger: "change",
+                    },
+                ],
+                content_md: [
+                    {
+                        required: true,
+                        message: "请输入文章内容",
+                        trigger: "blur",
                     },
                 ],
             },
@@ -155,4 +168,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang='less' scoped>
+/deep/.el-tag {
+    .el-select__tags-text {
+        max-width: 150px;
+        display: inline-flex;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+</style>

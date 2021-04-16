@@ -48,7 +48,7 @@ module.exports = (app) => {
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
-			return res.status(500).send({
+			return res.status(200).send({
 				message: errors,
 			});
 		}
@@ -144,7 +144,7 @@ module.exports = (app) => {
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
-			return res.status(500).send({
+			return res.status(200).send({
 				message: errors,
 			});
 		}

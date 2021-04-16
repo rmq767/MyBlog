@@ -15,8 +15,24 @@ module.exports = function validateArticle(data) {
 	if (validator.isEmpty(data.theme)) {
 		errors.theme = "主题不能为空";
 	}
+	if (
+		!validator.isLength(data.theme, {
+			min: 1,
+			max: 100,
+		})
+	) {
+		errors.theme = "主题的长度不超过100位";
+	}
 	if (validator.isEmpty(type)) {
 		errors.type = "分类不能为空";
+	}
+	if (
+		!validator.isLength(type, {
+			min: 1,
+			max: 100,
+		})
+	) {
+		errors.type = "分类的长度不超过100位";
 	}
 	if (
 		!validator.isLength(data.title, {

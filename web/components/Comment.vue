@@ -4,9 +4,9 @@
             <h3>发表评论</h3>
             <div>
                 <v-form>
-                    <v-textarea v-model="form.message" label="请输入评论（240字以内）" :counter="240" :max-length='240'></v-textarea>
-                    <v-text-field v-model="email" :counter="64" label="邮箱" type='email' :max-length='64'></v-text-field>
-                    <v-text-field v-model="name" :counter="20" label="昵称" :max-length='20'></v-text-field>
+                    <v-textarea v-model="form.message" label="请输入评论内容（240字以内）" :counter="240"></v-textarea>
+                    <v-text-field v-model="email" :counter="64" label="邮箱" type='email'></v-text-field>
+                    <v-text-field v-model="name" :counter="20" label="昵称"></v-text-field>
                     <v-btn class="mr-4" @click="submit" large>发表</v-btn>
                 </v-form>
             </div>
@@ -56,9 +56,9 @@
                     <v-sheet class="text-center" height="24rem">
                         <div class="px-2 mt-2">
                             <v-form>
-                                <v-textarea v-model="reply.message" label="请输入回复（240字以内）" :max-length='240' :counter="240"></v-textarea>
-                                <v-text-field v-model="email" :counter="64" label="邮箱" :max-length='64'></v-text-field>
-                                <v-text-field v-model="name" :counter="20" label="昵称" :max-length='20'></v-text-field>
+                                <v-textarea v-model="reply.message" label="请输入回复内容（240字以内）" :counter="240"></v-textarea>
+                                <v-text-field v-model="email" :counter="64" label="邮箱"></v-text-field>
+                                <v-text-field v-model="name" :counter="20" label="昵称"></v-text-field>
                                 <v-btn class="mr-4" @click="submitReply(comment_id)" large>提交</v-btn>
                             </v-form>
                         </div>
@@ -119,14 +119,40 @@ export default {
         async submit() {
             if (!this.form.message) {
                 this.snackbar = true;
-                this.snackbarText = "留言不能为空";
-            } else if (pattern.test(this.email) && !this.email) {
+                this.snackbarText = "评论不能为空";
+                return;
+            }
+            if (this.form.message.length > 240) {
                 this.snackbar = true;
-                this.snackbarText = "邮箱不正确";
-            } else if (!this.name) {
+                this.snackbarText = "评论长度不能超过240个字符";
+                return;
+            }
+            if (!this.email) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱不能为空";
+                return;
+            }
+            if (!pattern.test(this.email)) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱格式不正确";
+                return;
+            }
+            if (this.email.length > 64) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱长度不能超过64个字符";
+                return;
+            }
+            if (!this.name) {
                 this.snackbar = true;
                 this.snackbarText = "昵称不能为空";
-            } else {
+                return;
+            }
+            if (this.name.length > 20) {
+                this.snackbar = true;
+                this.snackbarText = "昵称长度不能超过20个字符";
+                return;
+            }
+            try {
                 const res = await this.$axios.post("/comments", {
                     name: this.name,
                     email: this.email,
@@ -141,24 +167,51 @@ export default {
                     this.form.message = "";
                     this.fetch();
                     this.snackbar = true;
-                    this.snackbarText = "留言成功，等待审核";
+                    this.snackbarText = "评论成功，等待审核";
                 } else {
                     this.snackbar = true;
-                    this.snackbarText = res.data.message || "留言失败";
+                    this.snackbarText = res.data.message || "评论失败";
                 }
+            } catch (error) {
+                this.snackbar = true;
+                this.snackbarText = "评论失败";
             }
         },
         async submitReply(comment_id) {
             if (!this.reply.message) {
                 this.snackbar = true;
                 this.snackbarText = "回复不能为空";
-            } else if (pattern.test(this.email) && !this.email) {
+            }
+            if (this.reply.message.length > 240) {
                 this.snackbar = true;
-                this.snackbarText = "邮箱不正确";
-            } else if (!this.name) {
+                this.snackbarText = "回复长度不能超过240个字符";
+                return;
+            }
+            if (!this.email) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱不能为空";
+                return;
+            }
+            if (!pattern.test(this.email)) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱格式不正确";
+                return;
+            }
+            if (this.email.length > 64) {
+                this.snackbar = true;
+                this.snackbarText = "邮箱长度不能超过64个字符";
+                return;
+            }
+            if (!this.name) {
                 this.snackbar = true;
                 this.snackbarText = "昵称不能为空";
-            } else {
+            }
+            if (this.name.length > 20) {
+                this.snackbar = true;
+                this.snackbarText = "昵称长度不能超过20个字符";
+                return;
+            }
+            try {
                 const res = await this.$axios.post(`/commentreply`, {
                     i_name: this.name,
                     r_name: this.r_name,
@@ -183,6 +236,9 @@ export default {
                     this.snackbar = true;
                     this.snackbarText = res.data.message || "回复失败";
                 }
+            } catch (error) {
+                this.snackbar = true;
+                this.snackbarText = "回复失败";
             }
         },
         async fetch() {

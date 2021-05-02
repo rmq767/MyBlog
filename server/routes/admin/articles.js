@@ -35,11 +35,18 @@ module.exports = (app) => {
 	});
 	// 新增文章
 	router.post("/", async (req, res) => {
-		const { title, content_html, content_md, type, theme } = req.body;
+		const {
+			title,
+			content_html,
+			content_md,
+			type,
+			theme,
+			isTop,
+		} = req.body;
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
-			return res.status(500).send({
+			return res.status(200).send({
 				message: errors,
 			});
 		}
@@ -106,7 +113,7 @@ module.exports = (app) => {
 		});
 
 		const sql =
-			"insert into articles (title, content_html,content_md,createTime,type,theme) VALUES (?,?,?,?,?,?)";
+			"insert into articles (title, content_html,content_md,createTime,type,theme,isTop) VALUES (?,?,?,?,?,?,?)";
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
@@ -117,6 +124,7 @@ module.exports = (app) => {
 				`${createTime}`,
 				`${type}`,
 				`${theme}`,
+				`${isTop}`,
 			],
 			(err, data) => {
 				if (err) {
@@ -134,7 +142,7 @@ module.exports = (app) => {
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
-			return res.status(500).send({
+			return res.status(200).send({
 				message: errors,
 			});
 		}

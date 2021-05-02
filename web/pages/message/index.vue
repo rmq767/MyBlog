@@ -4,7 +4,7 @@
             <div class="name-block" @click="changeName">
                 <span>{{name}}:</span>
             </div>
-            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage"></v-text-field>
+            <v-text-field filled rounded solo light v-model="message.msg" @change="sendMessage" :max-length='240'></v-text-field>
         </div>
         <div class="message-block">
             <message :messageList="messageList"></message>
@@ -42,10 +42,10 @@ export default {
             let firstName = this.firstNickName[
                 Math.floor(Math.random() * this.firstNickName.length)
             ];
-            let secendName = this.secendNickName[
-                Math.floor(Math.random() * this.secendNickName.length)
+            let secondName = this.secondNickName[
+                Math.floor(Math.random() * this.secondNickName.length)
             ];
-            this.name = firstName + secendName;
+            this.name = firstName + secondName;
         },
         async sendMessage() {
             if (!this.message.msg.trim()) {
@@ -60,13 +60,6 @@ export default {
                 let b = Math.floor(Math.random() * 255);
                 let left = Math.floor(Math.random() * (this.w - 360));
                 let top = Math.floor(Math.random() * (this.h - 200));
-                // let firstName = this.firstNickName[
-                //     Math.floor(Math.random() * this.firstNickName.length)
-                // ];
-                // let secendName = this.secendNickName[
-                //     Math.floor(Math.random() * this.secendNickName.length)
-                // ];
-                // this.name = firstName + secendName;
                 const response = await this.$axios.post(`/messages`, {
                     message: this.message.msg,
                     name: this.name,

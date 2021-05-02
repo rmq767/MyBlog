@@ -12,6 +12,14 @@ module.exports = function validateAdmin(data) {
 	if (!validator.isEmail(data.email)) {
 		errors.email = "邮箱格式不对";
 	}
+	if (
+		!validator.isLength(data.email, {
+			min: 1,
+			max: 64,
+		})
+	) {
+		errors.email = "邮箱长度不能超过64位";
+	}
 	if (validator.isEmpty(data.password)) {
 		errors.password = "密码不能为空";
 	}

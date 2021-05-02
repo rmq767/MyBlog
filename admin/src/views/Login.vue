@@ -25,15 +25,6 @@
 import api from "../api";
 export default {
     data() {
-        var validatePass = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("请输入密码"));
-            } else if (value.length < 8 && value.length > 16) {
-                callback(new Error("密码8位到16位"));
-            } else {
-                callback();
-            }
-        };
         return {
             loginForm: {
                 password: "",
@@ -42,9 +33,15 @@ export default {
             rules: {
                 password: [
                     {
-                        validator: validatePass,
-                        trigger: ["blur", "change"],
                         required: true,
+                        message: "请输入密码",
+                        trigger: "blur",
+                    },
+                    {
+                        min: 8,
+                        max: 16,
+                        message: "长度在 8 到 16 个字符",
+                        trigger: "blur",
                     },
                 ],
                 email: [
@@ -57,6 +54,12 @@ export default {
                         type: "email",
                         message: "请输入正确的邮箱地址",
                         trigger: ["blur", "change"],
+                    },
+                    {
+                        min: 1,
+                        max: 64,
+                        message: "长度在64个字符内",
+                        trigger: "blur",
                     },
                 ],
             },

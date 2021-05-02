@@ -1,62 +1,32 @@
 const validator = require("validator");
 const isEmpty = require("./isEmpty");
 
-module.exports = function validateInformation(data) {
+module.exports = function validateMessage(data) {
 	let errors = {};
-	data.profile = !isEmpty(data.profile) ? data.profile : "";
-	data.qq = !isEmpty(data.qq) ? data.qq : "";
-	data.wechat = !isEmpty(data.wechat) ? data.wechat : "";
-	data.github = !isEmpty(data.github) ? data.github : "";
-	data.csdn = !isEmpty(data.csdn) ? data.csdn : "";
-	data.description = !isEmpty(data.description) ? data.description : "";
+	data.name = !isEmpty(data.name) ? data.name : "";
+	data.message = !isEmpty(data.message) ? data.message : "";
 
-	if (
-		!validator.isLength(data.profile, {
-			min: 0,
-			max: 120,
-		})
-	) {
-		errors.profile = "长度120个字符以内";
+	if (validator.isEmpty(data.name)) {
+		errors.name = "昵称不能为空";
 	}
 	if (
-		!validator.isLength(data.qq, {
-			min: 0,
-			max: 16,
-		})
-	) {
-		errors.qq = "长度16个字符以内";
-	}
-	if (
-		!validator.isLength(data.wechat, {
-			min: 0,
+		!validator.isLength(data.name, {
+			min: 1,
 			max: 20,
 		})
 	) {
-		errors.wechat = "长度20个字符以内";
+		errors.name = "昵称的长度不超过20位";
+	}
+	if (validator.isEmpty(data.message)) {
+		errors.message = "留言不能为空";
 	}
 	if (
-		!validator.isLength(data.github, {
-			min: 0,
-			max: 20,
-		})
-	) {
-		errors.github = "长度20个字符以内";
-	}
-	if (
-		!validator.isLength(data.csdn, {
-			min: 0,
-			max: 20,
-		})
-	) {
-		errors.csdn = "长度20个字符以内";
-	}
-	if (
-		!validator.isLength(data.description, {
-			min: 0,
+		!validator.isLength(data.message, {
+			min: 1,
 			max: 240,
 		})
 	) {
-		errors.description = "长度240个字符以内";
+		errors.message = "留言的长度不超过240位";
 	}
 	return {
 		errors,

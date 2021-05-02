@@ -57,6 +57,12 @@ export default {
                         message: "请选择分类",
                         trigger: "change",
                     },
+                    {
+                        min: 1,
+                        max: 50,
+                        message: "长度在 1 到 50 个字符",
+                        trigger: "blur",
+                    },
                 ],
                 title: [
                     {
@@ -79,8 +85,8 @@ export default {
                     },
                     {
                         min: 1,
-                        max: 240,
-                        message: "长度在 1 到 240 个字符",
+                        max: 255,
+                        message: "长度在 1 到 255 个字符",
                         trigger: "blur",
                     },
                 ],
@@ -88,6 +94,12 @@ export default {
                     {
                         required: true,
                         message: "请输入描述",
+                        trigger: "blur",
+                    },
+                    {
+                        min: 1,
+                        max: 240,
+                        message: "长度在 1 到 240 个字符",
                         trigger: "blur",
                     },
                 ],

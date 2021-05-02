@@ -48,6 +48,14 @@ module.exports = function validateLink(data) {
 	if (validator.isEmpty(data.type)) {
 		errors.type = "分类不能为空";
 	}
+	if (
+		!validator.isLength(data.type, {
+			min: 1,
+			max: 50,
+		})
+	) {
+		errors.type = "分类的长度不超过50位";
+	}
 
 	return {
 		errors,

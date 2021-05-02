@@ -2,7 +2,7 @@
     <div>
         <h3>{{ id ? '编辑' : '新建' }}项目</h3>
         <el-form label-width="120px" style="width:45rem;" ref="projectForm" :rules='rules' :model='project'>
-            <el-form-item label="题目" prop='title'>
+            <el-form-item label="标题" prop='title'>
                 <el-input v-model="project.title"></el-input>
             </el-form-item>
             <el-form-item label="链接" prop='link'>

@@ -9,12 +9,12 @@
                 <el-color-picker v-model="message.background" show-alpha></el-color-picker>
             </el-form-item>
             <el-form-item label="左边距" prop='posLeft'>
-                <el-input-number v-model="message.posLeft" :min="1" :max="1660"></el-input-number>
+                <el-input-number v-model="message.posLeft" :min="1" :max="maxWidth"></el-input-number>
             </el-form-item>
             <el-form-item label="上边距" prop='posTop'>
-                <el-input-number v-model="message.posTop" :min="1" :max="860"></el-input-number>
+                <el-input-number v-model="message.posTop" :min="1" :max="maxHeight"></el-input-number>
             </el-form-item>
-            <el-form-item label="评论" prop='message'>
+            <el-form-item label="内容" prop='message'>
                 <el-input v-model="message.message" type="textarea" :autosize="{ minRows: 4, maxRows: 6 }"></el-input>
             </el-form-item>
             <el-form-item label="是否通过审核" prop='is_check' required>
@@ -43,6 +43,8 @@ export default {
                 posTop: 1,
                 is_check: 1,
             },
+            maxWidth: 0,
+            maxHeight: 0,
             rules: {
                 name: [
                     {
@@ -137,6 +139,8 @@ export default {
     },
     created() {
         this.id && this.fetch();
+        this.maxWidth = window.screen.width;
+        this.maxHeight = window.screen.height;
     },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>留言列表</h3>
+        <h3>公告列表</h3>
         <div class="header-form">
             <el-form :model="form" ref="noticeForm" label-width="120px" inline style="width:100%">
                 <el-form-item label="公告题目：" prop='title'>

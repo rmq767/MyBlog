@@ -14,7 +14,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="题目" prop='title'>
+            <el-form-item label="名称" prop='title'>
                 <el-input v-model="link.title"></el-input>
             </el-form-item>
             <el-form-item label="链接" prop='link'>

@@ -55,7 +55,7 @@
                     <el-submenu index="projects">
                         <template slot="title">
                             <i class="el-icon-link"></i>
-                            <span slot="title">个人项目</span>
+                            <span slot="title">项目分享</span>
                         </template>
                         <el-menu-item-group>
                             <el-menu-item index="/project/new">添加项目</el-menu-item>

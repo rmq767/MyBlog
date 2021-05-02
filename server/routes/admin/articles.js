@@ -22,9 +22,7 @@ module.exports = (app) => {
 	});
 	// 获取单个文章
 	router.get("/:id", async (req, res) => {
-		const sql = `
-    select * from articles where id='${req.params.id};
-    '`;
+		const sql = `select * from articles where id='${req.params.id};'`;
 		await db.query(sql, (err, data) => {
 			if (err) {
 				return res.send({

@@ -61,6 +61,12 @@ export default {
                         message: "请输入描述",
                         trigger: "blur",
                     },
+                    {
+                        min: 1,
+                        max: 255,
+                        message: "长度在 1 到 255 个字符",
+                        trigger: "blur",
+                    },
                 ],
             },
         };

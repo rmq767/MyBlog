@@ -1,7 +1,7 @@
 <template>
     <div class="about">
         <div class="my-info">
-            <div class="avatar-pc">
+            <div class="avatar-pc" v-if="info.avatar">
                 <img :src="info.avatar" alt="">
             </div>
             <div class="info-item-social-contact">

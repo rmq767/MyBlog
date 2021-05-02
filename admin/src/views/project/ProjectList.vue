@@ -3,7 +3,7 @@
         <h3>项目列表</h3>
         <div class="header-form">
             <el-form :model="form" ref="linkForm" label-width="120px" inline style="width:100%">
-                <el-form-item label="名称：" prop='title'>
+                <el-form-item label="标题：" prop='title'>
                     <el-input v-model="form.title"></el-input>
                 </el-form-item>
                 <el-form-item label="描述：" prop='title'>

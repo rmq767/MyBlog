@@ -26,7 +26,7 @@
                             <template v-slot:activator="{ on }">
                                 <v-list-item-title v-on="on">QQ</v-list-item-title>
                             </template>
-                            <v-img :src="info.qqQrCode" width="5rem" height="auto"></v-img>
+                            <v-img v-if="info.qqQrCode" :src="info.qqQrCode" width="5rem" height="auto"></v-img>
                         </v-tooltip>
                     </v-list-item>
                     <v-list-item>
@@ -37,7 +37,7 @@
                             <template v-slot:activator="{ on }">
                                 <v-list-item-title v-on="on">微信</v-list-item-title>
                             </template>
-                            <v-img :src="info.wechatQrCode" width="5rem" height="auto"></v-img>
+                            <v-img v-if="info.wechatQrCode" :src="info.wechatQrCode" width="5rem" height="auto"></v-img>
                         </v-tooltip>
                     </v-list-item>
                 </template>

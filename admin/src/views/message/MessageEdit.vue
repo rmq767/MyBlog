@@ -139,8 +139,8 @@ export default {
     },
     created() {
         this.id && this.fetch();
-        this.maxWidth = window.screen.width;
-        this.maxHeight = window.screen.height;
+        this.maxWidth = window.screen.width - 300;
+        this.maxHeight = window.screen.height - 300;
     },
 };
 </script>

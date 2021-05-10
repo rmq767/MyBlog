@@ -1,20 +1,20 @@
 const validator = require("validator");
 const isEmpty = require("./isEmpty");
 
-module.exports = function validateTheme(data) {
+module.exports = function validateType(data) {
 	let errors = {};
-	data.theme = !isEmpty(data.theme) ? data.theme : "";
+	data.type = !isEmpty(data.type) ? data.type : "";
 
-	if (validator.isEmpty(data.theme)) {
-		errors.theme = "主题不能为空";
+	if (validator.isEmpty(data.type)) {
+		errors.type = "分类不能为空";
 	}
 	if (
-		!validator.isLength(data.theme, {
+		!validator.isLength(data.type, {
 			min: 1,
 			max: 20,
 		})
 	) {
-		errors.theme = "主题不超过20位";
+		errors.type = "分类不超过20位";
 	}
 	return {
 		errors,

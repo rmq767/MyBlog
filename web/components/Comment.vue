@@ -20,8 +20,11 @@
                             </div>
                             <div class="comment-info">
                                 <div>
-                                    <span class="name">{{comment.name}}</span>
-                                    <span class="date">{{comment.date}}</span>
+                                    <div>
+                                        <span class="name">{{comment.name}}</span>
+                                        <span class="email">({{comment.email}})</span>
+                                    </div>
+                                    <span class="date">{{comment.createTime}}</span>
                                 </div>
                                 <p class="comment">{{comment.comment}}</p>
                             </div>
@@ -37,8 +40,18 @@
                                     </div>
                                     <div class="reply-info">
                                         <div>
-                                            <span class="name">{{reply.i_name}}<span style="color:#666;fontSize:12px;margin:0px 5px">回复</span>{{reply.r_name}}</span>
-                                            <span class="date">{{reply.date}}</span>
+                                            <div>
+                                                <span>
+                                                    <span class="name">{{reply.i_name}}</span>
+                                                    <span class="email">({{reply.i_email}})</span>
+                                                </span>
+                                                <span style="color:#666;fontSize:12px;margin:0px 5px">回复</span>
+                                                <span>
+                                                    <span class="name">{{reply.r_name}}</span>
+                                                    <span class="email">({{reply.r_email}})</span>
+                                                </span>
+                                            </div>
+                                            <span class="date">{{reply.createTime}}</span>
                                         </div>
                                         <p class="reply-content">{{reply.c_reply}}</p>
                                     </div>
@@ -317,10 +330,18 @@ export default {
                 justify-content: center;
                 align-content: center;
                 margin-right: 3rem;
+                > div {
+                    display: flex;
+                    flex-direction: column;
+                }
                 .name {
                     font-weight: 600;
                     font-size: 14px;
                     color: #333;
+                }
+                .email {
+                    font-size: small;
+                    color: #666;
                     margin-right: 1rem;
                 }
                 .date {
@@ -378,11 +399,23 @@ export default {
                         justify-content: center;
                         align-content: center;
                         margin-right: 3rem;
+                        > div {
+                            display: flex;
+                            flex-direction: column;
+                            > span {
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                            }
+                        }
+                        .email {
+                            font-size: small;
+                            color: #666;
+                        }
                         .name {
                             font-weight: 600;
                             font-size: 14px;
                             color: #333;
-                            margin-right: 1rem;
                         }
                         .date {
                             font-size: 12px;

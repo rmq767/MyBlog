@@ -170,25 +170,5 @@ module.exports = (app) => {
 		});
 	});
 
-	// router.get("/get/nextpre", async (req, res) => {
-	// 	const { preId, nextId } = req.query;
-	// 	const sql = `
-	//     select id,title from articles where is_delete = 0 AND id='${preId}';
-	//     select id,title from articles where is_delete = 0 AND id='${nextId}';
-	//     `;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			return res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			return res.send({
-	// 				success: true,
-	// 				data: { pre: data[0], next: data[1] },
-	// 			});
-	// 		}
-	// 	});
-	// });
-
 	app.use("/web/api/articles", router);
 };

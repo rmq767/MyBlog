@@ -24,6 +24,9 @@
                     <span>创建时间：<span>
                             {{  article.createTime.split(" ")[0] }}</span>
                     </span>
+                    <span>更新时间：<span>
+                            {{  article.updateTime.split(" ")[0] }}</span>
+                    </span>
                     <span>阅读量：<span> {{ article.clicks }}</span>
                     </span>
                     <span>评论：<span>
@@ -45,20 +48,6 @@
                 <div class="content">
                     <div class="text-justify" v-html="article.content_html" v-highlight></div>
                 </div>
-                <!-- <div style="height: 10rem; position: relative">
-                    <div v-if="pre" style="position: absolute; top: 10%; left: 3%">
-                        <v-btn fab :to="{path:'/blog',query:{id:pre.id}}" small>
-                            <v-icon>mdi-skip-previous</v-icon>
-                        </v-btn>
-                        <span class="ml-4">{{ pre.title }}</span>
-                    </div>
-                    <div v-if="next" style="position: absolute; bottom: 10%; right: 3%">
-                        <span class="mr-4">{{ next.title }}</span>
-                        <v-btn fab :to="{path:'/blog',query:{id:next.id}}" small>
-                            <v-icon>mdi-skip-next</v-icon>
-                        </v-btn>
-                    </div>
-                </div> -->
             </div>
             <!-- 留言 -->
             <div class="mt-12">
@@ -77,6 +66,7 @@ export default {
         return {
             article: {
                 createTime: "",
+                updateTime: "",
             },
             sameThemeArticles: [],
             sameTypeArticles: [],
@@ -119,9 +109,6 @@ export default {
             });
         },
     },
-    // updated() {
-    //     this.$route.query.id;
-    // },
     components: {
         Comment,
     },

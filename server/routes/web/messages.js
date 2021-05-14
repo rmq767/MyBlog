@@ -43,7 +43,7 @@ module.exports = (app) => {
 					return res.send({ message: "已有相同昵称" });
 				} else {
 					const sql =
-						"insert into messages (name,message,background,posTop,posLeft,createTime) VALUES (?,?,?,?,?,?)";
+						"insert into messages (name,message,background,posTop,posLeft,createTime,updateTime) VALUES (?,?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
@@ -52,6 +52,7 @@ module.exports = (app) => {
 							`${background}`,
 							`${top}`,
 							`${left}`,
+							`${createTime}`,
 							`${createTime}`,
 						],
 						(err, data) => {

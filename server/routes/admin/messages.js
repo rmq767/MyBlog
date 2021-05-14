@@ -46,14 +46,8 @@ module.exports = (app) => {
 	});
 
 	router.post("/", async (req, res) => {
-		const {
-			name,
-			message,
-			background,
-			posTop,
-			posLeft,
-			is_check,
-		} = req.body;
+		const { name, message, background, posTop, posLeft, is_check } =
+			req.body;
 		const { errors, isValid } = validateMessage(req.body);
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		// 判断是否验证通过
@@ -75,7 +69,7 @@ module.exports = (app) => {
 					return res.send({ message: "已有相同昵称" });
 				} else {
 					const sql =
-						"insert into messages (name,message,background,posTop,posLeft,is_check,createTime) VALUES (?,?,?,?,?,?,?)";
+						"insert into messages (name,message,background,posTop,posLeft,is_check,createTime,updateTime) VALUES (?,?,?,?,?,?,?,?)";
 					await db.query(
 						sql,
 						[
@@ -85,6 +79,7 @@ module.exports = (app) => {
 							`${posTop}`,
 							`${posLeft}`,
 							`${is_check}`,
+							`${createTime}`,
 							`${createTime}`,
 						],
 						(err, data) => {
@@ -111,7 +106,8 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE messages SET name=?,message=?,background=?,posTop=?,posLeft=? WHERE id = '${id}'`;
+		const updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+		const sql = `UPDATE messages SET name=?,message=?,background=?,posTop=?,posLeft=?,updateTime=? WHERE id = '${id}'`;
 		const { name, message, background, posTop, posLeft } = req.body;
 		await db.query(
 			sql,
@@ -121,6 +117,7 @@ module.exports = (app) => {
 				`${background}`,
 				`${posTop}`,
 				`${posLeft}`,
+				`${updateTime}`,
 			],
 			(err, data) => {
 				if (err) {

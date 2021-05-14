@@ -33,8 +33,8 @@ export default {
             snackbar: false,
             snackbarText: "",
             timeout: 2000,
-            w: window.screen.availWidth,
-            h: window.screen.availHeight,
+            w: window.screen.width,
+            h: window.screen.height,
         };
     },
     methods: {
@@ -58,8 +58,8 @@ export default {
                 let r = Math.floor(Math.random() * 255);
                 let g = Math.floor(Math.random() * 255);
                 let b = Math.floor(Math.random() * 255);
-                let left = Math.floor(Math.random() * (this.w - 360));
-                let top = Math.floor(Math.random() * (this.h - 200));
+                let left = Math.floor(Math.random() * (this.w - 300));
+                let top = Math.floor(Math.random() * (this.h - 300));
                 const response = await this.$axios.post(`/messages`, {
                     message: this.message.msg,
                     name: this.name,

@@ -40,12 +40,12 @@ module.exports = (app) => {
 			});
 		}
 		const sql =
-			"insert into notices ( title,notice,createTime) VALUES (?,?,?)";
+			"insert into notices ( title,notice,createTime,updateTime) VALUES (?,?,?,?)";
 		const { title, notice } = req.body;
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${notice}`, `${createTime}`],
+			[`${title}`, `${notice}`, `${createTime}`, `${createTime}`],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -67,17 +67,22 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE notices SET title=?,notice=? WHERE id = '${id}'`;
+		const updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+		const sql = `UPDATE notices SET title=?,notice=?,updateTime=? WHERE id = '${id}'`;
 		const { title, notice } = req.body;
-		await db.query(sql, [`${title}`, `${notice}`], (err, data) => {
-			if (err) {
-				res.send({
-					message: err,
-				});
-			} else {
-				res.send({ success: true, data: data });
+		await db.query(
+			sql,
+			[`${title}`, `${notice}`, `${updateTime}`],
+			(err, data) => {
+				if (err) {
+					res.send({
+						message: err,
+					});
+				} else {
+					res.send({ success: true, data: data });
+				}
 			}
-		});
+		);
 	});
 
 	router.delete("/:id", async (req, res) => {
@@ -95,14 +100,8 @@ module.exports = (app) => {
 	});
 
 	router.get("/get/page", async (req, res) => {
-		const {
-			pageSize,
-			currentPage,
-			title,
-			notice,
-			startTime,
-			endTime,
-		} = req.query;
+		const { pageSize, currentPage, title, notice, startTime, endTime } =
+			req.query;
 		const start = (Number(currentPage) - 1) * Number(pageSize);
 		const end = Number(pageSize);
 		// 时间条件
@@ -124,20 +123,6 @@ module.exports = (app) => {
 			}
 		});
 	});
-
-	// router.post("/get/search", async (req, res) => {
-	// 	const { title, notice } = req.body;
-	// 	const sql = `select * from notices where title like '%${title}%' and notice like '%${notice}%' and is_delete = 0 ORDER BY id DESC`;
-	// 	await db.query(sql, (err, data) => {
-	// 		if (err) {
-	// 			res.send({
-	// 				message: err,
-	// 			});
-	// 		} else {
-	// 			res.send({ success: true, data: data });
-	// 		}
-	// 	});
-	// });
 
 	app.use("/admin/api/notices", router);
 };

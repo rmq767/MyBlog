@@ -75,7 +75,7 @@
                 <v-icon>mdi-share-variant</v-icon>
             </v-btn>
             <v-btn append link to="/project">
-                <span>个人项目</span>
+                <span>项目分享</span>
                 <v-icon>mdi-tools</v-icon>
             </v-btn>
             <v-btn append link to="/about">

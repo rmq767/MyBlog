@@ -40,12 +40,18 @@ module.exports = (app) => {
 			});
 		}
 		const sql =
-			"insert into projects (title,description,link,createTime) VALUES (?,?,?,?)";
+			"insert into projects (title,description,link,createTime,updateTime) VALUES (?,?,?,?,?)";
 		const { title, description, link } = req.body;
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${createTime}`],
+			[
+				`${title}`,
+				`${description}`,
+				`${link}`,
+				`${createTime}`,
+				`${createTime}`,
+			],
 			(err, data) => {
 				if (err) {
 					res.send({
@@ -59,12 +65,20 @@ module.exports = (app) => {
 	});
 
 	router.put("/:id", async (req, res) => {
+		const { errors, isValid } = validateProject(req.body);
+		// 判断是否验证通过
+		if (!isValid) {
+			return res.status(200).send({
+				message: errors,
+			});
+		}
 		const id = req.params.id;
-		const sql = `UPDATE projects SET title=?,description=?,link=? WHERE id = '${id}'`;
+		const updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+		const sql = `UPDATE projects SET title=?,description=?,link=?,updateTime=? WHERE id = '${id}'`;
 		const { title, description, link } = req.body;
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`],
+			[`${title}`, `${description}`, `${link}`, `${updateTime}`],
 			(err, data) => {
 				if (err) {
 					res.send({

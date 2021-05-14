@@ -53,7 +53,7 @@ module.exports = (app) => {
 			});
 		}
 		const sql =
-			"insert into links (title,description,link,image,type,createTime) VALUES (?,?,?,?,?,?)";
+			"insert into links (title,description,link,image,type,createTime,updateTime) VALUES (?,?,?,?,?,?,?)";
 		const { title, description, link, image, type } = req.body;
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
@@ -64,6 +64,7 @@ module.exports = (app) => {
 				`${link}`,
 				`${image}`,
 				`${type}`,
+				`${createTime}`,
 				`${createTime}`,
 			],
 			(err, data) => {
@@ -87,11 +88,19 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE links SET title=?,description=?,link=?,image=?,type=? WHERE id = '${id}'`;
+		const updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+		const sql = `UPDATE links SET title=?,description=?,link=?,image=?,type=?,updateTime=? WHERE id = '${id}'`;
 		const { title, description, link, image, type } = req.body;
 		await db.query(
 			sql,
-			[`${title}`, `${description}`, `${link}`, `${image}`, `${type}`],
+			[
+				`${title}`,
+				`${description}`,
+				`${link}`,
+				`${image}`,
+				`${type}`,
+				`${updateTime}`,
+			],
 			(err, data) => {
 				if (err) {
 					res.send({

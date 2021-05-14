@@ -35,14 +35,8 @@ module.exports = (app) => {
 	});
 	// 新增文章
 	router.post("/", async (req, res) => {
-		const {
-			title,
-			content_html,
-			content_md,
-			type,
-			theme,
-			isTop,
-		} = req.body;
+		const { title, content_html, content_md, type, theme, isTop } =
+			req.body;
 		const { errors, isValid } = validateArticle(req.body);
 		// 判断是否验证通过
 		if (!isValid) {
@@ -111,9 +105,8 @@ module.exports = (app) => {
 				}
 			}
 		});
-
 		const sql =
-			"insert into articles (title, content_html,content_md,createTime,type,theme,isTop) VALUES (?,?,?,?,?,?,?)";
+			"insert into articles (title, content_html,content_md,createTime,type,theme,isTop,updateTime) VALUES (?,?,?,?,?,?,?,?)";
 		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		await db.query(
 			sql,
@@ -125,6 +118,7 @@ module.exports = (app) => {
 				`${type}`,
 				`${theme}`,
 				`${isTop}`,
+				`${createTime}`,
 			],
 			(err, data) => {
 				if (err) {
@@ -147,15 +141,10 @@ module.exports = (app) => {
 			});
 		}
 		const id = req.params.id;
-		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,type=?,theme=?,isTop=? WHERE id = '${id}'`;
-		const {
-			title,
-			content_html,
-			content_md,
-			type,
-			theme,
-			isTop,
-		} = req.body;
+		const updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+		const sql = `UPDATE articles SET title = ?,content_html=?,content_md=?,type=?,theme=?,isTop=?,updateTime=? WHERE id = '${id}'`;
+		const { title, content_html, content_md, type, theme, isTop } =
+			req.body;
 		await db.query(
 			sql,
 			[
@@ -165,6 +154,7 @@ module.exports = (app) => {
 				`${type}`,
 				`${theme}`,
 				`${isTop}`,
+				`${updateTime}`,
 			],
 			(err, data) => {
 				if (err) {

@@ -73,6 +73,16 @@
                             <!-- <el-menu-item index="/information/list">信息列表</el-menu-item> -->
                         </el-menu-item-group>
                     </el-submenu>
+                    <el-submenu index="visitor">
+                        <template slot="title">
+                            <i class="el-icon-coordinate"></i>
+                            <span slot="title">游客管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="/visitor/list">游客权限管理</el-menu-item>
+                            <!-- <el-menu-item index="/information/list">信息列表</el-menu-item> -->
+                        </el-menu-item-group>
+                    </el-submenu>
                     <!-- <el-submenu index="admin" v-if="is_super == 1 ? true : false">
                         <template slot="title">
                             <i class="el-icon-edit"></i>

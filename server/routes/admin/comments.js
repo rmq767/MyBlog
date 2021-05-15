@@ -33,72 +33,77 @@ module.exports = (app) => {
 		});
 	});
 
-	router.post("/", async (req, res) => {
-		const { name, email, comment, article_id, is_check } = req.body;
-		const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
-		const { errors, isValid } = validateComment(req.body);
-		// 判断是否验证通过
-		if (!isValid) {
-			return res.status(200).send({
-				message: errors,
-			});
-		}
+	// router.post("/", async (req, res) => {
+	// 	const { name, email, comment, article_id, is_check } = req.body;
+	// 	const createTime = moment().format("YYYY-MM-DD HH:mm:ss");
+	// 	const { errors, isValid } = validateComment(req.body);
+	// 	// 判断是否验证通过
+	// 	if (!isValid) {
+	// 		return res.status(200).send({
+	// 			message: errors,
+	// 		});
+	// 	}
 
-		// 查询游客表是否重复游客
-		const isRepeatSql = `select * from visitor where email='${email}' and is_delete=0;`;
-		await db.query(isRepeatSql, async (err, data) => {
-			if (err) {
-				return res.send({
-					message: err,
-				});
-			} else {
-				if (data[0] && data[0].name === name) {
-					// 相同游客，插入评论
-					const sql =
-						"insert into comments (name,comment,createTime,article_id,email,is_check) VALUES (?,?,?,?,?,?)";
-					await db.query(
-						sql,
-						[
-							`${name}`,
-							`${comment}`,
-							`${createTime}`,
-							`${article_id}`,
-							`${email}`,
-							`${is_check}`,
-						],
-						(err, data1) => {
-							if (err) {
-								return res.send({
-									message: err,
-								});
-							} else {
-								return res.send({ success: true, data: data1 });
-							}
-						}
-					);
-				} else if (data[0] && data[0].name != name) {
-					// 相同游客、名字不同，返回错误
-					return res.send({
-						message: "昵称有误，请输入正确昵称",
-					});
-				} else {
-					// 无游客，插入游客
-					const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
-					await db.query(
-						visitorInfoSql,
-						[`${email}`, `${name}`, `${createTime}`],
-						async (err, data2) => {
-							if (err) {
-								return res.send({
-									message: err,
-								});
-							}
-						}
-					);
-				}
-			}
-		});
-	});
+	// 	// 查询游客表是否重复游客
+	// 	const isRepeatSql = `select * from visitor where email='${email}';`;
+	// 	await db.query(isRepeatSql, async (err, data) => {
+	// 		if (err) {
+	// 			return res.send({
+	// 				message: err,
+	// 			});
+	// 		} else {
+	// 			if (data[0].is_delete == 1) {
+	// 				return res.send({
+	// 					message: "该用户已被禁用",
+	// 				});
+	// 			}
+	// 			if (data[0] && data[0].name === name) {
+	// 				// 相同游客，插入评论
+	// 				const sql =
+	// 					"insert into comments (name,comment,createTime,article_id,email,is_check) VALUES (?,?,?,?,?,?)";
+	// 				await db.query(
+	// 					sql,
+	// 					[
+	// 						`${name}`,
+	// 						`${comment}`,
+	// 						`${createTime}`,
+	// 						`${article_id}`,
+	// 						`${email}`,
+	// 						`${is_check}`,
+	// 					],
+	// 					(err, data1) => {
+	// 						if (err) {
+	// 							return res.send({
+	// 								message: err,
+	// 							});
+	// 						} else {
+	// 							return res.send({ success: true, data: data1 });
+	// 						}
+	// 					}
+	// 				);
+	// 			} else if (data[0] && data[0].name != name) {
+	// 				// 相同游客、名字不同，返回错误
+	// 				return res.send({
+	// 					message: "昵称有误，请输入正确昵称",
+	// 				});
+	// 			} else {
+	// 				// 无游客，插入游客
+	// 				const visitorInfoSql = `insert into visitor (email,name,createTime) VALUES (?,?,?)`;
+	// 				await db.query(
+	// 					visitorInfoSql,
+	// 					[`${email}`, `${name}`, `${createTime}`],
+	// 					async (err, data2) => {
+	// 						if (err) {
+	// 							return res.send({
+	// 								message: err,
+	// 							});
+	// 						}
+	// 					}
+	// 				);
+	// 			}
+	// 		}
+	// 	});
+	// });
 
 	router.put("/:id", async (req, res) => {
 		const { errors, isValid } = validateComment(req.body);

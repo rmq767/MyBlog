@@ -10,6 +10,7 @@ import message from "./modules/message";
 import notice from "./modules/notice";
 import statistics from "./modules/statistics";
 import project from "./modules/project";
+import visitor from "./modules/visitor";
 import login from "./modules/login";
 
 export default {
@@ -25,5 +26,6 @@ export default {
 	notice,
 	statistics,
 	project,
+	visitor,
 	login,
 };

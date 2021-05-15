@@ -41,13 +41,18 @@ module.exports = (app) => {
 		}
 
 		// 查询游客表是否重复游客
-		const isRepeatSql = `select * from visitor where email='${i_email}' and is_delete=0;`;
+		const isRepeatSql = `select * from visitor where email='${i_email}';`;
 		await db.query(isRepeatSql, async (err, data) => {
 			if (err) {
 				return res.send({
 					message: err,
 				});
 			} else {
+				if (data[0].is_delete == 1) {
+					return res.send({
+						message: "该用户已被禁用",
+					});
+				}
 				if (data[0] && data[0].name === i_name) {
 					// 相同游客，插入评论
 					const sql =

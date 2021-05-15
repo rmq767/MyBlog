@@ -40,6 +40,7 @@ require("./routes/admin/login")(app);
 require("./routes/admin/commentReply")(app);
 require("./routes/admin/statistics")(app);
 require("./routes/admin/projects")(app);
+require("./routes/admin/visitor")(app);
 
 require("./routes/web/articles")(app);
 require("./routes/web/articleTheme")(app);

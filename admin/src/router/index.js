@@ -20,6 +20,7 @@ import InformationEdit from "../views/information/InformationEdit.vue";
 import AdminEdit from "../views/information/AdminEdit.vue";
 import Login from "../views/Login.vue";
 import CommentReplyList from "../views/article/CommentReplyList";
+import VisitorList from "../views/visitor/VisitorList.vue";
 
 Vue.use(VueRouter);
 
@@ -140,6 +141,10 @@ const routes = [
 			{
 				path: "/admin/edit",
 				component: AdminEdit,
+			},
+			{
+				path: "/visitor/list",
+				component: VisitorList,
 			},
 		],
 	},

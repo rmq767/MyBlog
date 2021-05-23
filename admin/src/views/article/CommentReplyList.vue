@@ -50,9 +50,19 @@
                     <span style="margin-left: 10px">{{ scope.row.i_name }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="邮箱" align="center" :show-overflow-tooltip="true" width="150">
+                <template slot-scope="scope">
+                    <span style="margin-left: 10px">{{ scope.row.i_email }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="回复的昵称" :show-overflow-tooltip="true" align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.r_name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="回复的邮箱" :show-overflow-tooltip="true" align="center">
+                <template slot-scope="scope">
+                    <span style="margin-left: 10px">{{ scope.row.r_email }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="回复的评论" :show-overflow-tooltip="true" align="center">

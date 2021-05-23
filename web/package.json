@@ -10,6 +10,12 @@
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate"
   },
+  "config": {
+      "nuxt":{
+          "host":"localhost",
+          "port":"3000"
+      }
+  },
   "dependencies": {
     "@babel/compat-data": "^7.12.1",
     "@nuxtjs/axios": "^5.3.6",

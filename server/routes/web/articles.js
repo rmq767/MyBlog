@@ -82,11 +82,12 @@ module.exports = (app) => {
 	});
 
 	router.get("/:id", async (req, res) => {
+		const id = req.params.id;
 		const sql = `
-    UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${req.params.id}) a1)+1 WHERE id = '${req.params.id}';
-    select * from articles where id='${req.params.id}';
-    SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
-    SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 GROUP BY e.id HAVING COUNT(article_id)>=1;
+    UPDATE articles SET clicks=(SELECT clicks FROM (SELECT * FROM articles WHERE id = ${id}) a1)+1 WHERE id = '${id}';
+    select * from articles where id='${id}';
+    SELECT e.id AS article_id,COUNT(*) as comment_count from articles e LEFT OUTER JOIN comments d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 AND d.article_id=${id} GROUP BY e.id HAVING COUNT(article_id)>=1;
+    SELECT e.id AS article_id,COUNT(*) as commentreply_count from articles e LEFT OUTER JOIN commentreply d on e.id = d.article_id WHERE d.is_delete = 0 AND d.is_check = 1 AND d.article_id=${id} GROUP BY e.id HAVING COUNT(article_id)>=1;
     `;
 		await db.query(sql, (err, data) => {
 			if (err) {
@@ -98,14 +99,15 @@ module.exports = (app) => {
 					for (let n in data[2]) {
 						for (let y in data[3]) {
 							if (
-								data[1][m].id === data[2][n].article_id &&
-								data[2][n].article_id != data[3][y].article_id
+								data[2][n].comment_count &&
+								!data[3][y].commentreply_count
 							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count;
-							} else if (
-								data[1][m].id === data[2][n].article_id &&
-								data[2][n].article_id === data[3][y].article_id
+							}
+							if (
+								data[2][n].comment_count &&
+								data[3][y].commentreply_count
 							) {
 								data[1][m].comment_count =
 									data[2][n].comment_count +
@@ -138,17 +140,23 @@ module.exports = (app) => {
 				for (let m in data[0]) {
 					for (let n in data[1]) {
 						for (let y in data[2]) {
+							// if (
+							// 	data[0][m].id === data[1][n].article_id &&
+							// 	data[1][n].article_id != data[2][y].article_id
+							// ) {
+							// 	data[0][m].comment_count =
+							// 		data[1][n].comment_count;
+							// }
+							if (data[0][m].id === data[1][n].article_id) {
+								data[0][m].comment_count1 =
+									data[1][n].comment_count;
+							}
 							if (
 								data[0][m].id === data[1][n].article_id &&
-								data[1][n].article_id != data[2][y].article_id
-							) {
-								data[0][m].comment_count =
-									data[1][n].comment_count;
-							} else if (
-								data[0][m].id === data[1][n].article_id &&
+								data[0][m].id === data[2][y].article_id &&
 								data[1][n].article_id === data[2][y].article_id
 							) {
-								data[0][m].comment_count =
+								data[0][m].comment_count2 =
 									data[1][n].comment_count +
 									data[2][y].commentreply_count;
 							}

@@ -52,10 +52,17 @@
                                     </p>
                                 </v-card-text>
                                 <div class="d-flex justify-space-around overline">
-                                    <span>
+                                    <span v-if="item.comment_count2">
                                         <v-icon class="mr-2">mdi-comment</v-icon>{{
-                                            item.comment_count
-                                                ? item.comment_count
+                                            item.comment_count2
+                                                ? item.comment_count2
+                                                : 0
+                                        }}
+                                    </span>
+                                    <span v-else>
+                                        <v-icon class="mr-2">mdi-comment</v-icon>{{
+                                            item.comment_count1
+                                                ? item.comment_count1
                                                 : 0
                                         }}
                                     </span>

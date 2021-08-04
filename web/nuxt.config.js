@@ -41,6 +41,7 @@ module.exports = {
       }
     ]
   },
+  buildDir: __dirname + "/../server/web/", //将文件输出到server/web
   /*
    ** Customize the progress-bar color
    */
